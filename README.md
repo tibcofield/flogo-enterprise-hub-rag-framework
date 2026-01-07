@@ -63,7 +63,7 @@ Try out the Flogo application samples that help you build and deploy Flogo® app
            - [subflow-basic](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/VSCode_Extension/Flow-design-concepts/subflow-basic) : This sample demonstrates how we can call simple subflows and detached invocation subflows using the Subflow activity.
  
     - **Mapping-Arrays**
-       - **if-else** 
+       - **conditional mappings** 
            - [if-else](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/VSCode_Extension/Mapping-Arrays/if-else) :  This sample demonstrates conditional data mappings using if-else blocks, with an app containing two flows and a subflow.
 
    - **Unit-Testing**
@@ -75,7 +75,7 @@ Try out the Flogo application samples that help you build and deploy Flogo® app
 - **Samples for [Flogo Capability on TIBCO® Control Plane](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Tibco_Control_Plane)**
     - **Application Deployment**
         - [Deploy and Run Custom App Image for Flogo Oracle DB Application](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Tibco_Control_Plane/App_Deployment/Custom_App_Image) : This sample demonstrates how to create Flogo application build with all dependencies preinstalled outside TIBCO Platform by using custom Docker images
-        - [Active Space]( https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Tibco_Control_Plane/App_Deployment/Custom_App_Image/ActiveSpaces) : This sample demonstrates how to deploy a TIBCO Flogo® ActiveSpaces application using a custom Docker image in TIBCO Control Plane.The Flogo ActiveSpaces application requires ActiveSpaces runtime libraries to connect to an ActiveSpaces cluster and perform data operations.The provided Dockerfile installs all required ActiveSpaces runtime dependencies needed to successfully run the Flogo ActiveSpaces application.
+        - [Deploy and Run Custom App Image for TIBCO ActiveSpaces connector]( https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Tibco_Control_Plane/App_Deployment/Custom_App_Image/ActiveSpaces) <img width="30" height="30" alt="image" src="https://github.com/user-attachments/assets/7eb4d12a-e825-4356-993f-91659da1d57a" /> : This sample demonstrates how to deploy a TIBCO Flogo® ActiveSpaces application using a custom Docker image in TIBCO Control Plane.The Flogo ActiveSpaces application requires ActiveSpaces runtime libraries to connect to an ActiveSpaces cluster and perform data operations.The provided Dockerfile installs all required ActiveSpaces runtime dependencies needed to successfully run the Flogo ActiveSpaces application.
 
 ---
 
