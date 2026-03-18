@@ -1,4 +1,4 @@
-package encrypt
+package keypair
 
 import "github.com/project-flogo/core/data/coerce"
 
