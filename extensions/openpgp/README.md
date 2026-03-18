@@ -90,7 +90,7 @@ The Input tab has the following fields:
 | ------- | -------- | ----------------- |
 | name    | true     | name attribute    |
 | comment | true     | comment attribute |
-| email   |          | email attribute   |
+| email   | true     | email attribute   |
 
 ## Output Settings
 

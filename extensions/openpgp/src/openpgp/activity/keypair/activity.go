@@ -19,7 +19,7 @@ func init() {
 
 // New creates a new activity
 func New(ctx activity.InitContext) (activity.Activity, error) {
-	return &MyActivity{logger: log.ChildLogger(ctx.Logger(), "openpgp"), activityName: "encrypt"}, nil
+	return &MyActivity{logger: log.ChildLogger(ctx.Logger(), "openpgp"), activityName: "keypair"}, nil
 }
 
 // MyActivity is a stub for your Activity implementation
