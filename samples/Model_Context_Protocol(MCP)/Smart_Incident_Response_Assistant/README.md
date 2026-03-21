@@ -30,14 +30,15 @@ The app exposes a single MCP tool — `incident_response` — that guides an eng
 - TIBCO Flogo® Extension for Visual Studio Code **2.26.1** or later
 - Flogo MCP connector **1.0.1** or later
 - An MCP client that supports MCP Elicitation, Logging, and Sampling (e.g. GitHub Copilot in VS Code)
+- **VS Code 1.112.0 or later** 
 
 ## Import the sample app in the Workspace
 
-Import `MCPShowcaseServer.flogo` into VS Code.
+Import `Smart_Incident_Response_Assistant_MCPServer.flogo` into VS Code.
 
 ## Understanding the configuration
 
-The `MCPShowcaseServer.flogo` app is a Flogo MCP server (HTTP) that exposes the `incident_response` tool to AI agents. When the tool is called, the flow runs the following sequence:
+The `Smart_Incident_Response_Assistant_MCPServer.flogo` app is a Flogo MCP server (HTTP) that exposes the `incident_response` tool to AI agents. When the tool is called, the flow runs the following sequence:
 
 ### Flow
 
@@ -106,7 +107,7 @@ The user message is built from the elicited incident fields (system, environment
 
 ## Run the application
 
-- Run `MCPShowcaseServer.flogo` from VS Code. This will start the Flogo MCP Server over HTTP at `http://localhost:9092/mcp`.
+- Run `Smart_Incident_Response_Assistant_MCPServer.flogo` from VS Code. This will start the Flogo MCP Server over HTTP at `http://localhost:9092/mcp`.
 - Configure this MCP server URL with your MCP client (GitHub Copilot in VS Code).
 - Ask the agent to start an incident triage. Try one of the prompts below:
 
@@ -142,7 +143,7 @@ The user message is built from the elicited incident fields (system, environment
 ```json
 {
   "servers": {
-    "MCPShowcaseServer": {
+    "Smart_Incident_Response_Assistant": {
       "type": "http",
       "url": "http://localhost:9092/mcp"
     }

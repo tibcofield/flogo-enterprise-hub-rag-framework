@@ -11,7 +11,7 @@
     "github.com/project-flogo/contrib/function/array",
     "github.com/project-flogo/contrib/function/coerce"
   ],
-  "name": "MCPShowcaseServer",
+  "name": "Smart_Incident_Response_Assistant_MCPServer",
   "description": "",
   "version": "1.0.0",
   "type": "flogo:app",
@@ -23,7 +23,7 @@
       "name": "flogo-mcp-mcpsever",
       "description": "Flogo MCP server for Agentic AI",
       "settings": {
-        "serverName": "MCPShowcaseServer",
+        "serverName": "Smart_Incident_Response_Assistant_MCPServer",
         "serverVersion": "1.0.0",
         "serverType": "HTTP",
         "serverPort": "=$property[\"FlogoMcpServer.PORT\"]",
@@ -47,7 +47,7 @@
           "action": {
             "ref": "github.com/project-flogo/flow",
             "settings": {
-              "flowURI": "res://flow:incident_response_flow"
+              "flowURI": "res://flow:smart_incident_response_assistant_flow"
             },
             "input": {
               "arguments": "=$.arguments",
@@ -73,16 +73,16 @@
               }
             }
           },
-          "name": "incident_response_flow"
+          "name": "smart_incident_response_assistant_flow"
         }
       ]
     }
   ],
   "resources": [
     {
-      "id": "flow:incident_response_flow",
+      "id": "flow:smart_incident_response_assistant_flow",
       "data": {
-        "name": "incident_response_flow",
+        "name": "smart_incident_response_assistant_flow",
         "description": "",
         "links": [
           {
@@ -215,7 +215,7 @@
                     "modelPreferences": {
                       "hints": [
                         {
-                          "name": "claude-3-5-sonnet"
+                          "name": "gpt-5.2"
                         }
                       ]
                     }
