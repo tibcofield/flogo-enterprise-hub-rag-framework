@@ -10,17 +10,17 @@ The Agentic AI Connector provides two primary building blocks:
 
 | Component | Best For | Key Capabilities |
 |---|---|---|
-| **Agent Activity** | Embedding LLM intelligence inside an existing Flogo flow | LLM provider config, model selection, default PII guardrails, token limits, MCP tools, in-memory conversation history, agent handoff |
-| **Agent Trigger** | Building full-featured autonomous agents with custom logic | All Agent Activity features **plus** custom tools (Flogo flows), custom guardrails (prompt injection / advanced PII), custom conversation stores (DB, file, Redis), agent hand-off orchestration |
+| **AI Agent Activity** | Embedding LLM intelligence inside an existing Flogo flow | LLM provider config, model selection, default PII guardrails, token limits, MCP tools, in-memory conversation history, agent handoff |
+| **AI Agent Trigger** | Building full-featured autonomous agents with custom logic | All AI Agent Activity features **plus** custom tools (Flogo flows), custom guardrails (prompt injection / advanced PII), custom conversation stores (DB, file, Redis), agent hand-off orchestration |
 
 An **Invoke AI Agent Trigger Activity** (`callagent`) bridges the two worlds: it lets any Flogo trigger (REST, WebSocket, Kafka, Timer, …) deterministically dispatch a user prompt to an Agent Trigger and receive its response.
 
 ### Supported LLM Providers
-- **OpenAI** (GPT-4o, GPT-4.1, o3, …)
-- **Anthropic** (Claude Sonnet, Claude Opus, …)
-- **Google** (Gemini 2.0 Flash, Gemini 2.5 Pro, …)
-- **Azure OpenAI**
-- Any OpenAI-compatible endpoint (Ollama, Together AI, …)
+- **OpenAI** (e.g. GPT-4o, GPT-4.1, o3)
+- **Gemini** (e.g. Gemini 2.0 Flash, Gemini 2.5 Pro)
+- **Anthropic** (e.g. Claude Sonnet, Claude Opus)
+- **Ollama** (local models, e.g. Llama 3, Mistral)
+- **vLLM** (self-hosted OpenAI-compatible endpoint)
 
 ### Handler Types (Agent Trigger only)
 
@@ -63,10 +63,9 @@ A procurement intelligence assistant demonstrating two key features working toge
 
 ## Prerequisites
 
-- **TIBCO Flogo® Extension for Visual Studio Code** (version 1.3.2 or later)
-- **Agentic AI Developer Preview** connector installed in your Flogo workspace
-- An API key for your chosen LLM provider (OpenAI, Anthropic, or Google)
-- Any WebSocket client for testing (e.g., `websocat`, `wscat`, or Postman)
+- **TIBCO Flogo® Extension for Visual Studio Code** (version 2.26.2 or later)
+- An API key for your chosen LLM provider (OpenAI, Gemini, or Anthropic)
+- A WebSocket client for testing: [Postman](https://www.postman.com/) or [websocat](https://github.com/vi/websocat)
 
 ## Quick Start
 

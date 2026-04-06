@@ -214,11 +214,9 @@ The LLM understands these relationships from the system prompt and uses them to 
 
 ## Prerequisites
 
-- **TIBCO Flogo® Extension for Visual Studio Code** (version 1.3.2 or later)
-- **Agentic AI Connector** installed in your Flogo workspace
-- **Flogo MCP Connector** installed in your Flogo workspace
-- An **OpenAI API key** (or swap for Anthropic/Google in the LLM Provider connection)
-- A WebSocket client for testing (e.g., `websocat`, `wscat`, or Postman)
+- **TIBCO Flogo® Extension for Visual Studio Code** (version 2.26.2 or later)
+- An **OpenAI API key** (or swap for Anthropic or Gemini in the LLM Provider connection)
+- A WebSocket client for testing: [Postman](https://www.postman.com/) or [websocat](https://github.com/vi/websocat)
 
 ---
 
@@ -254,12 +252,13 @@ Run `SupplyChainAgent.flogo`. This starts:
 
 ### Step 5 — Connect and Query
 
-```bash
-# Using websocat
-websocat "ws://localhost:9998/supply-chain?sessionId=my-session-1"
+Use any WebSocket client to connect.
 
-# Using wscat
-wscat -c "ws://localhost:9998/supply-chain?sessionId=my-session-1"
+**Postman**: Create a new WebSocket request, set the URL to `ws://localhost:9998/supply-chain?sessionId=my-session-1`, and click Connect.
+
+**websocat** (command line):
+```bash
+websocat "ws://localhost:9998/supply-chain?sessionId=my-session-1"
 ```
 
 Then type any of the sample queries below.

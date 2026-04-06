@@ -2,7 +2,7 @@
 
 ## Overview
 
-This sample demonstrates the **"List of Agents for Handoff"** capability of the **TIBCO Flogo® Agentic AI Connector** using a real-world Mobile customer care scenario. A single Flogo application hosts four cooperating AI agents that together deliver a seamless, intelligent customer support experience — with the LLM deciding in real time who handles each interaction.
+This sample demonstrates the **"List of Agents for Handoff"** capability of the **TIBCO Flogo® AI Agent Activity** using a real-world Mobile customer care scenario. A single Flogo application hosts four cooperating AI agents: a **CustomerSupportDispatcher** (AI Agent Activity) that uses the `agentHandoffs` list to let the LLM autonomously route customer messages to three specialist **Agent Triggers** (Billing, Technical, Upgrade) — delivering a seamless, intelligent support experience with no manual routing logic in the flow.
 
 The sample also contrasts two routing styles side by side:
 
@@ -275,10 +275,9 @@ This is the **deterministic path** — the Flogo flow code decides the routing, 
 
 ## Prerequisites
 
-- **TIBCO Flogo® Extension for Visual Studio Code** (version 1.3.2 or later)
-- **Agentic AI connector** (Tech Preview) installed in your Flogo workspace
+- **TIBCO Flogo® Extension for Visual Studio Code** (version 2.26.2 or later)
 - An **OpenAI API key** (or configure a different LLM provider — see below)
-- A WebSocket client for testing: [wscat](https://github.com/websockets/wscat), [websocat](https://github.com/vi/websocat), or Postman
+- A WebSocket client for testing: [Postman](https://www.postman.com/) or [websocat](https://github.com/vi/websocat)
 
 ---
 
@@ -303,11 +302,13 @@ Click **Run** in the Flogo VS Code extension. The app starts a WebSocket server 
 
 ### 4. Test — AI-Driven Routing (non-deterministic)
 
-Connect to the main customer care endpoint with your session ID:
+Connect to the main customer care endpoint with your session ID.
 
+**Postman**: Create a new WebSocket request with URL `ws://localhost:9998/customer-care?sessionId=sess-001` and click Connect.
+
+**websocat** (command line):
 ```bash
-# Using wscat
-wscat -c "ws://localhost:9998/customer-care?sessionId=sess-001"
+websocat "ws://localhost:9998/customer-care?sessionId=sess-001"
 ```
 
 Try these messages to see the LLM route to different specialists:
@@ -334,10 +335,13 @@ My internet is slow AND I want to know if upgrading my plan would help.
 
 ### 5. Test — Deterministic Direct Billing
 
-Connect directly to the billing endpoint:
+Connect directly to the billing endpoint.
 
+**Postman**: Use URL `ws://localhost:9998/billing?sessionId=sess-002`.
+
+**websocat** (command line):
 ```bash
-wscat -c "ws://localhost:9998/billing?sessionId=sess-002"
+websocat "ws://localhost:9998/billing?sessionId=sess-002"
 ```
 
 The Flogo flow bypasses AI routing and calls `BillingSpecialistAgent` directly every time.

@@ -28,6 +28,7 @@ Try out the Flogo application samples that help you build and deploy Flogo® app
 - **Samples for [TIBCO Flogo® Extension for Visual Studio Code](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/VSCode_Extension)**
     - **Model Context Protocol(MCP)**<img width="30" height="30" alt="image" src="https://github.com/user-attachments/assets/7eb4d12a-e825-4356-993f-91659da1d57a" />
          - [Customer 360](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Model_Context_Protocol(MCP)/Customer360) : This sample demonstrates how to use FLOGO MCP Connector and expose your customers, products, sales data as MCP server tools and query using natural language from AI Agent.
+         - [Customer Health Monitor](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Model_Context_Protocol(MCP)/CustomerHealthMonitor) : Demo showcasing Flogo's Model Context Protocol (MCP) integration with data from Salesforce, Google Sheets and Postgres.
 
     - **API Development**
        - **REST** 
@@ -76,6 +77,12 @@ Try out the Flogo application samples that help you build and deploy Flogo® app
            - [Play Testcase flow debugger](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/VSCode_Extension/Unit-Testing/PlayTestcase-flowDebugger) :  This sample demonstrates unit testing for Flogo app flows using play mode feature, where you can test/debug the activities inside the each flow looking at its input and output data , and detect errors at the flow or activity level without building the app.
        - **Unit Testing**
            - [Unit Testing basic](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/VSCode_Extension/Unit-Testing/UnitTesting-basic) : This sample demonstrates that unit testing is a technique where individual components or flows of an application are tested in isolation to verify they work as intended and catch issues early.
+
+- **Samples for [Agentic AI with TIBCO Flogo®](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Agentic_AI)**
+    - **Agentic AI** <img width="30" height="30" alt="image" src="https://github.com/user-attachments/assets/7eb4d12a-e825-4356-993f-91659da1d57a" />
+        - [Healthcare Compliance Agent](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Agentic_AI/Healthcare-Compliance-Agent) : This sample demonstrates an AI-powered patient support assistant built with the TIBCO Flogo® AI Agent Trigger. It enforces HIPAA compliance guardrails (PHI detection), supports multi-turn conversations via a custom conversation store, and exposes custom tool schemas — all running on OpenAI GPT models.
+        - [Mobile Customer Care Multi-Agent Hub](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Agentic_AI/Mobile-Customer-Care-Multi-Agent) : This sample demonstrates the **List of Agents for Handoff** capability of the TIBCO Flogo® AI Agent Activity. A single Flogo application hosts four cooperating AI agents — a dispatcher (AI Agent Activity) that intelligently routes customer interactions to three specialist Agent Triggers (Billing, Technical, Upgrade) — with the LLM deciding in real time which agent handles each request.
+        - [Smart Supply Chain Assistant](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Agentic_AI/Smart-Supply-Chain-Assistant) : This sample demonstrates the **List of MCP Servers** feature of the TIBCO Flogo® AI Agent Trigger alongside a custom `CreatePurchaseOrder` tool. The AI agent queries real-time inventory and supplier data from two Flogo-hosted MCP servers and autonomously creates purchase orders — orchestrated end-to-end via WebSocket with `callagent` routing.
 
 - **Samples for [Flogo Capability on TIBCO® Control Plane](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Tibco_Control_Plane)**
     - **Application Deployment**

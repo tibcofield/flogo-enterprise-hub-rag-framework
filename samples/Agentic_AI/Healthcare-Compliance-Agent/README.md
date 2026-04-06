@@ -256,8 +256,7 @@ Each new `conversationId` is **fully automatic** — no seed file required. When
 
 ## Prerequisites
 
-- TIBCO Flogo® Extension for VS Code (1.3.2+)
-- Agentic AI Developer Preview connector
+- TIBCO Flogo® Extension for VS Code (2.26.2 or later)
 - OpenAI API key
 - A `conversations/` directory writable by the Flogo app process
 
@@ -299,12 +298,15 @@ Each new `conversationId` is **fully automatic** — no seed file required. When
 Run `HealthcarePatientAgent` from VS Code. The WebSocket server starts on port `9998`.
 
 ### Connect and Chat
-```bash
-# Using websocat — new session (auto-created on first message)
-websocat "ws://localhost:9998/patient-support?sessionId=maria"
 
-# Using wscat
-npx wscat -c "ws://localhost:9998/patient-support?sessionId=maria"
+Use any WebSocket client to connect. Two popular options:
+
+**Postman**: Create a new WebSocket request, set the URL to `ws://localhost:9998/patient-support?sessionId=maria`, and click Connect. Type messages in the message box and send.
+
+**websocat** (command line):
+```bash
+# New session (auto-created on first message)
+websocat "ws://localhost:9998/patient-support?sessionId=maria"
 
 # Resume the included demo session (pre-seeded with 2 messages about chest discomfort)
 websocat "ws://localhost:9998/patient-support?sessionId=demo"
