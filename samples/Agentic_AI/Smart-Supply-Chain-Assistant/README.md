@@ -384,7 +384,7 @@ WebSocket connections call the `callagent` (InvokeAIAgentTrigger) activity, whic
   "ref": "#callagent",
   "input": {
     "agentName": "SupplyChainAgent",
-    "userPrompt": "=coerce.toString($flow.content)",
+    "Prompt": "=coerce.toString($flow.content)",
     "conversationId": "=coerce.toString($flow.queryParams.sessionId)"
   }
 }
