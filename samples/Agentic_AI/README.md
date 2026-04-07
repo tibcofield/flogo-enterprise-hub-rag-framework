@@ -63,7 +63,7 @@ A procurement intelligence assistant demonstrating two key features working toge
 
 ## Prerequisites
 
-- **TIBCO Flogo® Extension for Visual Studio Code** (version 2.26.2 or later)
+- **TIBCO Flogo® 2.26.2 or later**. For more information, please refer [documentation](https://docs.tibco.com/pub/flogo/latest/doc/html/Default.htm#connectors/agentic-AI/agentic-AI-overview.htm)
 - An API key for your chosen LLM provider (OpenAI, Gemini, or Anthropic)
 - A WebSocket client for testing: [Postman](https://www.postman.com/) or [websocat](https://github.com/vi/websocat)
 
