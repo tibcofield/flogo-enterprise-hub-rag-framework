@@ -87,7 +87,7 @@ The **base Customer360 sample** exposes all data as Tools. That means every time
 
 ## Why Prompts Instead of Just Sending a Message?
 
-A **Prompt** is a reusable, server-managed instruction template. When a user in Claude Desktop selects the `analyze_customer_sales` prompt and fills in `customer_name=Alice Johnson` and `period=Q1 2025`, the Flogo flow constructs a rich, multi-requirement analysis brief. The AI receives this as the opening `user` message — with 6 specific analytical requirements already written in — and begins its analysis immediately.
+A **Prompt** is a reusable, server-managed instruction template. When a user in Claude Desktop selects the `analyze_customer_sales` prompt and fills in `customer_name=Bruce Wayne` and `period=Q1 2025`, the Flogo flow constructs a rich, multi-requirement analysis brief. The AI receives this as the opening `user` message — with 6 specific analytical requirements already written in — and begins its analysis immediately.
 
 **Business value:**
 - Consistent analysis quality across all users (the brief is always complete)
@@ -102,7 +102,7 @@ A **Prompt** is a reusable, server-managed instruction template. When a user in 
 
 ```
 Prompt: analyze_customer_sales
-  customer_name: Alice Johnson
+  customer_name: Bruce Wayne
   period: Q1 2025
 
 → Claude immediately performs a 6-point analysis:
@@ -125,10 +125,10 @@ Read: products://catalog
 → Returns the full product catalog JSON in one read — no tool call needed
 
 Read: sales://summary
-→ Returns pre-aggregated totals: $24,350 revenue, top 3 products, top 3 customers
+→ Returns pre-aggregated totals: $593,463 revenue, top 3 products, top 3 customers
 
 Read: customers://3/profile
-→ Returns Carol White's full profile fetched live from the REST API
+→ Returns Scott Lang's full profile fetched live from the REST API
 ```
 
 ### Using the Tools (same as base Customer360)

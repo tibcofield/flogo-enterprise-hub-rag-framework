@@ -294,8 +294,8 @@
             "output": {
               "arguments": {
                 "type": "json",
-                "value": "{\"type\":\"object\",\"properties\":{\"customer_name\":{\"type\":\"string\",\"description\":\"The full name of the customer to analyse, e.g. Alice Johnson\"},\"period\":{\"type\":\"string\",\"description\":\"The sales period to analyse, e.g. Q1 2025 or March 2025\"}},\"required\":[\"customer_name\",\"period\"]}",
-                "fe_metadata": "{\"type\":\"object\",\"properties\":{\"customer_name\":{\"type\":\"string\",\"description\":\"The full name of the customer to analyse, e.g. Alice Johnson\"},\"period\":{\"type\":\"string\",\"description\":\"The sales period to analyse, e.g. Q1 2025 or March 2025\"}},\"required\":[\"customer_name\",\"period\"]}"
+                "value": "{\"type\":\"object\",\"properties\":{\"customer_name\":{\"type\":\"string\",\"description\":\"The full name of the customer to analyse, e.g. Bruce Wayne\"},\"period\":{\"type\":\"string\",\"description\":\"The sales period to analyse, e.g. Q1 2025 or March 2025\"}},\"required\":[\"customer_name\",\"period\"]}",
+                "fe_metadata": "{\"type\":\"object\",\"properties\":{\"customer_name\":{\"type\":\"string\",\"description\":\"The full name of the customer to analyse, e.g. Bruce Wayne\"},\"period\":{\"type\":\"string\",\"description\":\"The sales period to analyse, e.g. Q1 2025 or March 2025\"}},\"required\":[\"customer_name\",\"period\"]}"
               }
             }
           },
@@ -909,7 +909,7 @@
                         {
                           "uri": "products://catalog",
                           "mimeType": "application/json",
-                          "text": "{\"catalog\":[{\"product_id\":1,\"product_name\":\"Laptop Pro 15\",\"product_cost\":\"$899.00\",\"product_msrp\":\"$1299.00\",\"product_quantity\":\"45\"},{\"product_id\":2,\"product_name\":\"Wireless Keyboard\",\"product_cost\":\"$29.00\",\"product_msrp\":\"$59.99\",\"product_quantity\":\"120\"},{\"product_id\":3,\"product_name\":\"4K Monitor\",\"product_cost\":\"$320.00\",\"product_msrp\":\"$549.00\",\"product_quantity\":\"30\"},{\"product_id\":4,\"product_name\":\"USB-C Hub\",\"product_cost\":\"$18.00\",\"product_msrp\":\"$39.99\",\"product_quantity\":\"200\"},{\"product_id\":5,\"product_name\":\"Noise-Cancelling Headphones\",\"product_cost\":\"$75.00\",\"product_msrp\":\"$199.00\",\"product_quantity\":\"60\"},{\"product_id\":6,\"product_name\":\"Webcam HD\",\"product_cost\":\"$35.00\",\"product_msrp\":\"$79.99\",\"product_quantity\":\"85\"}]}"
+                          "text": "{\"catalog\":[{\"product_id\":1,\"product_name\":\"red cape\",\"product_cost\":\"1000\",\"product_msrp\":\"2000\",\"product_quantity\":\"20\"},{\"product_id\":2,\"product_name\":\"magic lasso\",\"product_cost\":\"100000\",\"product_msrp\":\"100000\",\"product_quantity\":\"0\"},{\"product_id\":3,\"product_name\":\"pym particles disc\",\"product_cost\":\"8000\",\"product_msrp\":\"20000\",\"product_quantity\":\"4\"},{\"product_id\":4,\"product_name\":\"vibranium shield\",\"product_cost\":\"1000\",\"product_msrp\":\"100000\",\"product_quantity\":\"0\"},{\"product_id\":5,\"product_name\":\"arc reactor\",\"product_cost\":\"10000\",\"product_msrp\":\"50000\",\"product_quantity\":\"2\"},{\"product_id\":6,\"product_name\":\"spider-suit\",\"product_cost\":\"500\",\"product_msrp\":\"2000\",\"product_quantity\":\"5\"},{\"product_id\":7,\"product_name\":\"bat cape\",\"product_cost\":\"1000\",\"product_msrp\":\"10000\",\"product_quantity\":\"10\"},{\"product_id\":8,\"product_name\":\"mjolnir hammer\",\"product_cost\":\"5000\",\"product_msrp\":\"100000\",\"product_quantity\":\"0\"}]}"
                         }
                       ]
                     }
@@ -985,7 +985,7 @@
                         {
                           "uri": "sales://summary",
                           "mimeType": "application/json",
-                          "text": "{\"sales_summary\":{\"total_revenue\":\"$24,350.00\",\"total_transactions\":18,\"period\":\"2025-01 to 2025-03\",\"top_products\":[{\"product_name\":\"Laptop Pro 15\",\"units_sold\":6,\"revenue\":\"$7,794.00\"},{\"product_name\":\"4K Monitor\",\"units_sold\":5,\"revenue\":\"$2,745.00\"},{\"product_name\":\"Noise-Cancelling Headphones\",\"units_sold\":4,\"revenue\":\"$796.00\"}],\"top_customers\":[{\"customer_name\":\"Alice Johnson\",\"transactions\":4,\"total_spend\":\"$6,150.00\"},{\"customer_name\":\"Bruce Wayne\",\"transactions\":3,\"total_spend\":\"$3,897.00\"},{\"customer_name\":\"Carol White\",\"transactions\":3,\"total_spend\":\"$2,348.00\"}]}}"
+                          "text": "{\"sales_summary\":{\"total_revenue\":\"$593,463.00\",\"total_transactions\":10,\"period\":\"2025-01 to 2025-05\",\"top_products\":[{\"product_name\":\"mjolnir hammer\",\"units_sold\":1,\"revenue\":\"$199,999.00\"},{\"product_name\":\"magic lasso\",\"units_sold\":1,\"revenue\":\"$143,953.00\"},{\"product_name\":\"vibranium shield\",\"units_sold\":1,\"revenue\":\"$139,503.00\"}],\"top_customers\":[{\"customer_name\":\"thor odinson\",\"transactions\":1,\"total_spend\":\"$199,999.00\"},{\"customer_name\":\"diana prince\",\"transactions\":1,\"total_spend\":\"$143,953.00\"},{\"customer_name\":\"bruce wayne\",\"transactions\":2,\"total_spend\":\"$26,746.00\"}]}}"
                         }
                       ]
                     }
@@ -1095,7 +1095,7 @@
                 "serviceName": "",
                 "resourcePath": "",
                 "Method": "GET",
-                "Uri": "=string.concat($property[\"CustByIdInvokeRESTServiceURL\"], \"/\", coerce.toString($flow.arguments.id))",
+                "Uri": "=$property[\"CustByIdInvokeRESTServiceURL\"]",
                 "requestType": "application/json",
                 "Use certificate for verification": false,
                 "mutualAuth": false,
@@ -1108,7 +1108,8 @@
                 "Timeout": 0,
                 "proxy": "",
                 "host": "",
-                "serviceUrl": ""
+                "serviceUrl": "",
+                "pathParams": "=$flow.arguments"
               },
               "output": {
                 "configureResponseCodes": false,
@@ -1118,6 +1119,11 @@
               },
               "schemas": {
                 "input": {
+                  "pathParams": {
+                    "type": "json",
+                    "value": "{\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"string\"}},\"required\":[]}",
+                    "fe_metadata": "[{\"parameterName\":\"id\",\"type\":\"string\"}]"
+                  },
                   "headers": {
                     "type": "json",
                     "value": "{\"type\":\"object\",\"properties\":{\"Accept\":{\"type\":\"string\",\"visible\":false},\"Accept-Charset\":{\"type\":\"string\",\"visible\":false},\"Accept-Encoding\":{\"type\":\"string\",\"visible\":false},\"Authorization\":{\"type\":\"string\",\"visible\":false},\"Content-Type\":{\"type\":\"string\",\"visible\":false},\"Content-Length\":{\"type\":\"string\",\"visible\":false},\"Connection\":{\"type\":\"string\",\"visible\":false},\"Cookie\":{\"type\":\"string\",\"visible\":false},\"Pragma\":{\"type\":\"string\",\"visible\":false}},\"required\":[]}",
@@ -1425,7 +1431,7 @@
     {
       "name": "CustByIdInvokeRESTServiceURL",
       "type": "string",
-      "value": "http://localhost:18080/customers"
+      "value": "http://localhost:18080/customers/{id}"
     }
   ],
   "schemas": {

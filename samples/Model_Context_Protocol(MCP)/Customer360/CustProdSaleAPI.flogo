@@ -27,6 +27,8 @@
         "swagger": "",
         "swaggerVersion": "v2",
         "authenticationType": "None",
+        "username": "",
+        "password": "",
         "apiVersion": "1.0.0",
         "secureConnection": false,
         "serverKey": "",
@@ -198,7 +200,7 @@
           "settings": {
             "Method": "GET",
             "reqType": "application/json",
-            "Path": "/customers/:id",
+            "Path": "/customers/{id}",
             "OutputValidation": false
           },
           "action": {
@@ -232,6 +234,11 @@
               }
             },
             "output": {
+              "pathParams": {
+                "type": "json",
+                "value": "{\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"string\"}},\"required\":[]}",
+                "fe_metadata": "[{\"parameterName\":\"id\",\"type\":\"string\"}]"
+              },
               "headers": {
                 "type": "json",
                 "value": "{\"type\":\"object\",\"properties\":{\"Accept\":{\"type\":\"string\",\"visible\":false},\"Accept-Charset\":{\"type\":\"string\",\"visible\":false},\"Accept-Encoding\":{\"type\":\"string\",\"visible\":false},\"Content-Type\":{\"type\":\"string\",\"visible\":false},\"Content-Length\":{\"type\":\"string\",\"visible\":false},\"Connection\":{\"type\":\"string\",\"visible\":false},\"Cookie\":{\"type\":\"string\",\"visible\":false},\"Pragma\":{\"type\":\"string\",\"visible\":false}},\"required\":[]}",
@@ -1092,11 +1099,19 @@
                 "description": "Get a list of sales."
               }
             },
-            "/customers/:id": {
+            "/customers/{id}": {
               "get": {
                 "summary": "Get_Customer_By_Id_flow",
-                "operationId": "get_customers_:id",
-                "parameters": [],
+                "operationId": "get_customers_id",
+                "parameters": [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "description": "Request parameter",
+                    "required": true,
+                    "type": "string"
+                  }
+                ],
                 "responses": {
                   "200": {
                     "description": "Rest Response",
