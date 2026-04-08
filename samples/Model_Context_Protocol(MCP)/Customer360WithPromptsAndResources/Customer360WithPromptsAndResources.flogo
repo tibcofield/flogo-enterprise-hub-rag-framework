@@ -1163,7 +1163,7 @@
               "input": {
                 "Log Level": "INFO",
                 "flowInfo": false,
-                "message": "=coerce.toString($activity[InvokeRESTService].responseBody)",
+                "message": "=string.concat(\"Fetched customer profile for customer ID: \", coerce.toString($flow.arguments.id))",
                 "logLevel": ""
               }
             }
