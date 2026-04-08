@@ -19,7 +19,7 @@
   "triggers": [
     {
       "ref": "#mcpserver",
-      "name": "flogo-mcp-mcpsever",
+      "name": "flogo-mcp-mcpserver",
       "description": "Flogo MCP Server exposing Customer 360 Tools, Resources, and Prompts",
       "settings": {
         "serverName": "Customer360MCPServer",
