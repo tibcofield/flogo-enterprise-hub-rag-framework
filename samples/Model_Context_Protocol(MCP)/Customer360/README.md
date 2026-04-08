@@ -44,7 +44,11 @@ This sample demonstrates how to use **TIBCO Flogo® Connector for Model Context 
 <img width="1322" height="588" alt="Screenshot 2025-08-01 at 12 49 20 AM" src="https://github.com/user-attachments/assets/2885b657-0b45-49ab-b3e3-465894eece6d" />
 
 ## Run the application
-  - Run CustProdSaleAPI.flogo app from VsCode which will start the API server and you can access these endpoints - http://localhost:18080/products, http://localhost:18080/customers, http://localhost:18080/sales
+  - Run CustProdSaleAPI.flogo app from VsCode which will start the API server and you can access these endpoints:
+    - `GET http://localhost:18080/customers` — returns all customers
+    - `GET http://localhost:18080/products` — returns all products
+    - `GET http://localhost:18080/sales` — returns all sales
+    - `GET http://localhost:18080/customers/:id` — returns a single customer by ID (also used by the [Customer360WithPromptsAndResources](../Customer360WithPromptsAndResources/README.md) sample)
   - Make sure to check and update the app property CustInvokeRESTServiceURL, ProdInvokeRESTServiceURL, SaleInvokeRESTServiceURL in the `Customer360MCPServer.flogo` app to point to url where your CustProdSaleAPI flogo app is running.
   - Run `Customer360MCPServer.flogo` app from VsCode which will start FLOGO MCP Server over HTTP at http://localhost:9091/mcp.
   - You can configure this MCP Server url with Claude Desktop or GitHub Copilot in VS Code and send queries in natural language and get the response as shown below.
