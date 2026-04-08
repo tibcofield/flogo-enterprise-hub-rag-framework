@@ -182,7 +182,7 @@ Import `Customer360WithPromptsAndResources.flogo` in VS Code.
 | `CustInvokeRESTServiceURL` | `http://localhost:18080/customers` | Used by `GetCustomers` tool |
 | `ProdInvokeRESTServiceURL` | `http://localhost:18080/products` | Used by `GetProducts` tool |
 | `SaleInvokeRESTServiceURL` | `http://localhost:18080/sales` | Used by `GetSales` tool |
-| `CustByIdInvokeRESTServiceURL` | `http://localhost:18080/customers` | Used by `customer_profile` dynamic resource — appends `/{id}` at runtime |
+| `CustByIdInvokeRESTServiceURL` | `http://localhost:18080/customers/{id}` | Used by `customer_profile` dynamic resource |
 
 ### Step 4 — Run the MCP server
 
