@@ -214,6 +214,13 @@ The MCP server starts at `http://localhost:9092/mcp`.
 }
 ```
 
+Once connected, VS Code GitHub Copilot exposes the server's resources in the MCP panel alongside its tools:
+
+- **Static resources** (`products://catalog`, `sales://summary`) — appear in the MCP resources list and can be read directly by selecting them in the panel
+- **Dynamic resource** (`customer_profile`) — uses the URI template `customers://{id}/profile`. To fetch a specific customer's profile, enter the full URI with the customer ID in the MCP resource input field. For example, `customers://3/profile` returns Scott Lang's full profile fetched live from the REST API.
+
+> **How the custom ID is passed to the flow:** When you request `customers://3/profile`, the Flogo MCP trigger extracts the `id` value (`3`) from the URI template and passes it into the `Customer_Profile_Resource` flow as `$flow.arguments.id`. The flow then calls `GET http://localhost:18080/customers/3` and returns the result.
+
 ---
 
 ## What Happens Under the Hood
