@@ -1047,9 +1047,16 @@
           {
             "id": 3,
             "from": "InvokeRESTService",
+            "to": "LogMessage",
+            "type": "label",
+            "label": "InvokeRESTService to LogMessage"
+          },
+          {
+            "id": 4,
+            "from": "LogMessage",
             "to": "Return",
             "type": "label",
-            "label": "Return"
+            "label": "LogMessage to Return"
           }
         ],
         "tasks": [
@@ -1148,6 +1155,20 @@
             }
           },
           {
+            "id": "LogMessage",
+            "name": "LogMessage",
+            "description": "Simple Log Message Activity",
+            "activity": {
+              "ref": "#log",
+              "input": {
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "=string.concat(\"Fetched customer profile for customer ID: \", coerce.toString($flow.arguments.id))",
+                "logLevel": ""
+              }
+            }
+          },
+          {
             "id": "Return",
             "name": "Return",
             "description": "Return customer profile as JSON resource content",
@@ -1171,7 +1192,7 @@
             }
           }
         ],
-        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjUwLCJ5Ijo1MH0sIkxvZ1N0YXJ0Ijp7IngiOjE3OCwieSI6NDF9LCJJbnZva2VSRVNUU2VydmljZSI6eyJ4IjozNzIsInkiOjQ5fSwiUmV0dXJuIjp7IngiOjU5NywieSI6NTN9fQ==",
+        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjUwLCJ5Ijo1MH0sIkxvZ1N0YXJ0Ijp7IngiOjE3OCwieSI6NDF9LCJJbnZva2VSRVNUU2VydmljZSI6eyJ4IjozNzIsInkiOjQ5fSwiTG9nTWVzc2FnZSI6eyJ4Ijo1MzcsInkiOjUxfSwiUmV0dXJuIjp7IngiOjcxNywieSI6NDV9fQ==",
         "metadata": {
           "input": [
             {
@@ -1452,8 +1473,8 @@
     },
     "CustomerByIdSchema": {
       "type": "json",
-      "value": "{\n    \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n    \"type\": \"object\",\n    \"properties\": {\n        \"customer\": {\n            \"type\": \"array\",\n            \"items\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"customer_id\": { \"type\": \"number\" },\n                    \"customer_name\": { \"type\": \"string\" },\n                    \"customer_age\": { \"type\": \"number\" },\n                    \"customer_street\": { \"type\": \"string\" },\n                    \"customer_city\": { \"type\": \"string\" },\n                    \"customer_state\": { \"type\": \"string\" },\n                    \"customer_country\": { \"type\": \"string\" }\n                }\n            }\n        }\n    }\n}",
-      "fe_metadata": "{\n    \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n    \"type\": \"object\",\n    \"properties\": {\n        \"customer\": {\n            \"type\": \"array\",\n            \"items\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"customer_id\": { \"type\": \"number\" },\n                    \"customer_name\": { \"type\": \"string\" },\n                    \"customer_age\": { \"type\": \"number\" },\n                    \"customer_street\": { \"type\": \"string\" },\n                    \"customer_city\": { \"type\": \"string\" },\n                    \"customer_state\": { \"type\": \"string\" },\n                    \"customer_country\": { \"type\": \"string\" }\n                }\n            }\n        }\n    }\n}"
+      "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"properties\":{\"customer_id\":{\"type\":\"number\"},\"customer_name\":{\"type\":\"string\"},\"customer_age\":{\"type\":\"string\"},\"customer_street\":{\"type\":\"string\"},\"customer_city\":{\"type\":\"string\"},\"customer_state\":{\"type\":\"string\"},\"customer_country\":{\"type\":\"string\"}}}",
+      "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"properties\":{\"customer_id\":{\"type\":\"number\"},\"customer_name\":{\"type\":\"string\"},\"customer_age\":{\"type\":\"string\"},\"customer_street\":{\"type\":\"string\"},\"customer_city\":{\"type\":\"string\"},\"customer_state\":{\"type\":\"string\"},\"customer_country\":{\"type\":\"string\"}}}"
     }
   },
   "connections": {},
