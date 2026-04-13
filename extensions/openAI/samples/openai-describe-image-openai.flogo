@@ -1,0 +1,189 @@
+{
+  "imports": [
+    "github.com/project-flogo/flow",
+    "github.com/project-flogo/contrib/activity/noop",
+    "github.com/tibco/flogo-files/src/app/File/activity/read",
+    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/createResponse",
+    "github.com/tibco/flogo-general/src/app/General/activity/log",
+    "github.com/project-flogo/contrib/activity/actreturn",
+    "github.com/tibco/flogo-general/src/app/General/trigger/startuphook"
+  ],
+  "name": "openAIDescribeImage-openAI",
+  "description": "",
+  "version": "1.0.0",
+  "type": "flogo:app",
+  "appModel": "1.1.1",
+  "tags": [],
+  "triggers": [
+    {
+      "ref": "#startuphook",
+      "name": "tibco-appstartup",
+      "description": "This trigger allows you to execute flows before other triggers in the application are started. This is useful in initializing application specific tasks.",
+      "settings": {},
+      "id": "AppStartupTrigger",
+      "handlers": [
+        {
+          "description": "Desribes the image using response API",
+          "action": {
+            "ref": "github.com/project-flogo/flow",
+            "settings": {
+              "flowURI": "res://flow:Describe_Image"
+            }
+          },
+          "name": "Describe_Image"
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "flow:Describe_Image",
+      "data": {
+        "name": "Describe Image",
+        "description": "Desribes the image using response API",
+        "links": [
+          {
+            "id": 1,
+            "from": "StartActivity",
+            "to": "ReadFile",
+            "type": "label",
+            "label": "StartActivity to ReadFile"
+          },
+          {
+            "id": 2,
+            "from": "ReadFile",
+            "to": "DescribeImage",
+            "type": "label",
+            "label": "ReadFile to CreateResponse"
+          },
+          {
+            "id": 3,
+            "from": "DescribeImage",
+            "to": "LogMessage",
+            "type": "label",
+            "label": "DescribeImage to LogMessage"
+          },
+          {
+            "id": 4,
+            "from": "LogMessage",
+            "to": "Return",
+            "type": "label",
+            "label": "LogMessage to Return"
+          }
+        ],
+        "tasks": [
+          {
+            "id": "StartActivity",
+            "name": "StartActivity",
+            "description": "NoOp Activity",
+            "activity": {
+              "ref": "#noop"
+            }
+          },
+          {
+            "id": "ReadFile",
+            "name": "ReadFile",
+            "description": "This activity reads the content of a file",
+            "activity": {
+              "ref": "#read",
+              "input": {
+                "readAs": "Binary",
+                "compress": "None",
+                "input": {
+                  "mapping": {
+                    "fileName": "/Users/markbloomfield/Documents/projects/extension-tests/test-data/pictures/200.png"
+                  }
+                }
+              },
+              "schemas": {
+                "input": {
+                  "input": {
+                    "type": "json",
+                    "value": "{\"properties\":{\"fileName\":{\"type\":\"string\"}},\"required\":[\"fileName\"],\"type\":\"object\"}",
+                    "fe_metadata": "{\"properties\":{\"fileName\":{\"type\":\"string\"}},\"required\":[\"fileName\"],\"type\":\"object\"}"
+                  }
+                },
+                "output": {
+                  "output": {
+                    "type": "json",
+                    "value": "{\"properties\":{\"fileMetadata\":{\"properties\":{\"fullPath\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"size\":{\"type\":\"number\"},\"mode\":{\"type\":\"string\"},\"modTime\":{\"type\":\"string\",\"format\":\"date-time\"},\"isDir\":{\"type\":\"boolean\"}},\"type\":\"object\"},\"fileContent\":{\"properties\":{\"binaryContent\":{\"type\":\"string\"}},\"type\":\"object\"}},\"type\":\"object\"}",
+                    "fe_metadata": "{\"properties\":{\"fileMetadata\":{\"properties\":{\"fullPath\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"size\":{\"type\":\"number\"},\"mode\":{\"type\":\"string\"},\"modTime\":{\"type\":\"string\",\"format\":\"date-time\"},\"isDir\":{\"type\":\"boolean\"}},\"type\":\"object\"},\"fileContent\":{\"properties\":{\"binaryContent\":{\"type\":\"string\"}},\"type\":\"object\"}},\"type\":\"object\"}"
+                  }
+                }
+              },
+              "feSchemaMap": {}
+            }
+          },
+          {
+            "id": "DescribeImage",
+            "name": "DescribeImage",
+            "description": "This activity executes requests to openAPI responses API",
+            "settings": {
+              "retryOnError": {
+                "count": 0,
+                "interval": 0
+              }
+            },
+            "activity": {
+              "ref": "#createResponse",
+              "settings": {
+                "endPointURL": "https://api.openai.com/v1",
+                "apiKey": "=$property[\"OPEN_AI_API_KEY\"]",
+                "model": "gpt-4.1-mini",
+                "maxRetries": 2,
+                "inputFormat": "image/png;base64",
+                "outputFormat": "text"
+              },
+              "input": {
+                "prompt": "Describe this image",
+                "tool": "",
+                "base64String": "=$activity[ReadFile].output.fileContent.binaryContent"
+              }
+            }
+          },
+          {
+            "id": "LogMessage",
+            "name": "LogMessage",
+            "description": "Simple Log Message Activity",
+            "activity": {
+              "ref": "#log",
+              "input": {
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "=$activity[DescribeImage].response",
+                "logLevel": ""
+              }
+            }
+          },
+          {
+            "id": "Return",
+            "name": "Return",
+            "description": "Simple Return Activity",
+            "activity": {
+              "ref": "#actreturn"
+            }
+          }
+        ],
+        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjEwMCwieSI6MTAwfSwiUmVhZEZpbGUiOnsieCI6MjYzLCJ5Ijo5NX0sIkRlc2NyaWJlSW1hZ2UiOnsieCI6NDczLCJ5Ijo5NX0sIkxvZ01lc3NhZ2UiOnsieCI6NjkxLCJ5Ijo5Nn0sIlJldHVybiI6eyJ4Ijo5NjQsInkiOjk0fX0=",
+        "metadata": {
+          "input": [],
+          "output": [],
+          "fe_metadata": {}
+        }
+      }
+    }
+  ],
+  "properties": [
+    {
+      "name": "OPEN_AI_API_KEY",
+      "type": "string",
+      "value": "REPLACE ME"
+    }
+  ],
+  "connections": {},
+  "contrib": "W3sicmVmIjoiZ2l0aHViLmNvbS90aWJjby9mbG9nby1nZW5lcmFsL3NyYy9hcHAvR2VuZXJhbCIsImlkIjoiR2VuZXJhbCIsInZlcnNpb24iOiIxLjYuMTIiLCJ0YWciOiIxLjYuMTItYjA2IiwibmFtZSI6IkdlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCIsImlzVXNlckV4dGVuc2lvbiI6ZmFsc2V9LHsicmVmIjoiZ2l0aHViLmNvbS90aWJjby9mbG9nby1maWxlcy9zcmMvYXBwL0ZpbGUiLCJpZCI6IkZpbGUiLCJ2ZXJzaW9uIjoiMS4wLjAiLCJ0YWciOiIxLjAuMC1iMTQiLCJuYW1lIjoiRmlsZSIsInMzbG9jYXRpb24iOiJUaWJjby9GaWxlIiwiaXNVc2VyRXh0ZW5zaW9uIjpmYWxzZX0seyJyZWYiOiJnaXRodWIuY29tL1RJQkNPU29mdHdhcmUvZmxvZ28tZW50ZXJwcmlzZS1odWIvZXh0ZW5zaW9ucy9vcGVuQUkiLCJpZCI6Im9wZW5BSSIsInZlcnNpb24iOiIxLjAuMSIsInRhZyI6IjEuMC4wIiwibmFtZSI6Ik9wZW5BSSAiLCJzM2xvY2F0aW9uIjoie1VTRVJJRH0vb3BlbkFJIiwiaXNVc2VyRXh0ZW5zaW9uIjp0cnVlfV0=",
+  "metadata": {
+    "endpoints": [],
+    "flogoVersion": "2.26.2"
+  }
+}

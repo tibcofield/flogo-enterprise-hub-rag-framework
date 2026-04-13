@@ -1,0 +1,87 @@
+{
+  "name": "openai-vector-search",
+  "version": "1.0.1",
+  "type": "flogo:activity",
+  "title": "Vector Search",
+  "author": "TIBCO Software",
+  "ref": "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/vectorSearch",
+  "display": {
+    "category": "openAI",
+    "visible": true,
+    "description": "This activity searches a vector store for relevant information based on a query",
+    "smallIcon": "icons/openAPISmall.png",
+    "largeIcon": "icons/openAPILarge.png"
+  },
+  "feature": {
+    "retry": {
+      "enabled": true
+    }
+  },
+  "settings": [
+    {
+      "name": "endPointURL",
+      "type": "string",
+      "required": true,
+      "display": {
+        "name": "API Endopoint URL",
+        "description": "Endpoint URL for the OpenAI API, for example https://api.openai.com/v1",
+        "appPropertySupport": true
+      }
+    },
+    {
+      "name": "apiKey",
+      "type": "string",
+      "required": true,
+      "display": {
+        "name": "OpenAI API Key",
+        "description": "OpenAI key that is required to authenticate with the OpenAI API",
+        "appPropertySupport": true
+      }
+    },
+    {
+      "name": "vectorStoreID",
+      "type": "string",
+      "required": false,
+      "value": "",
+      "display": {
+        "name": "Vector Store ID",
+        "description": "If populated will add the file to the vector store",
+        "appPropertySupport": true
+      }},
+      {
+      "name": "maxNumberOfResults",
+      "type": "integer",
+      "required": false,
+      "value": 5,
+      "display": {
+        "name": "Max Number of Results",
+        "description": "The maximum number of results to return from the vector search",
+        "appPropertySupport": true
+      }},
+      {
+      "name": "rewriteQuery",
+      "type": "boolean",
+      "required": false,
+      "value": false,
+      "display": {
+        "name": "Rewrite Query",
+        "description": "Whether to rewrite the natural language query for vector search.",
+        "appPropertySupport": true
+      }
+    }
+  ],
+  "inputs": [
+   {
+      "name": "searchString",
+      "type": "string",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "searchResultRows",
+      "type": "array",
+      "enablecoercing": true
+    }
+  ]
+}

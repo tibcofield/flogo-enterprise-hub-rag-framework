@@ -1,0 +1,183 @@
+{
+  "imports": [
+    "github.com/project-flogo/flow",
+    "github.com/project-flogo/contrib/activity/noop",
+    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/generateImage",
+    "github.com/tibco/flogo-general/src/app/General/activity/log",
+    "github.com/project-flogo/contrib/activity/actreturn",
+    "github.com/tibco/flogo-general/src/app/General/trigger/startuphook"
+  ],
+  "name": "openAI-imagecreation-openai",
+  "description": "Test flows for Creating and Editing Images",
+  "version": "1.0.0",
+  "type": "flogo:app",
+  "appModel": "1.1.1",
+  "tags": [],
+  "triggers": [
+    {
+      "ref": "#startuphook",
+      "name": "tibco-appstartup",
+      "description": "This trigger allows you to execute flows before other triggers in the application are started. This is useful in initializing application specific tasks.",
+      "settings": {},
+      "id": "AppStartupTrigger",
+      "handlers": [
+        {
+          "description": "Test the creation of images with Different settings",
+          "action": {
+            "ref": "github.com/project-flogo/flow",
+            "settings": {
+              "flowURI": "res://flow:TestCreateImage"
+            }
+          },
+          "name": "TestCreateImage"
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "flow:TestCreateImage",
+      "data": {
+        "name": "TestCreateImage",
+        "description": "Test the creation of images with Different settings",
+        "links": [
+          {
+            "id": 1,
+            "from": "StartActivity",
+            "to": "GenerateImage",
+            "type": "label",
+            "label": "StartActivity to GenerateImage"
+          },
+          {
+            "id": 2,
+            "from": "GenerateImage",
+            "to": "LogGenerateImageRespose",
+            "type": "label",
+            "label": "GenerateImage to LogMessage"
+          },
+          {
+            "id": 3,
+            "from": "LogGenerateImageRespose",
+            "to": "Return",
+            "type": "label",
+            "label": "LogMessage to Return"
+          },
+          {
+            "id": 4,
+            "from": "GenerateImage",
+            "to": "LogMessage1",
+            "type": "error",
+            "label": "GenerateImage to LogMessage1"
+          },
+          {
+            "id": 5,
+            "from": "LogMessage1",
+            "to": "Return",
+            "type": "label",
+            "label": "LogMessage1 to Return"
+          }
+        ],
+        "tasks": [
+          {
+            "id": "StartActivity",
+            "name": "StartActivity",
+            "description": "NoOp Activity",
+            "activity": {
+              "ref": "#noop"
+            }
+          },
+          {
+            "id": "GenerateImage",
+            "name": "GenerateImage",
+            "description": "This activity generates images using the images API",
+            "settings": {
+              "retryOnError": {
+                "count": 0,
+                "interval": 0
+              }
+            },
+            "activity": {
+              "ref": "#generateImage",
+              "settings": {
+                "endPointURL": "https://api.openai.com/v1",
+                "apiKey": "=$property[\"OpenAI.API_KEY\"]",
+                "maxRetries": 2,
+                "model": "gpt-image-1.5",
+                "mode": "new",
+                "outputFormat": "jpeg",
+                "outputDirectory": "/tmp/",
+                "inputDirectory": "/tmp/",
+                "imageSize": "auto",
+                "quality": "auto",
+                "compression": 50,
+                "transparent": false,
+                "moderation": "auto"
+              },
+              "input": {
+                "prompt": "create an image of Clown being fired out of a cannon",
+                "inputFilename": "",
+                "maskFilename": "",
+                "outputFilename": "clown.jpeg"
+              }
+            }
+          },
+          {
+            "id": "LogGenerateImageRespose",
+            "name": "LogGenerateImageRespose",
+            "description": "Simple Log Message Activity",
+            "activity": {
+              "ref": "#log",
+              "input": {
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "=$activity[GenerateImage].metaData",
+                "logLevel": ""
+              }
+            }
+          },
+          {
+            "id": "Return",
+            "name": "Return",
+            "description": "Simple Return Activity",
+            "activity": {
+              "ref": "#actreturn"
+            }
+          },
+          {
+            "id": "LogMessage1",
+            "name": "LogMessage1",
+            "description": "Simple Log Message Activity",
+            "activity": {
+              "ref": "#log",
+              "input": {
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "=$error[GenerateImage].message",
+                "logLevel": ""
+              }
+            }
+          }
+        ],
+        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjEwMCwieSI6MTAwfSwiR2VuZXJhdGVJbWFnZSI6eyJ4IjoyNDUsInkiOjk3fSwiTG9nR2VuZXJhdGVJbWFnZVJlc3Bvc2UiOnsieCI6NTI0LCJ5Ijo5N30sIlJldHVybiI6eyJ4Ijo4ODEsInkiOjk2fSwiTG9nTWVzc2FnZTEiOnsieCI6NTIzLCJ5IjoyOTF9fQ==",
+        "metadata": {
+          "input": [],
+          "output": [],
+          "fe_metadata": {}
+        }
+      }
+    }
+  ],
+  "properties": [
+    {
+      "name": "OpenAI.API_KEY",
+      "type": "string",
+      "value": "REPLACE ME"
+    }
+  ],
+  "connections": {},
+  "contrib": "W3sicmVmIjoiZ2l0aHViLmNvbS90aWJjby9mbG9nby1nZW5lcmFsL3NyYy9hcHAvR2VuZXJhbCIsImlkIjoiR2VuZXJhbCIsInZlcnNpb24iOiIxLjYuMTIiLCJ0YWciOiIxLjYuMTItYjA2IiwibmFtZSI6IkdlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCIsImlzVXNlckV4dGVuc2lvbiI6ZmFsc2V9LHsicmVmIjoiZ2l0aHViLmNvbS9USUJDT1NvZnR3YXJlL2Zsb2dvLWVudGVycHJpc2UtaHViL2V4dGVuc2lvbnMvb3BlbkFJIiwiaWQiOiJvcGVuQUkiLCJ2ZXJzaW9uIjoiMS4wLjEiLCJ0YWciOiIxLjAuMCIsIm5hbWUiOiJPcGVuQUkgIiwiczNsb2NhdGlvbiI6IntVU0VSSUR9L29wZW5BSSIsImlzVXNlckV4dGVuc2lvbiI6dHJ1ZX1d",
+  "metadata": {
+    "endpoints": [],
+    "flogoVersion": "2.26.2"
+  }
+}
