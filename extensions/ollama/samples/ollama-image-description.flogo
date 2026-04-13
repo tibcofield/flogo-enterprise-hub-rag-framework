@@ -1,0 +1,147 @@
+{
+  "imports": [
+    "github.com/project-flogo/flow",
+    "github.com/project-flogo/contrib/activity/noop",
+    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/ollama/activity/generateCompletion",
+    "github.com/tibco/flogo-general/src/app/General/activity/log",
+    "github.com/project-flogo/contrib/activity/actreturn",
+    "github.com/tibco/flogo-general/src/app/General/trigger/startuphook",
+    "github.com/project-flogo/contrib/function/coerce"
+  ],
+  "name": "ollama-image-description",
+  "description": "",
+  "version": "1.0.0",
+  "type": "flogo:app",
+  "appModel": "1.1.1",
+  "tags": [],
+  "triggers": [
+    {
+      "ref": "#startuphook",
+      "name": "tibco-appstartup",
+      "description": "This trigger allows you to execute flows before other triggers in the application are started. This is useful in initializing application specific tasks.",
+      "settings": {},
+      "id": "AppStartupTrigger",
+      "handlers": [
+        {
+          "description": "",
+          "action": {
+            "ref": "github.com/project-flogo/flow",
+            "settings": {
+              "flowURI": "res://flow:image-desc"
+            }
+          },
+          "name": "image-desc"
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "flow:image-desc",
+      "data": {
+        "name": "image-desc",
+        "description": "",
+        "links": [
+          {
+            "id": 1,
+            "from": "StartActivity",
+            "to": "Generatecompletion",
+            "type": "label",
+            "label": "StartActivity to Generatecompletion"
+          },
+          {
+            "id": 2,
+            "from": "Generatecompletion",
+            "to": "LogMessage",
+            "type": "label",
+            "label": "Generatecompletion to LogMessage"
+          },
+          {
+            "id": 3,
+            "from": "LogMessage",
+            "to": "Return",
+            "type": "label",
+            "label": "LogMessage to Return"
+          }
+        ],
+        "tasks": [
+          {
+            "id": "StartActivity",
+            "name": "StartActivity",
+            "description": "NoOp Activity",
+            "activity": {
+              "ref": "#noop"
+            }
+          },
+          {
+            "id": "Generatecompletion",
+            "name": "Generatecompletion",
+            "description": "Generates embedings ollama embedding API",
+            "settings": {
+              "retryOnError": {
+                "count": 0,
+                "interval": 0
+              }
+            },
+            "activity": {
+              "ref": "#generateCompletion",
+              "input": {
+                "prompt": "describe this picture",
+                "suffix": "",
+                "fileName": "/tmp/clown.jpeg",
+                "modelOptions": ""
+              },
+              "settings": {
+                "ollamaHostURL": "http://localhost:11434",
+                "model": "llava",
+                "modelVersion": "latest",
+                "systemMsg": "",
+                "outputFormat": "text",
+                "template": "",
+                "context": "",
+                "stream": false,
+                "raw": false,
+                "keepAlive": 5
+              }
+            }
+          },
+          {
+            "id": "LogMessage",
+            "name": "LogMessage",
+            "description": "Simple Log Message Activity",
+            "activity": {
+              "ref": "#log",
+              "input": {
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "=coerce.toString($activity[Generatecompletion].outputText)",
+                "logLevel": ""
+              }
+            }
+          },
+          {
+            "id": "Return",
+            "name": "Return",
+            "description": "Simple Return Activity",
+            "activity": {
+              "ref": "#actreturn"
+            }
+          }
+        ],
+        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjQwLCJ5Ijo4MX0sIkdlbmVyYXRlY29tcGxldGlvbiI6eyJ4IjoyNTYsInkiOjc1fSwiTG9nTWVzc2FnZSI6eyJ4Ijo1ODQsInkiOjc1fSwiUmV0dXJuIjp7IngiOjg4MCwieSI6Nzh9fQ==",
+        "metadata": {
+          "input": [],
+          "output": [],
+          "fe_metadata": {}
+        }
+      }
+    }
+  ],
+  "properties": [],
+  "connections": {},
+  "contrib": "W3sicmVmIjoiZ2l0aHViLmNvbS90aWJjby9mbG9nby1nZW5lcmFsL3NyYy9hcHAvR2VuZXJhbCIsImlkIjoiR2VuZXJhbCIsInZlcnNpb24iOiIxLjYuMTIiLCJ0YWciOiIxLjYuMTItYjA2IiwibmFtZSI6IkdlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCIsImlzVXNlckV4dGVuc2lvbiI6ZmFsc2V9XQ==",
+  "metadata": {
+    "endpoints": [],
+    "flogoVersion": "2.26.2"
+  }
+}

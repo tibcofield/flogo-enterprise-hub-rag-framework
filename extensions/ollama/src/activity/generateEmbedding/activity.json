@@ -1,0 +1,107 @@
+{
+  "name": "ollama-generate-embedding",
+  "version": "1.0.1",
+  "type": "flogo:activity",
+  "title": "Generate Embedding",
+  "author": "TIBCO Software",
+  "ref": "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/ollama/activity/generateEmbedding",
+  "display": {
+    "category": "ollama",
+    "visible": true,
+    "description": "Generates embedings ollama embedding API",
+    "smallIcon": "icons/ollamaAPIImageSmall.png",
+    "largeIcon": "icons/ollamaAPIImageLarge.png"
+  },
+  "feature": {
+    "retry": {
+      "enabled": true
+    }
+  },
+  "settings": [
+    {
+      "name": "ollamaHostURL",
+      "type": "string",
+      "value": "http://localhost:11434",
+      "required": true,
+      "display": {
+        "name": "Ollama Connection URL",
+        "description": "The Ollama Connection URL to use when invoking the Ollama API",
+        "appPropertySupport": true
+      }
+    },
+    {
+      "name": "embeddingModel",
+      "type": "string",
+      "required": false,
+      "value": "all-minilm",
+      "display": {
+        "name": "Embedding Model",
+        "description": "The Model to use for the embeding"
+      },
+      "allowed": [
+        "nomic-embed-text",
+        "mxbai-embed-large",
+        "bge-m3",
+        "all-minilm",
+        "snowflace-artic-embed",
+        "snowflacke-artice-embed2",
+        "bce-large",
+        "paraphracse-multilingual",
+        "granite-embedding",
+        "embeddinggemma"
+      ]
+    },
+    {
+      "name": "embeddingModelVersion",
+      "type": "string",
+      "required": false,
+      "value": "latest",
+      "display": {
+        "name": "Model Version",
+        "description": "The version of the model to use.  Defaults to latest"
+      }
+    },
+    {
+      "name": "truncate",
+      "type": "boolean",
+      "required": false,
+      "value": false,
+      "display": {
+        "name": "truncate",
+        "description": "Truncates the end of each input to fit within context length. Returns error if false and context length is exceeded. Defaults to true"
+      }
+    },
+    {
+      "name": "keepAlive",
+      "type": "integer",
+      "required": true,
+      "value": 5,
+      "display": {
+        "name": "Keep Alive",
+        "description": "How long the model should be kept in memoery after each request (default 5m)"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "name": "embeddingText",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "modelOptions",
+      "type": "string",
+      "required": false
+    }
+  ],
+  "outputs": [
+    {
+      "name": "embedding",
+      "type": "string"
+    },
+    {
+      "name": "embeddingMetadata",
+      "type": "string"
+    }
+  ]
+}

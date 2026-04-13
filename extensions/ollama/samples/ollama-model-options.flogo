@@ -1,0 +1,206 @@
+{
+  "imports": [
+    "github.com/project-flogo/flow",
+    "github.com/project-flogo/contrib/activity/noop",
+    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/ollama/activity/modelOptions",
+    "github.com/tibco/flogo-general/src/app/General/activity/log",
+    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/ollama/activity/generateEmbedding",
+    "github.com/project-flogo/contrib/activity/actreturn",
+    "github.com/tibco/flogo-general/src/app/General/trigger/startuphook"
+  ],
+  "name": "Ollama-options",
+  "description": "Tests setting just the seed value to produce repetative model results",
+  "version": "1.0.0",
+  "type": "flogo:app",
+  "appModel": "1.1.1",
+  "tags": [],
+  "triggers": [
+    {
+      "ref": "#startuphook",
+      "name": "tibco-appstartup",
+      "description": "This trigger allows you to execute flows before other triggers in the application are started. This is useful in initializing application specific tasks.",
+      "settings": {},
+      "id": "AppStartupTrigger",
+      "handlers": [
+        {
+          "description": "Add description",
+          "action": {
+            "ref": "github.com/project-flogo/flow",
+            "settings": {
+              "flowURI": "res://flow:embeding-with-fixed-seed"
+            }
+          },
+          "name": "embeding-with-fixed-seed"
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "flow:embeding-with-fixed-seed",
+      "data": {
+        "name": "embeding-with-fixed-seed",
+        "description": "Add description",
+        "links": [
+          {
+            "id": 1,
+            "from": "StartActivity",
+            "to": "ModelOptions",
+            "type": "label",
+            "label": "StartActivity to ModelOptions"
+          },
+          {
+            "id": 2,
+            "from": "ModelOptions",
+            "to": "LogMessage",
+            "type": "label",
+            "label": "ModelOptions to LogMessage"
+          },
+          {
+            "id": 3,
+            "from": "LogMessage",
+            "to": "GenerateEmbedding",
+            "type": "label",
+            "label": "LogMessage to GenerateEmbedding"
+          },
+          {
+            "id": 4,
+            "from": "GenerateEmbedding",
+            "to": "LogMeta",
+            "type": "label",
+            "label": "GenerateEmbedding to LogMeta"
+          },
+          {
+            "id": 5,
+            "from": "LogMeta",
+            "to": "LogEmbedding",
+            "type": "label",
+            "label": "LogMeta to LogMessage1"
+          },
+          {
+            "id": 6,
+            "from": "LogEmbedding",
+            "to": "Return",
+            "type": "label",
+            "label": "LogMessage1 to Return"
+          }
+        ],
+        "tasks": [
+          {
+            "id": "StartActivity",
+            "name": "StartActivity",
+            "description": "NoOp Activity",
+            "activity": {
+              "ref": "#noop"
+            }
+          },
+          {
+            "id": "ModelOptions",
+            "name": "ModelOptions",
+            "description": "Generates model options for running models using Ollama",
+            "settings": {
+              "retryOnError": {
+                "count": 0,
+                "interval": 0
+              }
+            },
+            "activity": {
+              "ref": "#modelOptions",
+              "input": {
+                "seed": 100
+              }
+            }
+          },
+          {
+            "id": "LogMessage",
+            "name": "LogMessage",
+            "description": "Simple Log Message Activity",
+            "activity": {
+              "ref": "#log",
+              "input": {
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "=$activity[ModelOptions].modelOptions",
+                "logLevel": ""
+              }
+            }
+          },
+          {
+            "id": "GenerateEmbedding",
+            "name": "GenerateEmbedding",
+            "description": "Generates embedings ollama embedding API",
+            "settings": {
+              "retryOnError": {
+                "count": 0,
+                "interval": 0
+              }
+            },
+            "activity": {
+              "ref": "#generateEmbedding",
+              "settings": {
+                "ollamaHostURL": "http://localhost:11434",
+                "embeddingModel": "all-minilm",
+                "embeddingModelVersion": "latest",
+                "truncate": false,
+                "keepAlive": 5
+              },
+              "input": {
+                "embeddingText": "brown fox",
+                "modelOptions": ""
+              }
+            }
+          },
+          {
+            "id": "LogMeta",
+            "name": "LogMeta",
+            "description": "Simple Log Message Activity",
+            "activity": {
+              "ref": "#log",
+              "input": {
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "=$activity[GenerateEmbedding].embeddingMetadata",
+                "logLevel": ""
+              }
+            }
+          },
+          {
+            "id": "LogEmbedding",
+            "name": "LogEmbedding",
+            "description": "Simple Log Message Activity",
+            "activity": {
+              "ref": "#log",
+              "input": {
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "=$activity[GenerateEmbedding].embedding",
+                "logLevel": ""
+              }
+            }
+          },
+          {
+            "id": "Return",
+            "name": "Return",
+            "description": "Simple Return Activity",
+            "activity": {
+              "ref": "#actreturn"
+            }
+          }
+        ],
+        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjEwMCwieSI6MTAwfSwiTW9kZWxPcHRpb25zIjp7IngiOjIyMiwieSI6MTAxfSwiTG9nTWVzc2FnZSI6eyJ4IjozOTYsInkiOjEwMH0sIkdlbmVyYXRlRW1iZWRkaW5nIjp7IngiOjU2NSwieSI6MTAyfSwiTG9nTWV0YSI6eyJ4Ijo3NTQsInkiOjEwMX0sIkxvZ0VtYmVkZGluZyI6eyJ4IjoyMjksInkiOjI5MX0sIlJldHVybiI6eyJ4Ijo0NjEsInkiOjI5Mn19",
+        "metadata": {
+          "input": [],
+          "output": [],
+          "fe_metadata": {}
+        }
+      }
+    }
+  ],
+  "properties": [],
+  "connections": {},
+  "contrib": "W3sicmVmIjoiZ2l0aHViLmNvbS90aWJjby9mbG9nby1nZW5lcmFsL3NyYy9hcHAvR2VuZXJhbCIsImlkIjoiR2VuZXJhbCIsInZlcnNpb24iOiIxLjYuMTIiLCJ0YWciOiIxLjYuMTItYjA2IiwibmFtZSI6IkdlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCIsImlzVXNlckV4dGVuc2lvbiI6ZmFsc2V9LHsicmVmIjoiZ2l0aHViLmNvbS9USUJDT1NvZnR3YXJlL2Zsb2dvLWVudGVycHJpc2UtaHViL2V4dGVuc2lvbnMvb2xsYW1hIiwiaWQiOiJvbGxhbWEiLCJ2ZXJzaW9uIjoiMS4wLjAiLCJ0YWciOiIxLjAuMCIsIm5hbWUiOiJPbGxhbWEiLCJzM2xvY2F0aW9uIjoie1VTRVJJRH0vb2xsYW1hIiwiaXNVc2VyRXh0ZW5zaW9uIjp0cnVlfV0=",
+  "metadata": {
+    "endpoints": [],
+    "flogoVersion": "2.26.2"
+  }
+}

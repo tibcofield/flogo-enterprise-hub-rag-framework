@@ -1,0 +1,167 @@
+{
+  "name": "ollama-generate-completion",
+  "version": "1.0.1",
+  "type": "flogo:activity",
+  "title": "Generate completion",
+  "author": "TIBCO Software",
+  "ref": "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/ollama/activity/generateCompletion",
+  "display": {
+    "category": "ollama",
+    "visible": true,
+    "description": "Generates embedings ollama embedding API",
+    "smallIcon": "icons/ollamaAPIImageSmall.png",
+    "largeIcon": "icons/ollamaAPIImageLarge.png"
+  },
+  "feature": {
+    "retry": {
+      "enabled": true
+    }
+  },
+  "settings": [
+    {
+      "name": "ollamaHostURL",
+      "type": "string",
+      "value": "http://localhost:11434",              
+      "required": true,
+      "display": {
+        "name": "Ollama Connection URL",
+        "description": "The Ollama Connection URL to use when invoking the Ollama API",
+        "appPropertySupport": true
+      }
+    },
+    {
+      "name": "model",
+      "type": "string",
+      "required": false,
+      "value": "llama3.2",
+      "display": {
+        "name": "Model",
+        "description": "The Model to use for the completion"
+      }
+    }
+    ,
+    {
+      "name": "modelVersion",
+      "type": "string",
+      "required": false,
+      "value": "latest",
+      "display": {
+        "name": "Model",
+        "description": "The Model version to use for the completion"
+      }
+    }
+    ,
+    {
+      "name": "systemMsg",
+      "type": "string",
+      "required": false,
+      "value": "",
+      "display": {
+        "name": "System Message",
+        "description": "The system message to use (overrides modfile settings if provided)"
+      }
+    },
+    {
+      "name": "outputFormat",
+      "type": "string",
+      "required": false,
+      "value": "text",
+      "display": {
+        "name": "Output Format",
+        "description": "The output format to use (text, json)"
+      },
+      "allowed": [
+        "text",
+        "json"
+      ]
+    }
+    ,
+    {
+      "name": "template",
+      "type": "string",
+      "required": false,
+      "value": "",
+      "display": {
+        "name": "Tempalte",
+        "description": "The prompt template to use (overrides modfile settings if provided)"
+      }
+    },
+    {
+      "name": "context",
+      "type": "string",
+      "required": false,
+      "value": "",
+      "display": {
+        "name": "Context",
+        "description": "The context parameter returned from a previous request to /genetare, this can be used to keep short conversational memoery"
+      }
+    }
+    ,
+    {
+      "name": "stream",
+      "type": "boolean",
+      "required": false,
+      "value": false,
+      "display": {
+        "name": "Stream",
+        "description": "if false the response will be returned as a single response object, rather thatn a stream of objects."
+      }
+    },
+    {
+      "name": "raw",
+      "type": "boolean",
+      "required": true,
+      "value": false,
+      "display": {
+        "name": "Raw",
+        "description": "if true no formating will be applied to the prompt."
+      }
+    },
+    {
+      "name": "keepAlive",
+      "type": "integer",
+      "required": true,
+      "value": 5,
+      "display": {
+        "name": "Keep Alive",
+        "description": "How long the model should be kept in memoery after each request (default 5m)"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "name": "prompt",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "suffix",
+      "type": "string",
+      "required": false
+    },
+    {
+      "name": "fileName",
+      "type": "string",
+      "required": false
+    },
+    {
+      "name": "modelOptions",
+      "type": "string",
+      "required": false
+    }
+  ],
+  "outputs": [
+    {
+      "name": "outputJSON",
+      "type": "object"
+    },
+    {
+      "name": "outputText",
+      "type": "object"
+    },
+    {
+      "name": "metaData",
+      "type": "string"
+    }
+  ]
+}
