@@ -84,17 +84,17 @@
       "description": "Healthcare Patient Support Agent — HIPAA-aware, with custom PHI guardrail, file-based conversation store, and 3 patient-service tools.",
       "settings": {
         "llmProviderConnection": "conn://22222222-2222-2222-2222-222222222222",
-        "agentName": "=$property[\"Trigger_Setings.AgentName\"]",
-        "agentDescription": "=$property[\"Trigger_Setings.AgentDescription\"]",
+        "agentName": "=$property[\"Trigger_Settings.AgentName\"]",
+        "agentDescription": "=$property[\"Trigger_Settings.AgentDescription\"]",
         "agentType": "Local",
         "agentPort": 8081,
-        "model": "=$property[\"Trigger_Setings.LLM_Model\"]",
+        "model": "=$property[\"Trigger_Settings.LLM_Model\"]",
         "reasoning": "",
-        "temperature": "=$property[\"Trigger_Setings.LLM_temperature\"]",
+        "temperature": "=$property[\"Trigger_Settings.LLM_temperature\"]",
         "enableGuardrails": true,
-        "rateLimit": "=$property[\"Trigger_Setings.Rate_Limit\"]",
-        "tokenLimit": "=$property[\"Trigger_Setings.Token_Limit\"]",
-        "redactSensitiveData": "=$property[\"Trigger_Setings.Redact_Sensitive_Data\"]",
+        "rateLimit": "=$property[\"Trigger_Settings.Rate_Limit\"]",
+        "tokenLimit": "=$property[\"Trigger_Settings.Token_Limit\"]",
+        "redactSensitiveData": "=$property[\"Trigger_Settings.Redact_Sensitive_Data\"]",
         "mcpServers": [],
         "conversationStoreType": "Custom Store",
         "memoryMaxSize": 30,
@@ -1370,7 +1370,7 @@
     {
       "name": "AgenticAI.OpenAI_LLMProvider.API_Key",
       "type": "string",
-      "value": "SECRET:2FPukX4sC76a1l4GR0aFdlsFyRblh0izzVeFI1Qmf4jMdWoi3049A3+lJVnzQDtdilJMnsSHurLyJ9CGxDsIOxd2mMwJ4jHjX8URIBITI2AbzW4tH0BLI87mXNqeZfaa5zeYp1r1+0AlH84WJ+isFzkrqdb1jKaxKRDOBf9D05/en0bYEe9qyLHxu+VYzu1LM3uVzxxrxVLjp6FLG7DZN7D2pNriSvmQE377chASrjBR70y7"
+      "value": "SECRET:M3w8sH3IBTTCcLHS2HUCx8U5G8E+wap4FOB7MwG7iDDgOX9WpnwOsW48rdaedHxGuPnhRnb8uB3GhYrw/6wzxWDUlUvO7CjFr1TZrYhqFDXHMeOl1qWUwIIdrw8r079Ua25BePEkIfTuhLsa3edLCuyXTFa8ObQbmNpF3Ilz1fgNM27BVPkHWXd6Z9cjjIbXSJgEnWu2KI2EGLtW/3tSPyH/dVB2HOXy/XCcsGB/HEzu2eI9"
     },
     {
       "name": "AgenticAI.OpenAI_LLMProvider.LLM_Base_URL",
@@ -1383,37 +1383,37 @@
       "value": "conversations"
     },
     {
-      "name": "Trigger_Setings.AgentName",
+      "name": "Trigger_Settings.AgentName",
       "type": "string",
       "value": "HealthcarePatientAgent"
     },
     {
-      "name": "Trigger_Setings.AgentDescription",
+      "name": "Trigger_Settings.AgentDescription",
       "type": "string",
       "value": "A compassionate healthcare patient support assistant. Helps patients with appointment scheduling, clinic locations, and general medication guidance. Strictly protects patient privacy."
     },
     {
-      "name": "Trigger_Setings.LLM_Model",
+      "name": "Trigger_Settings.LLM_Model",
       "type": "string",
       "value": "gpt-5.2"
     },
     {
-      "name": "Trigger_Setings.Token_Limit",
+      "name": "Trigger_Settings.Token_Limit",
       "type": "float64",
       "value": 4096
     },
     {
-      "name": "Trigger_Setings.Rate_Limit",
+      "name": "Trigger_Settings.Rate_Limit",
       "type": "float64",
       "value": 20
     },
     {
-      "name": "Trigger_Setings.Redact_Sensitive_Data",
+      "name": "Trigger_Settings.Redact_Sensitive_Data",
       "type": "boolean",
       "value": true
     },
     {
-      "name": "Trigger_Setings.LLM_temperature",
+      "name": "Trigger_Settings.LLM_temperature",
       "type": "float64",
       "value": 1
     }

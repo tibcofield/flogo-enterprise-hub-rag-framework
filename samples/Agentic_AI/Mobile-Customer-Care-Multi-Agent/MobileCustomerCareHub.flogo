@@ -557,7 +557,7 @@
                 "tokenLimit": "=$property[\"CustomerSupportDispatcher.Activity_Settings.Token_Limit\"]",
                 "redactSensitiveData": "=$property[\"CustomerSupportDispatcher.Activity_Settings.Redact_Sensitive_Data\"]",
                 "responseType": "Text",
-                "agentHandoffs": "=$property[\"BillingSpecialistAgent.Trigger_Settings.Agents_Handoff\"]",
+                "agentHandoffs": "=$property[\"CustomerSupportDispatcher.Activity_Settings.Agents_Handoff\"]",
                 "mcpServers": [],
                 "conversationStoreType": "Memory",
                 "memoryMaxSize": 20,
@@ -1283,7 +1283,7 @@
     {
       "name": "AgenticAI.openai-Mobile.API_Key",
       "type": "string",
-      "value": "SECRET:Ez/jx99bjmTaFmfk13j+5JhqEyx0ctCJe7eAPg0Vt/zBWQof8sOF6qg0RgxXHc+N14Mxtu0zUGg7Qj1H32N2OKgmMWpTRra+8+0yUxWP7n/wRm7yQFUDk9yALB/uPXg1svEuROG8P1QMQCKoMyGkF//8nMsD6PBtlan6K5xrBEngGaHQAPV/4JD6L/km5czNnbnVHUA+2W+Zlur7dvScL5c+bT/ejtdd2W5OV8BqCGiyIiId"
+      "value": "SECRET:RNh1N3TfQ8RQdBbRYCBt4NdUaBwdLc9V2YJEymxNh+Cdiuq9seU4RKTSVloO28PjhN8LgeJyXdekE71ONy3skxYEE1zdtf0n3f9X/zlFe4fgUq9oI8I1fvB1JQ8zdjgp0D9/mZF+zQyAOfIy3kwiM5JQ2gliNpRR6ZzYOVJVXyU6GsnfvK+ZZ6RTVLTnABOzZYdusx+dsmLEuoPF3hcZKlqUdpxhoAUwRRTfjxYWErD1xbTu"
     },
     {
       "name": "AgenticAI.openai-Mobile.LLM_Base_URL",
@@ -1416,7 +1416,7 @@
       "value": 0.6
     },
     {
-      "name": "BillingSpecialistAgent.Trigger_Settings.Agents_Handoff",
+      "name": "CustomerSupportDispatcher.Activity_Settings.Agents_Handoff",
       "type": "string",
       "value": "BillingSpecialistAgent,TechnicalSupportAgent,UpgradeAdvisorAgent"
     }
