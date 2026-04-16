@@ -26,6 +26,7 @@ const (
 	sVectorStoreID      = "vectorStoreID"
 	sMaxChunkSizeTokens = "maxChunkSizeTokens"
 	sChunkOverlapTokens = "chunkOverlapTokens"
+	sTimeoutSeconds     = "timeoutSeconds"
 	iFilename           = "filename"
 	iFileAttributeNames = "fileAttributeNames"
 	iFileAttributes     = "fileAttributes"
@@ -40,12 +41,14 @@ type Settings struct {
 	VectorStoreID      string `md:"string"`
 	MaxChunkSizeTokens int64  `md:"maxChunkSizeTokens"`
 	ChunkOverlapTokens int64  `md:"chunkOverlapTokens"`
+	TimeoutSeconds     int    `md:"timeoutSeconds"`
 }
 
 // FromMap populates the settings struct from a map.
 func (s *Settings) FromMap(values map[string]interface{}) error {
 	if values == nil {
 		s.Purpose = "assistants"
+		s.TimeoutSeconds = 300 // Default 5 minutes for large files
 		return nil
 	}
 
@@ -87,10 +90,15 @@ func (s *Settings) FromMap(values map[string]interface{}) error {
 		return err
 	}
 
+	s.TimeoutSeconds, err = coerce.ToInt(values[sTimeoutSeconds])
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
-// nput defines what data the activity receives
+// Input defines what data the activity receives
 type Input struct {
 	FileName           string              `md:"filename"`
 	FileAttributeNames []interface{}       `md:"fileAttributeNames"`
@@ -155,8 +163,10 @@ func (i *Input) ToMap() map[string]interface{} {
 
 // Output defines what data the activity returns
 type Output struct {
+	ID            string `md:"id"`
 	MetaData      string `md:"metaData"`
 	OutputFileURL string `md:"outputFileURL"`
+	ObjectID      string `md:"object"`
 }
 
 // ToMap converts the struct to a map.

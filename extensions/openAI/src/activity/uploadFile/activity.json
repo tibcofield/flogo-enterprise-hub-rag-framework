@@ -88,6 +88,17 @@
         "description": "The number of tokens that overlap between chunks. The default value is 400",
         "appPropertySupport": true
       }
+    },
+    {
+      "name": "timeoutSeconds",
+      "type": "integer",
+      "required": true,
+      "value": 300,
+      "display": {
+        "name": "Timeout in Seconds",
+        "description": "The timeout duration in seconds. The default value is 300 seconds.",
+        "appPropertySupport": true
+      }
     }
   ],
   "inputs": [
@@ -104,7 +115,31 @@
   ],  
   "outputs": [
     {
-      "name": "metaData",
+      "name": "id",
+      "type": "string"
+    },
+    {
+      "name": "object",
+      "type": "string"
+    },
+    {
+      "name": "bytes",
+      "type": "string"
+    },
+    {
+      "name": "created_at",
+      "type": "string"
+    },
+    {
+      "name": "expire_at",
+      "type": "string"
+    },
+    {
+      "name": "filename",
+      "type": "string"
+    },
+    {
+      "name": "purpose",
       "type": "string"
     }
   ]

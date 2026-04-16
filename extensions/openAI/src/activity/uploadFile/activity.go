@@ -8,9 +8,12 @@ package uploadFile
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"mime"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/openai/openai-go/v3"
 	"github.com/openai/openai-go/v3/option"
@@ -19,7 +22,7 @@ import (
 	"github.com/project-flogo/core/support/log"
 )
 
-var logger = log.ChildLogger(log.RootLogger(), "opeanAI-upload-file")
+var logger = log.ChildLogger(log.RootLogger(), "openai-upload-file")
 
 // activityMd is the metadata for the activity.
 var activityMd = activity.ToMetadata(&Settings{}, &Input{}, &Output{})
@@ -35,7 +38,8 @@ func init() {
 
 // Activity is a ChatGPT API activity
 type Activity struct {
-	Settings *Settings
+	Settings  *Settings
+	oaiClient openai.Client
 }
 
 // New creates a new instance of the Activity.
@@ -46,12 +50,31 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		return nil, err
 	}
 
+	// Validate required settings during initialization
+	if s.ApiKey == "" {
+		return nil, errors.New("validation failed: OpenAI API key is required but not provided in activity settings")
+	}
+
+	if s.EndPointURL == "" {
+		return nil, errors.New("validation failed: OpenAI endpoint URL is required but not provided in activity settings")
+	}
+
+	// Create OpenAI client once during initialization
+	oaiClient := openai.NewClient(
+		option.WithAPIKey(s.ApiKey),
+		option.WithBaseURL(s.EndPointURL),
+	)
+
+	logger.Infof("OpenAI client initialized for endpoint: %s", s.EndPointURL)
+
 	return &Activity{
-		Settings: s,
+		Settings:  s,
+		oaiClient: oaiClient,
 	}, nil
 }
 
 func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
+	logger.Infof("****************** Starting OpenAI File Upload Activity Eval ******************")
 
 	input := &Input{}
 	err = ctx.GetInputObject(input)
@@ -59,24 +82,27 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		return false, err
 	}
 
-	if a.Settings.ApiKey == "" {
-		logger.Error("Missing openAPI key")
-		return false, err
-	}
-
-	oaiClient := openai.NewClient(
-		option.WithAPIKey(a.Settings.ApiKey),
-		option.WithBaseURL(a.Settings.EndPointURL),
-	)
-
-	clientCtx := context.Background()
-
-	fileReader, err := os.Open(input.FileName)
-	if err != nil {
+	// Validate input parameters
+	if input.FileName == "" {
+		err := errors.New("validation failed: file name is required but not provided in input")
 		logger.Error(err.Error())
 		return false, err
 	}
 
+	// Create context with timeout for large file uploads
+	clientCtx, cancel := context.WithTimeout(context.Background(),
+		time.Duration(a.Settings.TimeoutSeconds)*time.Second)
+	defer cancel()
+
+	logger.Infof("Setting upload timeout to %d seconds for large file transfers", a.Settings.TimeoutSeconds)
+
+	fileReader, err := os.Open(input.FileName)
+	if err != nil {
+		contextErr := fmt.Errorf("validation failed: unable to open file '%s': %w", input.FileName, err)
+		logger.Error(contextErr.Error())
+		return false, contextErr
+	}
+	defer fileReader.Close()
 	fileName := filepath.Base(input.FileName)
 
 	mimeType := mime.TypeByExtension(filepath.Ext(input.FileName))
@@ -84,13 +110,22 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	inputFile := openai.File(fileReader, fileName, mimeType)
 
-	fileResp, err := oaiClient.Files.New(clientCtx, openai.FileNewParams{
+	fileResp, err := a.oaiClient.Files.New(clientCtx, openai.FileNewParams{
 		File:    inputFile,
 		Purpose: openai.FilePurpose(a.Settings.Purpose),
 	})
 	if err != nil {
-		logger.Errorf("File upload error: %v\n", err)
-		return false, err
+		// Check for timeout specifically
+		if clientCtx.Err() == context.DeadlineExceeded {
+			contextErr := fmt.Errorf("upload timeout: file '%s' upload exceeded %d seconds - consider increasing timeout for large files",
+				fileName, a.Settings.TimeoutSeconds)
+			logger.Error(contextErr.Error())
+			return false, contextErr
+		}
+		contextErr := fmt.Errorf("OpenAI API error: failed to upload file '%s' to endpoint '%s' with purpose '%s': %w",
+			fileName, a.Settings.EndPointURL, a.Settings.Purpose, err)
+		logger.Error(contextErr.Error())
+		return false, contextErr
 	}
 
 	logger.Info("Populating custom metadata from source data...")
@@ -103,7 +138,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	}
 
 	if a.Settings.VectorStoreID != "" {
-		_, err = oaiClient.VectorStores.Files.New(clientCtx, a.Settings.VectorStoreID,
+		_, err = a.oaiClient.VectorStores.Files.New(clientCtx, a.Settings.VectorStoreID,
 			openai.VectorStoreFileNewParams{
 				FileID:     fileResp.ID,
 				Attributes: customMetadata,
@@ -115,8 +150,17 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		)
 
 		if err != nil {
-			logger.Errorf("Error generating vector store embedding: %v\n", err)
-			return false, err
+			// Check for timeout specifically
+			if clientCtx.Err() == context.DeadlineExceeded {
+				contextErr := fmt.Errorf("vector store timeout: adding file '%s' (ID: %s) to vector store '%s' exceeded %d seconds",
+					fileName, fileResp.ID, a.Settings.VectorStoreID, a.Settings.TimeoutSeconds)
+				logger.Error(contextErr.Error())
+				return false, contextErr
+			}
+			contextErr := fmt.Errorf("vector store operation failed: unable to add file '%s' (ID: %s) to vector store '%s': %w",
+				fileName, fileResp.ID, a.Settings.VectorStoreID, err)
+			logger.Error(contextErr.Error())
+			return false, contextErr
 		}
 	}
 

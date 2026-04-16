@@ -44,7 +44,7 @@ func TestUploadFileFileAttributeTest(t *testing.T) {
 
 	tc := test.NewActivityContext(act.Metadata())
 
-	relPath := "../../../testdata/TIB_ad_sdk_5.8.0_relnotes.pdf"
+	relPath := "../../../testdata/tib_ad_sdk_relnotes.pdf"
 	fmt.Printf("Relative path: %s\n", relPath)
 
 	tc.SetInput("filename", relPath)
@@ -102,7 +102,7 @@ func TestSearchDocumentsDefaultRelPath(t *testing.T) {
 
 	tc := test.NewActivityContext(act.Metadata())
 
-	relPath := "../../../testdata/TIB_ad_sdk_5.8.0_relnotes.pdf"
+	relPath := "../../../testdata/tib_ad_sdk_relnotes.pdf"
 	fmt.Printf("Relative path: %s\n", relPath)
 
 	tc.SetInput("filename", relPath)
@@ -139,7 +139,7 @@ func TestSearchDocumentsDefaultAbsPath(t *testing.T) {
 
 	tc := test.NewActivityContext(act.Metadata())
 
-	relPath := "../../../testdata/TIB_ad_sdk_5.8.0_relnotes.pdf"
+	relPath := "../../../testdata/tib_ad_sdk_relnotes.pdf"
 	fmt.Printf("Relative path: %s\n", relPath)
 	absPath, err := filepath.Abs(relPath)
 	if err != nil {
