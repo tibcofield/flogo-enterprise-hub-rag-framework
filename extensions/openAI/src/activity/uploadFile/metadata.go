@@ -30,7 +30,13 @@ const (
 	iFilename           = "filename"
 	iFileAttributeNames = "fileAttributeNames"
 	iFileAttributes     = "fileAttributes"
-	oMetaData           = "metaData"
+	oID                 = "id"
+	oObject             = "object"
+	oBytes              = "bytes"
+	oCreatedAt          = "createdAt"
+	oExpireAt           = "expireAt"
+	oFilename           = "filename"
+	oPurpose            = "purpose"
 )
 
 // Settings defines configuration options for your activity
@@ -163,31 +169,70 @@ func (i *Input) ToMap() map[string]interface{} {
 
 // Output defines what data the activity returns
 type Output struct {
-	ID            string `md:"id"`
-	MetaData      string `md:"metaData"`
-	OutputFileURL string `md:"outputFileURL"`
-	ObjectID      string `md:"object"`
+	ID        string `md:"id"`
+	Object    string `md:"object"`
+	Bytes     string `md:"bytes"`
+	CreatedAt string `md:"createdAt"`
+	ExpireAt  string `md:"expireAt"`
+	Filename  string `md:"filename"`
+	Purpose   string `md:"purpose"`
 }
 
 // ToMap converts the struct to a map.
+
 func (o *Output) ToMap() map[string]interface{} {
 	return map[string]interface{}{
-		oMetaData: o.MetaData,
+		oID:        o.ID,
+		oObject:    o.Object,
+		oBytes:     o.Bytes,
+		oCreatedAt: o.CreatedAt,
+		oExpireAt:  o.ExpireAt,
+		oFilename:  o.Filename,
+		oPurpose:   o.Purpose,
 	}
 }
 
-// FromMap populates the struct from a map.
+// // FromMap populates the struct from a map.
 func (o *Output) FromMap(values map[string]interface{}) error {
 	if values == nil {
 		return nil
 	}
 
 	var err error
-	if val, ok := values[oMetaData]; ok && val != nil {
-		o.MetaData, err = coerce.ToString(val)
+	if val, ok := values[oID]; ok && val != nil {
+		o.ID, err = coerce.ToString(val)
 		if err != nil {
 			return err
 		}
+	}
+	if val, ok := values[oObject]; ok && val != nil {
+		o.Object, err = coerce.ToString(val)
+		if err != nil {
+			return err
+		}
+	}
+	if err != nil {
+		return err
+	}
+	o.Bytes, err = coerce.ToString(values[oBytes])
+	if err != nil {
+		return err
+	}
+	o.CreatedAt, err = coerce.ToString(values[oCreatedAt])
+	if err != nil {
+		return err
+	}
+	o.ExpireAt, err = coerce.ToString(values[oExpireAt])
+	if err != nil {
+		return err
+	}
+	o.Filename, err = coerce.ToString(values[oFilename])
+	if err != nil {
+		return err
+	}
+	o.Purpose, err = coerce.ToString(values[oPurpose])
+	if err != nil {
+		return err
 	}
 
 	return nil

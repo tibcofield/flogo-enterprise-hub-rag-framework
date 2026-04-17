@@ -110,6 +110,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	inputFile := openai.File(fileReader, fileName, mimeType)
 
+	// invoke the API
 	fileResp, err := a.oaiClient.Files.New(clientCtx, openai.FileNewParams{
 		File:    inputFile,
 		Purpose: openai.FilePurpose(a.Settings.Purpose),
@@ -164,6 +165,15 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		}
 	}
 
-	ctx.SetOutput(oMetaData, "File Uploaded ID:"+fileResp.ID)
+	// construct activity output
+	//	ctx.SetOutput(oMetaData)
+	ctx.SetOutput("ID", fileResp.ID)
+	ctx.SetOutput("object", fileResp.Object)
+	ctx.SetOutput("bytes", fileResp.Bytes)
+	ctx.SetOutput("createdAt", fileResp.CreatedAt)
+	// ctx.SetOutput("expireAt", fileResp.ExpireAt)
+	ctx.SetOutput("filename", fileResp.Filename)
+	ctx.SetOutput("purpose", fileResp.Purpose)
+
 	return true, nil
 }
