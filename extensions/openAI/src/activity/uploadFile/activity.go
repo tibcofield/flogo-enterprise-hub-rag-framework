@@ -167,11 +167,11 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	// construct activity output
 	//	ctx.SetOutput(oMetaData)
-	ctx.SetOutput("ID", fileResp.ID)
+	ctx.SetOutput("id", fileResp.ID)
 	ctx.SetOutput("object", fileResp.Object)
 	ctx.SetOutput("bytes", fileResp.Bytes)
 	ctx.SetOutput("createdAt", fileResp.CreatedAt)
-	// ctx.SetOutput("expireAt", fileResp.ExpireAt)
+	// ctx.SetOutput("expireAt", fileResp.ExpireAt)  expireAt is not returned in the response for file upload API, so commenting out for now. Will revisit when we have more clarity on this.
 	ctx.SetOutput("filename", fileResp.Filename)
 	ctx.SetOutput("purpose", fileResp.Purpose)
 

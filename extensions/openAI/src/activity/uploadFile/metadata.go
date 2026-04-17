@@ -173,9 +173,9 @@ type Output struct {
 	Object    string `md:"object"`
 	Bytes     string `md:"bytes"`
 	CreatedAt string `md:"createdAt"`
-	ExpireAt  string `md:"expireAt"`
-	Filename  string `md:"filename"`
-	Purpose   string `md:"purpose"`
+	// ExpireAt  string `md:"expireAt"` expireAt is not returned in the response for file upload API, so commenting out for now. Will revisit when we have more clarity on this.
+	Filename string `md:"filename"`
+	Purpose  string `md:"purpose"`
 }
 
 // ToMap converts the struct to a map.
@@ -186,9 +186,9 @@ func (o *Output) ToMap() map[string]interface{} {
 		oObject:    o.Object,
 		oBytes:     o.Bytes,
 		oCreatedAt: o.CreatedAt,
-		oExpireAt:  o.ExpireAt,
-		oFilename:  o.Filename,
-		oPurpose:   o.Purpose,
+		// oExpireAt:  o.ExpireAt, expireAt is not returned in the response for file upload API, so commenting out for now. Will revisit when we have more clarity on this.
+		oFilename: o.Filename,
+		oPurpose:  o.Purpose,
 	}
 }
 
@@ -222,10 +222,10 @@ func (o *Output) FromMap(values map[string]interface{}) error {
 	if err != nil {
 		return err
 	}
-	o.ExpireAt, err = coerce.ToString(values[oExpireAt])
-	if err != nil {
-		return err
-	}
+	// o.ExpireAt, err = coerce.ToString(values[oExpireAt])
+	// if err != nil {
+	// 	return err
+	// }
 	o.Filename, err = coerce.ToString(values[oFilename])
 	if err != nil {
 		return err

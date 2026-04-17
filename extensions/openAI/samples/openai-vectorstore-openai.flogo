@@ -9,7 +9,8 @@
     "github.com/project-flogo/contrib/activity/actreturn",
     "github.com/tibco/flogo-general/src/app/General/trigger/startuphook",
     "github.com/project-flogo/contrib/function/array",
-    "github.com/project-flogo/contrib/function/coerce"
+    "github.com/project-flogo/contrib/function/coerce",
+    "github.com/project-flogo/contrib/function/string"
   ],
   "name": "openaiVectorStore-openAI",
   "description": "",
@@ -211,7 +212,7 @@
               "input": {
                 "Log Level": "INFO",
                 "flowInfo": false,
-                "message": "next activity",
+                "message": "=string.concat(\"***** output: id: \",$activity[UploadFile].id, \" object: \", $activity[UploadFile].object, \" created at: \",$activity[UploadFile].createdAt )",
                 "logLevel": ""
               }
             }

@@ -127,13 +127,10 @@
       "type": "string"
     },
     {
-      "name": "created_at",
+      "name": "createdAt",
       "type": "string"
     },
-    {
-      "name": "expire_at",
-      "type": "string"
-    },
+    
     {
       "name": "filename",
       "type": "string"
