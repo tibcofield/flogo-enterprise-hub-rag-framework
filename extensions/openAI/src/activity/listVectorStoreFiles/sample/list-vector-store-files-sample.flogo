@@ -1,0 +1,84 @@
+{
+  "name": "list-vector-store-files-sample",
+  "type": "flogo:app",
+  "version": "1.0.0",
+  "description": "Sample flow demonstrating the OpenAI List Vector Store Files activity",
+  "properties": [
+    {
+      "name": "OPENAI_API_KEY",
+      "type": "string",
+      "value": ""
+    },
+    {
+      "name": "OPENAI_ENDPOINT_URL", 
+      "type": "string",
+      "value": "https://api.openai.com/v1"
+    },
+    {
+      "name": "VECTOR_STORE_ID",
+      "type": "string",
+      "value": ""
+    }
+  ],
+  "channels": [],
+  "triggers": [
+    {
+      "name": "ReceiveHTTPMessage",
+      "id": "receive_http_message",
+      "ref": "#app.trigger.http",
+      "settings": {
+        "port": 9999
+      },
+      "handlers": [
+        {
+          "flow": {
+            "name": "ListVectorStoreFilesFlow",
+            "description": "Flow that lists files in a vector store",
+            "tasks": [
+              {
+                "id": "list_files",
+                "name": "ListVectorStoreFiles",
+                "description": "List files in the specified vector store",
+                "activity": {
+                  "ref": "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/listVectorStoreFiles",
+                  "settings": {
+                    "apiKey": "=$property[OPENAI_API_KEY]",
+                    "endPointURL": "=$property[OPENAI_ENDPOINT_URL]"
+                  },
+                  "input": {
+                    "vectorStoreID": "=$property[VECTOR_STORE_ID]",
+                    "limit": 10,
+                    "order": "desc",
+                    "filter": "completed"
+                  }
+                }
+              },
+              {
+                "id": "return_result",
+                "name": "ReturnResult",
+                "description": "Return the list of files",
+                "activity": {
+                  "ref": "#activityLibrary.http.return",
+                  "input": {
+                    "code": 200,
+                    "data": {
+                      "vectorStoreID": "=$property[VECTOR_STORE_ID]",
+                      "fileCount": "=len($activity[list_files].files)",
+                      "files": "=$activity[list_files].files"
+                    }
+                  }
+                }
+              }
+            ],
+            "links": [
+              {
+                "from": "list_files",
+                "to": "return_result"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -19,7 +19,7 @@ Roadmap
 | Responses API                       | In Dev for text and Images    | https://platform.openai.com/docs/guides/migrate-to-responses | 
 | Images API                          | In Dev                        | https://platform.openai.com/docs/api-reference/images |
 | Embedings API                       | Testing                       | https://platform.openai.com/docs/guides/embeddings |
-| Files API                           | In Dev                        | https://platform.openai.com/docs/api-reference/files |
+| Files API - upload file             | Completed                     | https://platform.openai.com/docs/api-reference/files |
 | Chat API                            | Out of scope                  ||
 | Completions API                     | Out of scope                  | Deprecated and unclear on OpenAI, other platforms direction |
 | Realtime API                        | Out of scope                  || 
@@ -30,7 +30,7 @@ Roadmap
 | Graders API                         | Out of scope                  ||
 | Moderrations API                    | Out of scope                  ||
 | Vector Store API                    | In Scope.                     | Allows you to manage vector stores. |
-
+| Vector Store API  - List Files      | Completed.                    | https://developers.openai.com/api/reference/resources/vector_stores/subresources/files/methods/list. |
 ## ChatGPT Use Cases 
 
 These are some of the example use cases we are being reviewed as part of the client extension development.
