@@ -1,0 +1,90 @@
+{
+  "name": "openai-list-vector-store-files",
+  "version": "1.0.0",
+  "type": "flogo:activity",
+  "title": "List Vector Store Files",
+  "author": "TIBCO Software",
+  "ref": "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/listVectorStoreFiles",
+  "display": {
+    "category": "openAI",
+    "visible": true,
+    "description": "This activity lists files in an OpenAI vector store with support for filtering and pagination",
+    "smallIcon": "icons/openAPISmall.png",
+    "largeIcon": "icons/openAPILarge.png"
+  },
+  "feature": {
+    "retry": {
+      "enabled": true
+    }
+  },
+  "settings": [
+    {
+      "name": "endPointURL",
+      "type": "string",
+      "required": true,
+      "display": {
+        "name": "API Endpoint URL",
+        "description": "Endpoint URL for the OpenAI API, for example https://api.openai.com/v1",
+        "appPropertySupport": true
+      }
+    },
+    {
+      "name": "apiKey",
+      "type": "string",
+      "required": true,
+      "display": {
+        "name": "OpenAI API Key",
+        "description": "OpenAI API key that is required to authenticate with the OpenAI API",
+        "appPropertySupport": true
+      }
+    }
+  ],
+  "inputs": [
+    
+    {
+      "name": "vectorStoreID",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false
+    },
+    {
+      "name": "filter",
+      "type": "string",
+      "required": false
+    },
+    {
+      "name": "order",
+      "type": "string",
+      "required": false
+    },
+    {
+      "name": "after",
+      "type": "string",
+      "required": false
+    },
+    {
+      "name": "before",
+      "type": "string",
+      "required": false
+    },
+    {
+      "name": "timeoutSeconds",
+      "type": "integer",
+      "required": false
+    }
+  ],
+  "outputs": [
+    {
+      "name": "files",
+      "type": "array",
+      "display": {
+        "name": "Files",
+        "description": "Array of vector store files"
+      }
+    }
+  ]
+}
