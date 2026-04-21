@@ -70,27 +70,16 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	clientCtx := context.Background()
 
-	// fileReader, err := os.Open(a.Settings.FileDirectory + fileName)
-	// if err != nil {
-	// 	logger.Error(err.Error())
-	// }
 
-	// inputFile := openai.File(fileReader, fileName, "application/pdf")
-
-	// // Request an image
-	// fileResp, err := oaiClient.Files.New(clientCtx, openai.FileNewParams{
-	// 	File:    inputFile,
-	// 	Purpose: openai.FilePurpose(a.Settings.Purpose),
-	// })
 	pages, err := oaiClient.VectorStores.Search(
 		clientCtx,
-		a.Settings.VectorStoreID,
+		input.VectorStoreID,
 		openai.VectorStoreSearchParams{
 			Query: openai.VectorStoreSearchParamsQueryUnion{
 				OfString: openai.String(searchString),
 			},
-			MaxNumResults: openai.Int(a.Settings.MaxNumberOfResults),
-			RewriteQuery:  openai.Bool(a.Settings.RewriteQuery),
+			MaxNumResults: openai.Int(input.MaxNumberOfResults),
+			RewriteQuery:  openai.Bool(input.RewriteQuery),
 			// TODO filters...
 			RankingOptions: openai.VectorStoreSearchParamsRankingOptions{
 				ScoreThreshold: openai.Float(0.70),

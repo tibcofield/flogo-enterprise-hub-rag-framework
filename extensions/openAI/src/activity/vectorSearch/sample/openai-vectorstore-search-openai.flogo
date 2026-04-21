@@ -2,11 +2,13 @@
   "imports": [
     "github.com/project-flogo/flow",
     "github.com/project-flogo/contrib/activity/noop",
+    "github.com/tibco/flogo-general/src/app/General/activity/sleep",
     "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/vectorSearch",
     "github.com/tibco/flogo-general/src/app/General/activity/log",
     "github.com/project-flogo/contrib/activity/actreturn",
     "github.com/tibco/flogo-general/src/app/General/trigger/startuphook",
-    "github.com/project-flogo/contrib/function/coerce"
+    "github.com/project-flogo/contrib/function/coerce",
+    "github.com/project-flogo/contrib/function/string"
   ],
   "name": "openai-vectorStore-search-openai",
   "description": "",
@@ -27,37 +29,44 @@
           "action": {
             "ref": "github.com/project-flogo/flow",
             "settings": {
-              "flowURI": "res://flow:New_flow"
+              "flowURI": "res://flow:Vectorstore_search"
             }
           },
-          "name": "New_flow"
+          "name": "Vectorstore_search"
         }
       ]
     }
   ],
   "resources": [
     {
-      "id": "flow:New_flow",
+      "id": "flow:Vectorstore_search",
       "data": {
-        "name": "New_flow",
+        "name": "Vectorstore search",
         "description": "",
         "links": [
           {
             "id": 1,
             "from": "StartActivity",
-            "to": "VectorSearch",
+            "to": "SleepForDebug",
             "type": "label",
-            "label": "StartActivity to VectorSearch"
+            "label": "StartActivity to Sleep"
           },
           {
             "id": 2,
+            "from": "SleepForDebug",
+            "to": "VectorSearch",
+            "type": "label",
+            "label": "Sleep to VectorSearch"
+          },
+          {
+            "id": 3,
             "from": "VectorSearch",
             "to": "LogMessage",
             "type": "label",
             "label": "VectorSearch to LogMessage"
           },
           {
-            "id": 3,
+            "id": 4,
             "from": "LogMessage",
             "to": "Return",
             "type": "label",
@@ -74,6 +83,18 @@
             }
           },
           {
+            "id": "SleepForDebug",
+            "name": "SleepForDebug",
+            "description": "Simple sleep Activity",
+            "activity": {
+              "ref": "#sleep",
+              "input": {
+                "IntervalTypeSetting": "Second",
+                "IntervalSetting": 10
+              }
+            }
+          },
+          {
             "id": "VectorSearch",
             "name": "VectorSearch",
             "description": "This activity searches a vector store for relevant information based on a query",
@@ -86,14 +107,14 @@
             "activity": {
               "ref": "#vectorSearch",
               "settings": {
-                "endPointURL": "https://api.openai.com/v1",
-                "apiKey": "=$property[\"OPENAIKEY\"]",
-                "vectorStoreID": "vs_68c16d3063108191ba01df9993cfdfb5",
-                "maxNumberOfResults": 5,
-                "rewriteQuery": false
+                "endPointURL": "=$property[\"OPENAI_API_ENDPOINT_URL\"]",
+                "apiKey": "=$property[\"OPEN_AI_API_KEY\"]"
               },
               "input": {
-                "searchString": "EMS Version Numbers"
+                "vectorStoreID": "=$property[\"VECTORSTORE_ID\"]",
+                "searchString": ":getProtocol",
+                "maxNumberOfResults": 5,
+                "rewriteQuery": false
               }
             }
           },
@@ -101,12 +122,17 @@
             "id": "LogMessage",
             "name": "LogMessage",
             "description": "Simple Log Message Activity",
+            "type": "iterator",
+            "settings": {
+              "iterate": "=$activity[VectorSearch]",
+              "accumulate": false
+            },
             "activity": {
               "ref": "#log",
               "input": {
                 "Log Level": "INFO",
                 "flowInfo": false,
-                "message": "=coerce.toString($activity[VectorSearch].searchResultRows)",
+                "message": "=string.concat($iteration[key], ': ', coerce.toString($iteration[value]))",
                 "logLevel": ""
               }
             }
@@ -120,7 +146,7 @@
             }
           }
         ],
-        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjEwMCwieSI6MTAwfSwiVmVjdG9yU2VhcmNoIjp7IngiOjMzOSwieSI6OTJ9LCJMb2dNZXNzYWdlIjp7IngiOjYwNSwieSI6OTJ9LCJSZXR1cm4iOnsieCI6ODkxLCJ5Ijo5MX19",
+        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjAsInkiOjcyfSwiU2xlZXBGb3JEZWJ1ZyI6eyJ4IjoxMTcsInkiOjYzfSwiVmVjdG9yU2VhcmNoIjp7IngiOjM0MiwieSI6NjR9LCJMb2dNZXNzYWdlIjp7IngiOjYyMywieSI6NjN9LCJSZXR1cm4iOnsieCI6ODk4LCJ5Ijo2N319",
         "metadata": {
           "input": [],
           "output": [],
@@ -131,15 +157,25 @@
   ],
   "properties": [
     {
-      "name": "OPENAIKEY",
+      "name": "VECTORSTORE_ID",
+      "type": "string",
+      "value": "REPLACE ME"
+    },
+    {
+      "name": "OPENAI_API_ENDPOINT_URL",
+      "type": "string",
+      "value": "https://api.openai.com/v1"
+    },
+    {
+      "name": "OPEN_AI_API_KEY",
       "type": "string",
       "value": "REPLACE ME"
     }
   ],
   "connections": {},
-  "contrib": "W3sicmVmIjoiZ2l0aHViLmNvbS90aWJjby9mbG9nby1nZW5lcmFsL3NyYy9hcHAvR2VuZXJhbCIsImlkIjoiR2VuZXJhbCIsInZlcnNpb24iOiIxLjYuMTIiLCJ0YWciOiIxLjYuMTItYjA2IiwibmFtZSI6IkdlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCIsImlzVXNlckV4dGVuc2lvbiI6ZmFsc2V9LHsicmVmIjoiZ2l0aHViLmNvbS9USUJDT1NvZnR3YXJlL2Zsb2dvLWVudGVycHJpc2UtaHViL2V4dGVuc2lvbnMvb3BlbkFJIiwiaWQiOiJvcGVuQUkiLCJ2ZXJzaW9uIjoiMS4wLjEiLCJ0YWciOiIxLjAuMCIsIm5hbWUiOiJPcGVuQUkgIiwiczNsb2NhdGlvbiI6IntVU0VSSUR9L29wZW5BSSIsImlzVXNlckV4dGVuc2lvbiI6dHJ1ZX1d",
+  "contrib": "W3sicmVmIjoiZ2l0aHViLmNvbS90aWJjby9mbG9nby1nZW5lcmFsL3NyYy9hcHAvR2VuZXJhbCIsImlkIjoiR2VuZXJhbCIsInZlcnNpb24iOiIxLjYuMTEiLCJ0YWciOiIxLjYuMTEtYjAyIiwibmFtZSI6IkdlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCIsImlzVXNlckV4dGVuc2lvbiI6ZmFsc2V9LHsicmVmIjoiZ2l0aHViLmNvbS9USUJDT1NvZnR3YXJlL2Zsb2dvLWVudGVycHJpc2UtaHViL2V4dGVuc2lvbnMvb3BlbkFJIiwiaWQiOiJvcGVuQUkiLCJ2ZXJzaW9uIjoiMS4wLjEiLCJ0YWciOiIxLjAuMCIsIm5hbWUiOiJPcGVuQUkgIiwiczNsb2NhdGlvbiI6IntVU0VSSUR9L29wZW5BSSIsImlzVXNlckV4dGVuc2lvbiI6dHJ1ZX1d",
   "metadata": {
     "endpoints": [],
-    "flogoVersion": "2.26.2"
+    "flogoVersion": "2.26.0"
   }
 }

@@ -31,11 +31,8 @@ func TestSearchDocumentsDefault(t *testing.T) {
 	}
 
 	s := Settings{
-		VectorStoreID:      os.Getenv("VECTOR_STORE_ID"),
-		ApiKey:             os.Getenv("OPEN_AI_API_KEY"),
-		EndPointURL:        os.Getenv("OPENAI_API_ENDPOINT_URL"),
-		MaxNumberOfResults: 10,
-		RewriteQuery:       false,
+		ApiKey:      os.Getenv("OPEN_AI_API_KEY"),
+		EndPointURL: os.Getenv("OPENAI_API_ENDPOINT_URL"),
 	}
 
 	act := &Activity{
@@ -44,6 +41,9 @@ func TestSearchDocumentsDefault(t *testing.T) {
 
 	tc := test.NewActivityContext(act.Metadata())
 	tc.SetInput("searchString", "tibco ems versions")
+	tc.SetInput("vectorStoreID", os.Getenv("VECTOR_STORE_ID"))
+	tc.SetInput("maxNumberOfResults", int64(10))
+	tc.SetInput("rewriteQuery", false)
 
 	done, err := act.Eval(tc)
 	if !done {

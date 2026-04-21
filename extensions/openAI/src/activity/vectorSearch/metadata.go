@@ -17,20 +17,17 @@ import (
 const (
 	sAPIKey             = "apiKey"
 	sEnpointURL         = "endPointURL"
-	sVectorStoreID      = "vectorStoreID"
-	sMaxNumberOfResults = "maxNumberOfResults"
-	srewriteQuery       = "rewriteQuery"
 	iSearchString       = "searchString"
+	iVectorStoreID      = "vectorStoreID"
+	iMaxNumberOfResults = "maxNumberOfResults"
+	irewriteQuery       = "rewriteQuery"
 	oSearchResultRows   = "searchResultRows"
 )
 
 // Settings defines configuration options for your activity
 type Settings struct {
-	ApiKey             string `md:"apiKey, required"`
-	EndPointURL        string `md:"endPointURL, required"`
-	VectorStoreID      string `md:"string"`
-	MaxNumberOfResults int64  `md:"maxNumberOfResults"`
-	RewriteQuery       bool   `md:"rewriteQuery"`
+	ApiKey      string `md:"apiKey, required"`
+	EndPointURL string `md:"endPointURL, required"`
 }
 
 // FromMap populates the settings struct from a map.
@@ -38,7 +35,6 @@ func (s *Settings) FromMap(values map[string]interface{}) error {
 	if values == nil {
 		s.ApiKey = ""
 		s.EndPointURL = ""
-		s.VectorStoreID = ""
 		//
 		return nil
 	}
@@ -51,16 +47,6 @@ func (s *Settings) FromMap(values map[string]interface{}) error {
 	}
 
 	s.EndPointURL, err = coerce.ToString(values[sEnpointURL])
-	if err != nil {
-		return err
-	}
-
-	s.MaxNumberOfResults, err = coerce.ToInt64(values[sMaxNumberOfResults])
-	if err != nil {
-		return err
-	}
-
-	s.RewriteQuery, err = coerce.ToBool(values[srewriteQuery])
 	if err != nil {
 		return err
 	}
@@ -88,16 +74,15 @@ func (s *Settings) FromMap(values map[string]interface{}) error {
 	// 	return err
 	// }
 
-	s.VectorStoreID, err = coerce.ToString(values[sVectorStoreID])
-	if err != nil {
-		return err
-	}
 	return nil
 }
 
 // Input defines what data the activity receives
 type Input struct {
-	SearchString string `md:"searchString"`
+	SearchString       string `md:"searchString"`
+	VectorStoreID      string `md:"vectorStoreID"`
+	MaxNumberOfResults int64  `md:"maxNumberOfResults"`
+	RewriteQuery       bool   `md:"rewriteQuery"`
 }
 
 // FromMap populates the struct from the activity's inputs.
@@ -111,6 +96,21 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 	var err error
 
 	i.SearchString, err = coerce.ToString(values[iSearchString])
+	if err != nil {
+		return err
+	}
+
+	i.VectorStoreID, err = coerce.ToString(values[iVectorStoreID])
+	if err != nil {
+		return err
+	}
+
+	i.MaxNumberOfResults, err = coerce.ToInt64(values[iMaxNumberOfResults])
+	if err != nil {
+		return err
+	}
+
+	i.RewriteQuery, err = coerce.ToBool(values[irewriteQuery])
 	if err != nil {
 		return err
 	}
@@ -155,7 +155,10 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 // ToMap converts the struct to a map.
 func (i *Input) ToMap() map[string]interface{} {
 	return map[string]interface{}{
-		iSearchString: i.SearchString,
+		iSearchString:       i.SearchString,
+		iVectorStoreID:      i.VectorStoreID,
+		iMaxNumberOfResults: i.MaxNumberOfResults,
+		irewriteQuery:       i.RewriteQuery,
 	}
 }
 
