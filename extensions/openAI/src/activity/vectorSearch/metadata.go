@@ -138,6 +138,7 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 		i.Ranker = "auto" // Default ranker
 	}
 
+	// for possible future enhancements with file attributes search
 	// i.FileAttributeNames, err = coerce.ToArray(values[iFileAttributeNames])
 	// if err != nil {
 	// 	return err
