@@ -1,0 +1,213 @@
+{
+  "name": "openai-generate-image",
+  "version": "1.0.1",
+  "type": "flogo:activity",
+  "title": "Generate Image",
+  "author": "TIBCO Software",
+  "ref": "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/generateImage",
+  "display": {
+    "category": "openAI",
+    "visible": true,
+    "description": "This activity generates images using the images API",
+    "smallIcon": "icons/openAPISmall.png",
+    "largeIcon": "icons/openAPILarge.png"
+  },
+  "feature": {
+    "retry": {
+      "enabled": true
+    }
+  },
+  "settings": [
+    {
+      "name": "endPointURL",
+      "type": "string",
+      "required": true,
+      "display": {
+        "name": "API Endopoint URL",
+        "description": "Endpoint URL for the OpenAI API, for example https://api.openai.com/v1",
+        "appPropertySupport": true
+      }
+    },{
+      "name": "apiKey",
+      "type": "string",
+      "required": true,
+      "display": {
+        "name": "OpenAI API Key",
+        "description": "OpenAI key that is required to authenticate with the OpenAI API",
+        "appPropertySupport": true
+      }
+    },
+    {
+      "name": "maxRetries",
+      "type": "integer",
+      "required": true,
+      "value": 2,
+      "display": {
+        "name": "Max Retries",
+        "description": "The maximum amount of retries allowed before failing",
+        "appPropertySupport": true
+      }
+    },
+    {
+      "name": "model",
+      "type": "string",
+      "required": false,
+      "value": "gpt-image-1.5",
+      "display": {
+        "name": "Model",
+        "description": "The Model that will be used for Image creation",
+        "appPropertySupport": true
+      }
+    },
+    {
+      "name": "mode",
+      "type": "string",
+      "required": false,
+      "value": "new",
+      "display": {
+        "name": "Mode",
+        "description": "Wether to crete a new model or edit an existing one"
+      },
+      "allowed": [
+        "new", 
+        "edit"
+      ]
+    },
+    {
+      "name": "outputFormat",
+      "type": "string",
+      "required": false,
+      "value": "jpeg",
+      "display": {
+        "name": "Output Format",
+        "description": "The format of the result data passed back by the plugin"
+      },
+      "allowed": [
+        "jpeg",
+        "png",
+        "webp"
+      ]
+    },
+    {
+      "name": "outputDirectory",
+      "type": "string",
+      "required": true,
+      "value": "/tmp/",
+      "display": {
+        "name": "Output Directory",
+        "description": "The location where generated files will be stored",
+        "appPropertySupport": true      
+      }
+    },
+    {
+      "name": "inputDirectory",
+      "type": "string",
+      "required": true,
+      "value": "/tmp/",
+      "display": {
+        "name": "Input Directory",
+        "description": "The location where the input files will be stored",
+        "appPropertySupport": true      
+      }
+    },
+    {
+      "name": "imageSize",
+      "type": "string",
+      "required": true,
+      "value": "auto",
+      "display": {
+        "name": "Image Size",
+        "description": "The size of the generated image"
+      },
+      "allowed": [
+        "auto",
+        "256x256",
+        "512x512",
+        "1024x1024",
+        "1536x1024",
+        "1024x1536"
+      ]
+    },
+    {
+      "name": "quality",
+      "type": "string",
+      "required": true,
+      "value": "auto",
+      "display": {
+        "name": "Image Quatlity",
+        "description": "The quality of the produced image (Model Specific Check Notes)"
+      },
+      "allowed": [
+        "auto",
+        "high",
+        "medium",
+        "low",
+        "hd",
+        "standard"
+      ]
+    },
+    {
+      "name": "compression",
+      "type": "int",
+      "required": false,
+      "value": 50,
+      "display": {
+        "name": "Output Compression",
+        "description": "How much to compress the image by if using jpeg or webp"
+      }
+    },
+    {
+      "name": "transparent",
+      "type": "boolean",
+      "required": true,
+      "value": false,
+      "display": {
+        "name": "Transparent",
+        "description": "Make the model transparent (only supported by gpt-image-1)"
+      }
+    },
+    {
+      "name": "moderation",
+      "type": "string",
+      "required": true,
+      "value": "auto",
+      "display": {
+        "name": "Moderation",
+        "description": "Control moderation strictness "
+      },
+      "allowed": [
+        "auto",
+        "low"
+      ]
+    }  
+  ],
+  "inputs": [
+    {
+      "name": "prompt",
+      "type": "string",
+      "required": true
+    },{
+      "name": "inputFilename",
+      "type": "string",
+      "required": false
+    },{
+      "name": "maskFilename",
+      "type": "string",
+      "required": false
+    }
+    ,{
+      "name": "outputFilename",
+      "type": "string",
+      "required": false
+    }
+  ],
+  "outputs": [
+    {
+      "name": "metaData",
+      "type": "string"
+    },{
+      "name": "outputFileURL",
+      "type": "string"
+    }
+  ]
+}

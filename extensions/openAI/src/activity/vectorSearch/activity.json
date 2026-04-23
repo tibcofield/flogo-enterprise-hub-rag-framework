@@ -1,0 +1,85 @@
+{
+  "name": "openai-vector-search",
+  "version": "1.0.1",
+  "type": "flogo:activity",
+  "title": "Vector Search",
+  "author": "TIBCO Software",
+  "ref": "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/vectorSearch",
+  "display": {
+    "category": "openAI",
+    "visible": true,
+    "description": "This activity searches a vector store for relevant information based on a query",
+    "smallIcon": "icons/openAPISmall.png",
+    "largeIcon": "icons/openAPILarge.png"
+  },
+  "feature": {
+    "retry": {
+      "enabled": true
+    }
+  },
+  "settings": [
+    {
+      "name": "endPointURL",
+      "type": "string",
+      "required": true,
+      "display": {
+        "name": "API Endopoint URL",
+        "description": "Endpoint URL for the OpenAI API, for example https://api.openai.com/v1",
+        "appPropertySupport": true
+      }
+    },
+    {
+      "name": "apiKey",
+      "type": "string",
+      "required": true,
+      "display": {
+        "name": "OpenAI API Key",
+        "description": "OpenAI key that is required to authenticate with the OpenAI API",
+        "appPropertySupport": true
+      }
+    }
+  ],
+  "inputs": [
+  {
+      "name": "vectorStoreID",
+      "type": "string",
+      "required": true
+    },
+   {
+      "name": "searchString",
+      "type": "string",
+      "required": true
+    },
+ 
+    {
+      "name": "maxNumberOfResults",
+      "type": "integer",
+      "required": true
+    },
+    {
+      "name": "rewriteQuery",
+      "type": "boolean",
+      "required": false
+      
+    },
+    {
+      "name": "scoreThreshold",
+      "type": "number",
+      "required": false
+     
+    },
+    {
+      "name": "ranker",
+      "type": "string",
+      "required": false
+    
+    }
+  ],
+  "outputs": [
+    {
+      "name": "searchResultRows",
+      "type": "array",
+      "enablecoercing": true
+    }
+  ]
+}

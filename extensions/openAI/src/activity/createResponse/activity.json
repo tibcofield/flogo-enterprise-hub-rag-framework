@@ -1,0 +1,113 @@
+{
+  "name": "openAI-create-response",
+  "version": "1.0.1",
+  "type": "flogo:activity",
+  "title": "Create Response",
+  "author": "Mark Bloomfield",
+  "ref": "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/createResponse",
+  "display": {
+    "category": "openAI",
+    "visible": true,
+    "description": "This activity executes requests to openAPI responses API",
+    "smallIcon": "icons/openAPISmall.png",
+    "largeIcon": "icons/openAPILarge.png"
+  },
+  "feature": {
+    "retry": {
+      "enabled": true
+    }
+  },
+  "settings": [
+        {
+      "name": "endPointURL",
+      "type": "string",
+      "required": true,
+      "display": {
+        "name": "API Endopoint URL",
+        "description": "Endpoint URL for the OpenAI API, for example https://api.openai.com/v1",
+        "appPropertySupport": true
+      }
+    },
+    {
+      "name": "apiKey",
+      "type": "string",
+      "required": true,
+      "display": {
+        "name": "OpenAI API Key",
+        "description": "OpenAI key that is required to authenticate with the OpenAI API",
+        "appPropertySupport": true
+      }
+    },{
+      "name": "model",
+      "type": "string",
+      "required": true,
+      "display": {
+        "name": "Model",
+        "description": "The model to use for generating responses, for example gpt-4o or gpt-3.5-turbo",
+        "appPropertySupport": true
+      }
+    },{
+      "name": "maxRetries",
+      "type": "integer",
+      "required": true,
+      "value": 2,
+      "display": {
+        "name": "Max Retries",
+        "description": "The maximum amount of retries allowed before failing",
+        "appPropertySupport": true
+      }
+    },
+    {
+      "name": "inputFormat",
+      "type": "string",
+      "required": false,
+      "value": "text",
+      "display": {
+        "name": "Input Format",
+        "description": "The format of the result data passed into the plugin"
+      },
+      "allowed": [
+        "text",
+        "json",
+        "image/jpeg;base64",
+        "image/png;base64"
+      ]
+    },
+    {
+      "name": "outputFormat",
+      "type": "string",
+      "required": false,
+      "value": "text",
+      "display": {
+        "name": "Output Format",
+        "description": "The format of the result data passed back by the plugin"
+      },
+      "allowed": [
+        "text",
+        "json"
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "name": "prompt",
+      "type": "string",
+      "required": true
+    },{
+      "name": "tool",
+      "type": "string",
+      "required": false
+    },{
+      "name": "base64String",
+      "type": "string",
+      "required": false
+    }
+
+  ],
+  "outputs": [
+    {
+      "name": "response",
+      "type": "string"
+    }
+  ]
+}

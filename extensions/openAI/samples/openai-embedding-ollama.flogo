@@ -1,0 +1,167 @@
+{
+  "imports": [
+    "github.com/project-flogo/flow",
+    "github.com/project-flogo/contrib/activity/noop",
+    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/generateEmbedding",
+    "github.com/tibco/flogo-general/src/app/General/activity/log",
+    "github.com/project-flogo/contrib/activity/actreturn",
+    "github.com/tibco/flogo-general/src/app/General/trigger/startuphook"
+  ],
+  "name": "openAI-Embedding-ollama",
+  "description": "",
+  "version": "1.0.0",
+  "type": "flogo:app",
+  "appModel": "1.1.1",
+  "tags": [],
+  "triggers": [
+    {
+      "ref": "#startuphook",
+      "name": "tibco-appstartup",
+      "description": "This trigger allows you to execute flows before other triggers in the application are started. This is useful in initializing application specific tasks.",
+      "settings": {},
+      "id": "AppStartupTrigger",
+      "handlers": [
+        {
+          "description": "Tests a simple Embedding Call",
+          "action": {
+            "ref": "github.com/project-flogo/flow",
+            "settings": {
+              "flowURI": "res://flow:TestEmbeding-Float"
+            }
+          },
+          "name": "TestEmbeding-Float"
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "flow:TestEmbeding-Float",
+      "data": {
+        "name": "TestEmbeding-Float",
+        "description": "Tests a simple Embedding Call",
+        "links": [
+          {
+            "id": 1,
+            "from": "StartActivity",
+            "to": "GenerateEmbedding",
+            "type": "label",
+            "label": "StartActivity to GenerateEmbedding"
+          },
+          {
+            "id": 2,
+            "from": "GenerateEmbedding",
+            "to": "LogMessage",
+            "type": "label",
+            "label": "GenerateEmbedding to LogMessage"
+          },
+          {
+            "id": 3,
+            "from": "LogMessage",
+            "to": "LogMessage1",
+            "type": "label",
+            "label": "LogMessage to LogMessage1"
+          },
+          {
+            "id": 4,
+            "from": "LogMessage1",
+            "to": "Return",
+            "type": "label",
+            "label": "LogMessage1 to Return"
+          }
+        ],
+        "tasks": [
+          {
+            "id": "StartActivity",
+            "name": "StartActivity",
+            "description": "NoOp Activity",
+            "activity": {
+              "ref": "#noop"
+            }
+          },
+          {
+            "id": "GenerateEmbedding",
+            "name": "GenerateEmbedding",
+            "description": "This activity generates embedings using the embedding API",
+            "settings": {
+              "retryOnError": {
+                "count": 0,
+                "interval": 0
+              }
+            },
+            "activity": {
+              "ref": "#generateEmbedding",
+              "settings": {
+                "endPointURL": "http://localhost:11434/v1/",
+                "apiKey": "=$property[\"OpenAI.API_KEY\"]",
+                "maxRetries": 2,
+                "embeddingModel": "embeddinggemma:latest",
+                "ebeddingFormat": "float",
+                "dimensions": 1536,
+                "safetyIdentifier": "User2536"
+              },
+              "input": {
+                "prompt": "the quick brown fox jumped over the log"
+              }
+            }
+          },
+          {
+            "id": "LogMessage",
+            "name": "LogMessage",
+            "description": "Simple Log Message Activity",
+            "activity": {
+              "ref": "#log",
+              "input": {
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "=$activity[GenerateEmbedding].embedding",
+                "logLevel": ""
+              }
+            }
+          },
+          {
+            "id": "LogMessage1",
+            "name": "LogMessage1",
+            "description": "Simple Log Message Activity",
+            "activity": {
+              "ref": "#log",
+              "input": {
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "=$activity[GenerateEmbedding].embeddingMetadata",
+                "logLevel": ""
+              }
+            }
+          },
+          {
+            "id": "Return",
+            "name": "Return",
+            "description": "Simple Return Activity",
+            "activity": {
+              "ref": "#actreturn"
+            }
+          }
+        ],
+        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjEwMCwieSI6MTAwfSwiR2VuZXJhdGVFbWJlZGRpbmciOnsieCI6MjQ1LCJ5Ijo5Mn0sIkxvZ01lc3NhZ2UiOnsieCI6NTA0LCJ5Ijo5Mn0sIkxvZ01lc3NhZ2UxIjp7IngiOjczMiwieSI6OTB9LCJSZXR1cm4iOnsieCI6OTY4LCJ5Ijo4OX19",
+        "metadata": {
+          "input": [],
+          "output": [],
+          "fe_metadata": {}
+        }
+      }
+    }
+  ],
+  "properties": [
+    {
+      "name": "OpenAI.API_KEY",
+      "type": "string",
+      "value": "REPLACE ME"
+    }
+  ],
+  "connections": {},
+  "contrib": "W3sicmVmIjoiZ2l0aHViLmNvbS90aWJjby9mbG9nby1nZW5lcmFsL3NyYy9hcHAvR2VuZXJhbCIsImlkIjoiR2VuZXJhbCIsInZlcnNpb24iOiIxLjYuMTIiLCJ0YWciOiIxLjYuMTItYjA2IiwibmFtZSI6IkdlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCIsImlzVXNlckV4dGVuc2lvbiI6ZmFsc2V9LHsicmVmIjoiZ2l0aHViLmNvbS9USUJDT1NvZnR3YXJlL2Zsb2dvLWVudGVycHJpc2UtaHViL2V4dGVuc2lvbnMvb3BlbkFJIiwiaWQiOiJvcGVuQUkiLCJ2ZXJzaW9uIjoiMS4wLjEiLCJ0YWciOiIxLjAuMCIsIm5hbWUiOiJPcGVuQUkgIiwiczNsb2NhdGlvbiI6IntVU0VSSUR9L29wZW5BSSIsImlzVXNlckV4dGVuc2lvbiI6dHJ1ZX1d",
+  "metadata": {
+    "endpoints": [],
+    "flogoVersion": "2.26.2"
+  }
+}
