@@ -70,7 +70,6 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	clientCtx := context.Background()
 
-
 	pages, err := oaiClient.VectorStores.Search(
 		clientCtx,
 		input.VectorStoreID,
@@ -80,25 +79,26 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			},
 			MaxNumResults: openai.Int(input.MaxNumberOfResults),
 			RewriteQuery:  openai.Bool(input.RewriteQuery),
-			// TODO filters...
+			// // TODO filters...
 			RankingOptions: openai.VectorStoreSearchParamsRankingOptions{
-				ScoreThreshold: openai.Float(0.70),
+				ScoreThreshold: openai.Float(0.20),
 				Ranker:         "none",
 			},
-
-			//Filters: ,
-			// Optional: Add filters based on your metadata schema
-			// Filter: openai.VectorStoreSearchParamsFilter{
-			// 	Metadata: map[string]openai.VectorStoreSearchParamsFilterValueUnion{
-			// 		"category": {
-			// 			OfString: openai.String("example-category"),
-			// 		},
-			// 	},
-			// },
-			// Optional: Specify which metadata fields to return in results
-			// ReturnMetadata: []string{"source", "author"},
-			// RankingOptions: ,
 		},
+
+		//Filters: ,
+		// Optional: Add filters based on your metadata schema
+		// Filter: openai.VectorStoreSearchParamsFilter{
+		// 	Metadata: map[string]openai.VectorStoreSearchParamsFilterValueUnion{
+		// 		"category": {
+		// 			OfString: openai.String("example-category"),
+		// 		},
+		// 	},
+		// },
+		// Optional: Specify which metadata fields to return in results
+		// ReturnMetadata: []string{"source", "author"},
+		// RankingOptions: ,
+
 	)
 
 	if err != nil {

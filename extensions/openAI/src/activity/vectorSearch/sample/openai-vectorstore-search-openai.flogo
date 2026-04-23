@@ -7,8 +7,7 @@
     "github.com/tibco/flogo-general/src/app/General/activity/log",
     "github.com/project-flogo/contrib/activity/actreturn",
     "github.com/tibco/flogo-general/src/app/General/trigger/startuphook",
-    "github.com/project-flogo/contrib/function/coerce",
-    "github.com/project-flogo/contrib/function/string"
+    "github.com/project-flogo/contrib/function/coerce"
   ],
   "name": "openai-vectorStore-search-openai",
   "description": "",
@@ -90,7 +89,7 @@
               "ref": "#sleep",
               "input": {
                 "IntervalTypeSetting": "Second",
-                "IntervalSetting": 10
+                "IntervalSetting": 1
               }
             }
           },
@@ -112,8 +111,8 @@
               },
               "input": {
                 "vectorStoreID": "=$property[\"VECTORSTORE_ID\"]",
-                "searchString": ":getProtocol",
-                "maxNumberOfResults": 5,
+                "searchString": "tell me something about bwce",
+                "maxNumberOfResults": 1,
                 "rewriteQuery": false
               }
             }
@@ -122,17 +121,12 @@
             "id": "LogMessage",
             "name": "LogMessage",
             "description": "Simple Log Message Activity",
-            "type": "iterator",
-            "settings": {
-              "iterate": "=$activity[VectorSearch]",
-              "accumulate": false
-            },
             "activity": {
               "ref": "#log",
               "input": {
                 "Log Level": "INFO",
                 "flowInfo": false,
-                "message": "=string.concat($iteration[key], ': ', coerce.toString($iteration[value]))",
+                "message": "=coerce.toString($activity[VectorSearch].searchResultRows)",
                 "logLevel": ""
               }
             }
