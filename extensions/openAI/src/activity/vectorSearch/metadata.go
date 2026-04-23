@@ -21,6 +21,8 @@ const (
 	iVectorStoreID      = "vectorStoreID"
 	iMaxNumberOfResults = "maxNumberOfResults"
 	irewriteQuery       = "rewriteQuery"
+	iScoreThreshold     = "scoreThreshold"
+	iRanker             = "ranker"
 	oSearchResultRows   = "searchResultRows"
 )
 
@@ -79,10 +81,12 @@ func (s *Settings) FromMap(values map[string]interface{}) error {
 
 // Input defines what data the activity receives
 type Input struct {
-	SearchString       string `md:"searchString"`
-	VectorStoreID      string `md:"vectorStoreID"`
-	MaxNumberOfResults int64  `md:"maxNumberOfResults"`
-	RewriteQuery       bool   `md:"rewriteQuery"`
+	SearchString       string  `md:"searchString"`
+	VectorStoreID      string  `md:"vectorStoreID"`
+	MaxNumberOfResults int64   `md:"maxNumberOfResults"`
+	RewriteQuery       bool    `md:"rewriteQuery"`
+	ScoreThreshold     float64 `md:"scoreThreshold"`
+	Ranker             string  `md:"ranker"`
 }
 
 // FromMap populates the struct from the activity's inputs.
@@ -113,6 +117,25 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 	i.RewriteQuery, err = coerce.ToBool(values[irewriteQuery])
 	if err != nil {
 		return err
+	}
+
+	// Set default values if not provided
+	if scoreThreshold, exists := values[iScoreThreshold]; exists && scoreThreshold != nil {
+		i.ScoreThreshold, err = coerce.ToFloat64(scoreThreshold)
+		if err != nil {
+			return err
+		}
+	} else {
+		i.ScoreThreshold = 0.20 // Default threshold
+	}
+
+	if ranker, exists := values[iRanker]; exists && ranker != nil {
+		i.Ranker, err = coerce.ToString(ranker)
+		if err != nil {
+			return err
+		}
+	} else {
+		i.Ranker = "auto" // Default ranker
 	}
 
 	// i.FileAttributeNames, err = coerce.ToArray(values[iFileAttributeNames])
@@ -159,6 +182,8 @@ func (i *Input) ToMap() map[string]interface{} {
 		iVectorStoreID:      i.VectorStoreID,
 		iMaxNumberOfResults: i.MaxNumberOfResults,
 		irewriteQuery:       i.RewriteQuery,
+		iScoreThreshold:     i.ScoreThreshold,
+		iRanker:             i.Ranker,
 	}
 }
 

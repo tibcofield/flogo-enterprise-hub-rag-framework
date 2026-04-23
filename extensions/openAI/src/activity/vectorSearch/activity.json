@@ -60,6 +60,24 @@
       "name": "rewriteQuery",
       "type": "boolean",
       "required": false
+    },
+    {
+      "name": "scoreThreshold",
+      "type": "number",
+      "required": false,
+      "display": {
+        "name": "Score Threshold",
+        "description": "Minimum similarity score threshold for results (0.0 to 1.0, default: 0.20)"
+      }
+    },
+    {
+      "name": "ranker",
+      "type": "string",
+      "required": false,
+      "display": {
+        "name": "Ranker",
+        "description": "Ranking algorithm: auto (recommended), default, or none (default: auto)"
+      }
     }
   ],
   "outputs": [

@@ -112,8 +112,9 @@
               "input": {
                 "vectorStoreID": "=$property[\"VECTORSTORE_ID\"]",
                 "searchString": "tell me something about bwce",
-                "maxNumberOfResults": 1,
-                "rewriteQuery": false
+                "maxNumberOfResults": 3,
+                "rewriteQuery": false,
+                "ranker": ""
               }
             }
           },

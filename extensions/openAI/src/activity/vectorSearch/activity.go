@@ -81,8 +81,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			RewriteQuery:  openai.Bool(input.RewriteQuery),
 			// // TODO filters...
 			RankingOptions: openai.VectorStoreSearchParamsRankingOptions{
-				ScoreThreshold: openai.Float(0.20),
-				Ranker:         "none",
+				ScoreThreshold: openai.Float(input.ScoreThreshold),
+				Ranker:         input.Ranker,
 			},
 		},
 
@@ -118,10 +118,13 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 		if err != nil {
 			logger.Errorf("next page failed: %v", err)
+			break
 		}
 		if nextPage == nil {
 			break
 		}
+		// Critical fix: assign nextPage back to pages to continue pagination
+		pages = nextPage
 	}
 
 	err = ctx.SetOutputObject(out)
