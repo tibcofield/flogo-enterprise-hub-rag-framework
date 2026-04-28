@@ -70,46 +70,37 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	clientCtx := context.Background()
 
-	// fileReader, err := os.Open(a.Settings.FileDirectory + fileName)
-	// if err != nil {
-	// 	logger.Error(err.Error())
-	// }
+	logger.Info("Starting vector store search with query: ", searchString)
 
-	// inputFile := openai.File(fileReader, fileName, "application/pdf")
-
-	// // Request an image
-	// fileResp, err := oaiClient.Files.New(clientCtx, openai.FileNewParams{
-	// 	File:    inputFile,
-	// 	Purpose: openai.FilePurpose(a.Settings.Purpose),
-	// })
 	pages, err := oaiClient.VectorStores.Search(
 		clientCtx,
-		a.Settings.VectorStoreID,
+		input.VectorStoreID,
 		openai.VectorStoreSearchParams{
 			Query: openai.VectorStoreSearchParamsQueryUnion{
 				OfString: openai.String(searchString),
 			},
-			MaxNumResults: openai.Int(a.Settings.MaxNumberOfResults),
-			RewriteQuery:  openai.Bool(a.Settings.RewriteQuery),
-			// TODO filters...
+			MaxNumResults: openai.Int(input.MaxNumberOfResults),
+			RewriteQuery:  openai.Bool(input.RewriteQuery),
+			// // TODO filters...
 			RankingOptions: openai.VectorStoreSearchParamsRankingOptions{
-				ScoreThreshold: openai.Float(0.70),
-				Ranker:         "none",
+				ScoreThreshold: openai.Float(input.ScoreThreshold),
+				Ranker:         input.Ranker,
 			},
-
-			//Filters: ,
-			// Optional: Add filters based on your metadata schema
-			// Filter: openai.VectorStoreSearchParamsFilter{
-			// 	Metadata: map[string]openai.VectorStoreSearchParamsFilterValueUnion{
-			// 		"category": {
-			// 			OfString: openai.String("example-category"),
-			// 		},
-			// 	},
-			// },
-			// Optional: Specify which metadata fields to return in results
-			// ReturnMetadata: []string{"source", "author"},
-			// RankingOptions: ,
 		},
+
+		//Filters: ,
+		// Optional: Add filters based on your metadata schema
+		// Filter: openai.VectorStoreSearchParamsFilter{
+		// 	Metadata: map[string]openai.VectorStoreSearchParamsFilterValueUnion{
+		// 		"category": {
+		// 			OfString: openai.String("example-category"),
+		// 		},
+		// 	},
+		// },
+		// Optional: Specify which metadata fields to return in results
+		// ReturnMetadata: []string{"source", "author"},
+		// RankingOptions: ,
+
 	)
 
 	if err != nil {
@@ -129,10 +120,13 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 		if err != nil {
 			logger.Errorf("next page failed: %v", err)
+			break
 		}
 		if nextPage == nil {
 			break
 		}
+		// Critical fix: assign nextPage back to pages to continue pagination
+		pages = nextPage
 	}
 
 	err = ctx.SetOutputObject(out)

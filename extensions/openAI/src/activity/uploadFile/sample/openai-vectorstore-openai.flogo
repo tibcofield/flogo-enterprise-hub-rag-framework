@@ -126,14 +126,14 @@
                       },
                       {
                         "key": "DocType",
-                        "value": "Install Guide"
+                        "value": "Concepts Guide"
                       },
                       {
                         "key": "Download URL",
                         "value": "https://docs.tibco.com/pub/activematrix_businessworks/6.12.0/doc/pdf/TIB_bwce_6.12.0_installation.pdf?id=15"
                       }
                     ],
-                    "filename": "C:/local/data/SynologyDrive/work/flogo/rag-collab/git/flogo-enterprise-hub-rag-framework/extensions/openAI/testdata/tib_ad_sdk_relnotes.pdf"
+                    "filename": "extensions/openAI/src/activity/uploadFile/testdata/TIB-bwce_6.12_concepts.pdf"
                   }
                 }
               },
@@ -253,9 +253,9 @@
     }
   ],
   "connections": {},
-  "contrib": "W3sicmVmIjoiZ2l0aHViLmNvbS90aWJjby9mbG9nby1nZW5lcmFsL3NyYy9hcHAvR2VuZXJhbCIsImlkIjoiR2VuZXJhbCIsInZlcnNpb24iOiIxLjYuMTIiLCJ0YWciOiIxLjYuMTItYjA2IiwibmFtZSI6IkdlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCIsImlzVXNlckV4dGVuc2lvbiI6ZmFsc2V9LHsicmVmIjoiZ2l0aHViLmNvbS9USUJDT1NvZnR3YXJlL2Zsb2dvLWVudGVycHJpc2UtaHViL2V4dGVuc2lvbnMvb3BlbkFJIiwiaWQiOiJvcGVuQUkiLCJ2ZXJzaW9uIjoiMS4wLjEiLCJ0YWciOiIxLjAuMCIsIm5hbWUiOiJPcGVuQUkgIiwiczNsb2NhdGlvbiI6IntVU0VSSUR9L29wZW5BSSIsImlzVXNlckV4dGVuc2lvbiI6dHJ1ZX1d",
+  "contrib": "W3sicmVmIjoiZ2l0aHViLmNvbS90aWJjby9mbG9nby1nZW5lcmFsL3NyYy9hcHAvR2VuZXJhbCIsImlkIjoiR2VuZXJhbCIsInZlcnNpb24iOiIxLjYuMTEiLCJ0YWciOiIxLjYuMTEtYjAyIiwibmFtZSI6IkdlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCIsImlzVXNlckV4dGVuc2lvbiI6ZmFsc2V9LHsicmVmIjoiZ2l0aHViLmNvbS9USUJDT1NvZnR3YXJlL2Zsb2dvLWVudGVycHJpc2UtaHViL2V4dGVuc2lvbnMvb3BlbkFJIiwiaWQiOiJvcGVuQUkiLCJ2ZXJzaW9uIjoiMS4wLjEiLCJ0YWciOiIxLjAuMCIsIm5hbWUiOiJPcGVuQUkgIiwiczNsb2NhdGlvbiI6IntVU0VSSUR9L29wZW5BSSIsImlzVXNlckV4dGVuc2lvbiI6dHJ1ZX1d",
   "metadata": {
     "endpoints": [],
-    "flogoVersion": "2.26.2"
+    "flogoVersion": "2.26.0"
   }
 }
