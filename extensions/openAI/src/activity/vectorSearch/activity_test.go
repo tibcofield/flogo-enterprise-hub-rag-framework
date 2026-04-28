@@ -30,6 +30,7 @@ func loadEnvFile() {
 	}
 	defer file.Close()
 
+	// Read the .env file line by line and set environment variables
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
