@@ -70,6 +70,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	clientCtx := context.Background()
 
+	logger.Info("Starting vector store search with query: ", searchString)
+
 	pages, err := oaiClient.VectorStores.Search(
 		clientCtx,
 		input.VectorStoreID,
