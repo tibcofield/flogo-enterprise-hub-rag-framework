@@ -1,14 +1,14 @@
 {
-  "name": "openai-list-vector-store-files",
+  "name": "openai-vector-store-list",
   "version": "1.0.0",
   "type": "flogo:activity",
-  "title": "Files List Vector Store",
+  "title": "List Vector Stores",
   "author": "TIBCO Software",
-  "ref": "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/listVectorStoreFiles",
+  "ref": "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/vectorStoreList",
   "display": {
     "category": "openAI",
     "visible": true,
-    "description": "This activity lists files in an OpenAI vector store with support for filtering and pagination",
+    "description": "This activity lists vector stores from OpenAI",
     "smallIcon": "icons/openAPISmall.png",
     "largeIcon": "icons/openAPILarge.png"
   },
@@ -34,26 +34,16 @@
       "required": true,
       "display": {
         "name": "OpenAI API Key",
-        "description": "OpenAI API key that is required to authenticate with the OpenAI API",
+        "description": "OpenAI key that is required to authenticate with the OpenAI API",
         "appPropertySupport": true
       }
+
     }
   ],
   "inputs": [
-    
-    {
-      "name": "vectorStoreID",
-      "type": "string",
-      "required": true
-    },
     {
       "name": "limit",
       "type": "integer",
-      "required": false
-    },
-    {
-      "name": "filter",
-      "type": "string",
       "required": false
     },
     {
@@ -79,12 +69,25 @@
   ],
   "outputs": [
     {
-      "name": "files",
+      "name": "vectorStores",
       "type": "array",
-      "display": {
-        "name": "Files",
-        "description": "Array of vector store files"
-      }
+      "required": false,
+      "enablecoercing": true
+    },
+    {
+      "name": "hasMore",
+      "type": "boolean",
+      "required": false
+    },
+    {
+      "name": "firstId",
+      "type": "string",
+      "required": false
+    },
+    {
+      "name": "lastId",
+      "type": "string",
+      "required": false
     }
   ]
 }
