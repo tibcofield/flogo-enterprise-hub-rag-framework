@@ -1,0 +1,150 @@
+{
+  "imports": [
+    "github.com/project-flogo/flow",
+    "github.com/project-flogo/contrib/activity/noop",
+    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/vectorStoreCreate",
+    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/fileUpload",
+    "github.com/tibco/flogo-general/src/app/General/trigger/startuphook",
+    "github.com/project-flogo/contrib/function/array"
+  ],
+  "name": "openai-vector-e2e",
+  "description": "",
+  "version": "1.0.0",
+  "type": "flogo:app",
+  "appModel": "1.1.1",
+  "tags": [],
+  "triggers": [
+    {
+      "ref": "#startuphook",
+      "name": "tibco-appstartup",
+      "description": "This trigger allows you to execute flows before other triggers in the application are started. This is useful in initializing application specific tasks.",
+      "settings": {},
+      "id": "AppStartupTrigger",
+      "handlers": [
+        {
+          "description": "",
+          "action": {
+            "ref": "github.com/project-flogo/flow",
+            "settings": {
+              "flowURI": "res://flow:VectorStore_testing"
+            }
+          },
+          "name": "VectorStore_testing"
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "flow:VectorStore_testing",
+      "data": {
+        "name": "VectorStore testing",
+        "description": "",
+        "links": [
+          {
+            "id": 1,
+            "from": "StartActivity",
+            "to": "CreateVectorStore",
+            "type": "label",
+            "label": "StartActivity to CreateVectorStore"
+          },
+          {
+            "id": 2,
+            "from": "CreateVectorStore",
+            "to": "UploadFile",
+            "type": "label",
+            "label": "CreateVectorStore to UploadFile"
+          }
+        ],
+        "tasks": [
+          {
+            "id": "StartActivity",
+            "name": "StartActivity",
+            "description": "NoOp Activity",
+            "activity": {
+              "ref": "#noop"
+            }
+          },
+          {
+            "id": "CreateVectorStore",
+            "name": "CreateVectorStore",
+            "description": "This activity creates a new vector store in OpenAI",
+            "settings": {
+              "retryOnError": {
+                "count": 0,
+                "interval": 0
+              }
+            },
+            "activity": {
+              "ref": "#vectorStoreCreate",
+              "settings": {
+                "endPointURL": "=$property[\"OPENAI_API_ENDPOINT_URL\"]",
+                "apiKey": "=$property[\"OPENAI_API_KEY\"]"
+              },
+              "input": {
+                "name": "VectorStoreTesting",
+                "description": "VectorStore test case 1",
+                "expiresAfterDays": 1,
+                "maxChunkSizeTokens": 400,
+                "chunkOverlapTokens": 50,
+                "timeoutSeconds": 60,
+                "fileIds": {
+                  "mapping": [
+                    ""
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "id": "UploadFile",
+            "name": "UploadFile",
+            "description": "This activity uploads files to OpenAI file store",
+            "settings": {
+              "retryOnError": {
+                "count": 0,
+                "interval": 0
+              }
+            },
+            "activity": {
+              "ref": "#fileUpload",
+              "settings": {
+                "purpose": "assistants",
+                "maxChunkSizeTokens": 800,
+                "chunkOverlapTokens": 400,
+                "timeoutSeconds": 300
+              },
+              "input": {
+                "vectorStoreID": ""
+              }
+            }
+          }
+        ],
+        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjEwMCwieSI6MTAwfSwiQ3JlYXRlVmVjdG9yU3RvcmUiOnsieCI6MjUwLCJ5Ijo5NH0sIlVwbG9hZEZpbGUiOnsieCI6NDkyLCJ5Ijo5NH19",
+        "metadata": {
+          "input": [],
+          "output": [],
+          "fe_metadata": {}
+        }
+      }
+    }
+  ],
+  "properties": [
+    {
+      "name": "OPENAI_API_KEY",
+      "type": "string",
+      "value": "REPLACE_ME"
+    },
+    {
+      "name": "OPENAI_API_ENDPOINT_URL",
+      "type": "string",
+      "value": "https://api.openai.com/v1"
+    }
+  ],
+  "connections": {},
+  "contrib": "W3sicmVmIjoiZ2l0aHViLmNvbS90aWJjby9mbG9nby1nZW5lcmFsL3NyYy9hcHAvR2VuZXJhbCIsImlkIjoiR2VuZXJhbCIsInZlcnNpb24iOiIxLjYuMTEiLCJ0YWciOiIxLjYuMTEtYjAyIiwibmFtZSI6IkdlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCIsImlzVXNlckV4dGVuc2lvbiI6ZmFsc2V9LHsicmVmIjoiZ2l0aHViLmNvbS9USUJDT1NvZnR3YXJlL2Zsb2dvLWVudGVycHJpc2UtaHViL2V4dGVuc2lvbnMvb3BlbkFJIiwiaWQiOiJvcGVuQUkiLCJ2ZXJzaW9uIjoiMS4wLjEiLCJ0YWciOiIxLjAuMCIsIm5hbWUiOiJPcGVuQUkgIiwiczNsb2NhdGlvbiI6IntVU0VSSUR9L29wZW5BSSIsImlzVXNlckV4dGVuc2lvbiI6dHJ1ZX1d",
+  "metadata": {
+    "endpoints": [],
+    "flogoVersion": "2.26.0"
+  }
+}

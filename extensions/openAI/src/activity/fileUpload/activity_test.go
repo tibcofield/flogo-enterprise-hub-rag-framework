@@ -3,7 +3,7 @@
  * This file is subject to the license terms contained
  * in the license file that is distributed with this file.
  */
-package uploadFile
+package fileUpload
 
 import (
 	"bufio"
@@ -60,7 +60,6 @@ func populateSettingsFromEnv() *Settings {
 	cvrtMaxChunkSizeTokens, _ := strconv.ParseInt(os.Getenv("TEST_MAX_CHUNK_SIZE_TOKENS"), 10, 64)
 	cvrtTimeoutSecords, _ := strconv.ParseInt(os.Getenv("TEST_TIMEOUT_SECONDS"), 10, 32)
 	return &Settings{
-		VectorStoreID:      os.Getenv("VECTOR_STORE_ID"),
 		ApiKey:             os.Getenv("OPEN_AI_API_KEY"),
 		EndPointURL:        os.Getenv("OPENAI_API_ENDPOINT_URL"),
 		Purpose:            os.Getenv("TEST_PURPOSE"),
@@ -103,6 +102,7 @@ func TestUploadFileFileAttributeTest(t *testing.T) {
 
 	// setting up the input parameters for the activity
 	tc.SetInput("filename", "./testdata/TIB_hawk_5.2.0_vpat.pdf")
+	tc.SetInput("vectorStoreID", os.Getenv("VECTOR_STORE_ID"))
 
 	// setting up file attributes to be sent to OpenAI along with the file upload
 	fileAttributes := []FileAttributeData{
@@ -157,6 +157,7 @@ func TestSearchDocumentsDefaultRelPath(t *testing.T) {
 	fmt.Printf("Relative path: %s\n", relPath)
 
 	tc.SetInput("filename", relPath)
+	tc.SetInput("vectorStoreID", os.Getenv("VECTOR_STORE_ID"))
 
 	done, err := act.Eval(tc)
 	if !done {
@@ -197,6 +198,7 @@ func TestSearchDocumentsDefaultAbsPath(t *testing.T) {
 	}
 	fmt.Printf("Absolute path: %s\n", absPath)
 	tc.SetInput("filename", absPath)
+	tc.SetInput("vectorStoreID", os.Getenv("VECTOR_STORE_ID"))
 
 	done, err := act.Eval(tc)
 	if !done {

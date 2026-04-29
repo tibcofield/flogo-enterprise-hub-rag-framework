@@ -1,4 +1,4 @@
-package uploadFile
+package fileUpload
 
 /*
 * Copyright © 2023 - 2026. Cloud Software Group, Inc.
@@ -22,7 +22,7 @@ import (
 	"github.com/project-flogo/core/support/log"
 )
 
-var logger = log.ChildLogger(log.RootLogger(), "openai-upload-file")
+var logger = log.ChildLogger(log.RootLogger(), "openai-file-upload")
 
 // activityMd is the metadata for the activity.
 var activityMd = activity.ToMetadata(&Settings{}, &Input{}, &Output{})
@@ -89,6 +89,12 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		return false, err
 	}
 
+	if input.VectorStoreID == "" {
+		err := errors.New("validation failed: vectorStoreID is required but not provided in input")
+		logger.Error(err.Error())
+		return false, err
+	}
+
 	// Create context with timeout for large file uploads
 	clientCtx, cancel := context.WithTimeout(context.Background(),
 		time.Duration(a.Settings.TimeoutSeconds)*time.Second)
@@ -138,8 +144,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		logger.Info("adding" + item.Key)
 	}
 
-	if a.Settings.VectorStoreID != "" {
-		_, err = a.oaiClient.VectorStores.Files.New(clientCtx, a.Settings.VectorStoreID,
+	if input.VectorStoreID != "" {
+		_, err = a.oaiClient.VectorStores.Files.New(clientCtx, input.VectorStoreID,
 			openai.VectorStoreFileNewParams{
 				FileID:     fileResp.ID,
 				Attributes: customMetadata,
@@ -154,12 +160,12 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			// Check for timeout specifically
 			if clientCtx.Err() == context.DeadlineExceeded {
 				contextErr := fmt.Errorf("vector store timeout: adding file '%s' (ID: %s) to vector store '%s' exceeded %d seconds",
-					fileName, fileResp.ID, a.Settings.VectorStoreID, a.Settings.TimeoutSeconds)
+					fileName, fileResp.ID, input.VectorStoreID, a.Settings.TimeoutSeconds)
 				logger.Error(contextErr.Error())
 				return false, contextErr
 			}
 			contextErr := fmt.Errorf("vector store operation failed: unable to add file '%s' (ID: %s) to vector store '%s': %w",
-				fileName, fileResp.ID, a.Settings.VectorStoreID, err)
+				fileName, fileResp.ID, input.VectorStoreID, err)
 			logger.Error(contextErr.Error())
 			return false, contextErr
 		}
