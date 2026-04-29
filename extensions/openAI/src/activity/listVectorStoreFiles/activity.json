@@ -2,7 +2,7 @@
   "name": "openai-list-vector-store-files",
   "version": "1.0.0",
   "type": "flogo:activity",
-  "title": "List Vector Store Files",
+  "title": "Files List Vector Store",
   "author": "TIBCO Software",
   "ref": "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/listVectorStoreFiles",
   "display": {
