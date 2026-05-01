@@ -5,7 +5,7 @@
     "github.com/tibco/flogo-general/src/app/General/activity/sleep",
     "github.com/tibco/flogo-general/src/app/General/activity/mapper",
     "github.com/tibco/flogo-general/src/app/General/activity/log",
-    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/uploadFile",
+    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/fileUpload",
     "github.com/project-flogo/contrib/activity/actreturn",
     "github.com/tibco/flogo-general/src/app/General/trigger/startuphook",
     "github.com/project-flogo/contrib/function/array",
@@ -181,18 +181,18 @@
               }
             },
             "activity": {
-              "ref": "#uploadFile",
+              "ref": "#fileUpload",
               "settings": {
                 "endPointURL": "=$property[\"OPENAI_API_ENDPOINT_URL\"]",
                 "apiKey": "=$property[\"OPEN_AI_API_KEY\"]",
                 "purpose": "assistants",
-                "vectorStoreID": "=$property[\"VECTORSTORE_ID\"]",
                 "maxChunkSizeTokens": 800,
                 "chunkOverlapTokens": 400,
                 "timeoutSeconds": 300
               },
               "input": {
                 "filename": "=$activity[Mapper].output.filename",
+                "vectorStoreID": "=$property[\"VECTORSTORE_ID\"]",
                 "fileAttributes": {
                   "mapping": {
                     "@foreach($activity[Mapper].output.attributes,attributes)": {

@@ -79,7 +79,12 @@
     {
       "name": "searchResultRows",
       "type": "array",
-      "enablecoercing": true
+      "enablecoercing": true,
+      "display": {
+        "name": "Search Result Rows",
+        "description": "Array of vector store search result rows"
+      },
+      "value": "[{\"attributes\":{\"DocGroup\":{\"OfString\":\"\",\"OfFloat\":0,\"OfBool\":false},\"DocType\":{\"OfString\":\"\",\"OfFloat\":0,\"OfBool\":false},\"Download URL\":{\"OfString\":\"\",\"OfFloat\":0,\"OfBool\":false}},\"content\":[{\"text\":\"\",\"type\":\"text\"}],\"file_id\":\"\",\"filename\":\"\",\"score\":0}]"
     }
   ]
 }

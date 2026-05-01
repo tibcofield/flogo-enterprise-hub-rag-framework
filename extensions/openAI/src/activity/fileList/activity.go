@@ -1,4 +1,4 @@
-package listVectorStoreFiles
+package fileList
 
 /*
 * Copyright © 2023 - 2026. Cloud Software Group, Inc.
@@ -18,7 +18,7 @@ import (
 	"github.com/project-flogo/core/support/log"
 )
 
-var logger = log.ChildLogger(log.RootLogger(), "openai-list-vector-store-files")
+var logger = log.ChildLogger(log.RootLogger(), "openai-file-list")
 
 // activityMd is the metadata for the activity
 var activityMd = activity.ToMetadata(&Settings{}, &Input{}, &Output{})
@@ -70,7 +70,7 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 }
 
 func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
-	logger.Infof("****************** Starting OpenAI List Vector Store Files Activity Eval ******************")
+	logger.Infof("****************** Starting OpenAI File List Activity Eval ******************")
 
 	input := &Input{}
 	err = ctx.GetInputObject(input)

@@ -1,4 +1,4 @@
-package uploadFile
+package fileUpload
 
 /*
 * Copyright © 2023 - 2025. Cloud Software Group, Inc.
@@ -23,11 +23,11 @@ const (
 	sAPIKey             = "apiKey"
 	sEnpointURL         = "endPointURL"
 	sPurpose            = "purpose"
-	sVectorStoreID      = "vectorStoreID"
 	sMaxChunkSizeTokens = "maxChunkSizeTokens"
 	sChunkOverlapTokens = "chunkOverlapTokens"
 	sTimeoutSeconds     = "timeoutSeconds"
 	iFilename           = "filename"
+	iVectorStoreID      = "vectorStoreID"
 	iFileAttributeNames = "fileAttributeNames"
 	iFileAttributes     = "fileAttributes"
 	oID                 = "id"
@@ -44,7 +44,6 @@ type Settings struct {
 	ApiKey             string `md:"apiKey, required"`
 	EndPointURL        string `md:"endPointURL, required"`
 	Purpose            string `md:"purpose, required"`
-	VectorStoreID      string `md:"string"`
 	MaxChunkSizeTokens int64  `md:"maxChunkSizeTokens"`
 	ChunkOverlapTokens int64  `md:"chunkOverlapTokens"`
 	TimeoutSeconds     int    `md:"timeoutSeconds"`
@@ -81,11 +80,6 @@ func (s *Settings) FromMap(values map[string]interface{}) error {
 		}
 	}
 
-	s.VectorStoreID, err = coerce.ToString(values[sVectorStoreID])
-	if err != nil {
-		return err
-	}
-
 	s.MaxChunkSizeTokens, err = coerce.ToInt64(values[sMaxChunkSizeTokens])
 	if err != nil {
 		return err
@@ -107,6 +101,7 @@ func (s *Settings) FromMap(values map[string]interface{}) error {
 // Input defines what data the activity receives
 type Input struct {
 	FileName           string              `md:"filename"`
+	VectorStoreID      string              `md:"vectorStoreID"`
 	FileAttributeNames []interface{}       `md:"fileAttributeNames"`
 	FileAttributes     []FileAttributeData `md:"fileAttributes"`
 }
@@ -122,6 +117,11 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 	var err error
 
 	i.FileName, err = coerce.ToString(values[iFilename])
+	if err != nil {
+		return err
+	}
+
+	i.VectorStoreID, err = coerce.ToString(values[iVectorStoreID])
 	if err != nil {
 		return err
 	}
@@ -162,6 +162,7 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 func (i *Input) ToMap() map[string]interface{} {
 	return map[string]interface{}{
 		iFilename:           i.FileName,
+		iVectorStoreID:      i.VectorStoreID,
 		iFileAttributeNames: i.FileAttributeNames,
 		iFileAttributes:     i.FileAttributes,
 	}

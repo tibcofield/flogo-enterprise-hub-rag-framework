@@ -1,0 +1,400 @@
+{
+  "imports": [
+    "github.com/project-flogo/flow",
+    "github.com/project-flogo/contrib/activity/noop",
+    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/vectorStoreCreate",
+    "github.com/tibco/flogo-general/src/app/General/activity/log",
+    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/fileUpload",
+    "github.com/tibco/flogo-general/src/app/General/activity/sleep",
+    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/listVectorStoreFiles",
+    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/vectorSearch",
+    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/vectorStoreDelete",
+    "github.com/project-flogo/contrib/activity/actreturn",
+    "github.com/tibco/flogo-general/src/app/General/trigger/startuphook",
+    "github.com/project-flogo/contrib/function/string",
+    "github.com/project-flogo/contrib/function/coerce"
+  ],
+  "name": "openai-vector-e2e",
+  "description": "",
+  "version": "1.0.0",
+  "type": "flogo:app",
+  "appModel": "1.1.1",
+  "tags": [],
+  "triggers": [
+    {
+      "ref": "#startuphook",
+      "name": "tibco-appstartup",
+      "description": "This trigger allows you to execute flows before other triggers in the application are started. This is useful in initializing application specific tasks.",
+      "settings": {},
+      "id": "AppStartupTrigger",
+      "handlers": [
+        {
+          "description": "",
+          "action": {
+            "ref": "github.com/project-flogo/flow",
+            "settings": {
+              "flowURI": "res://flow:VectorStore_Testing"
+            }
+          },
+          "name": "VectorStore_Testing"
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "flow:VectorStore_Testing",
+      "data": {
+        "note": {
+          "author": {
+            "name": "VS code user",
+            "userId": "vscode"
+          },
+          "content": "Create Vectorstore\nUpload File\nList files in store\nVectorSearch\nDelete vectorstore",
+          "createAt": 1777471523969,
+          "lastUpdatedAt": 1777471523969,
+          "title": "Flow Note"
+        },
+        "name": "VectorStore Testing",
+        "description": "",
+        "links": [
+          {
+            "id": 1,
+            "from": "StartActivity",
+            "to": "CreateVectorStore",
+            "type": "label",
+            "label": "StartActivity to CreateVectorStore"
+          },
+          {
+            "id": 2,
+            "from": "CreateVectorStore",
+            "to": "LogMessage",
+            "type": "label",
+            "label": "CreateVectorStore to LogMessage"
+          },
+          {
+            "id": 3,
+            "from": "LogMessage",
+            "to": "UploadFile",
+            "type": "label",
+            "label": "LogMessage to UploadFile"
+          },
+          {
+            "id": 4,
+            "from": "UploadFile",
+            "to": "LogMessage2",
+            "type": "label",
+            "label": "UploadFile to CopyOfLogMessage"
+          },
+          {
+            "id": 5,
+            "from": "LogMessage2",
+            "to": "Sleep",
+            "type": "label",
+            "label": "LogMessage2 to Sleep"
+          },
+          {
+            "id": 6,
+            "from": "Sleep",
+            "to": "FilesListVectorStore",
+            "type": "label",
+            "label": "Sleep to FilesListVectorStore"
+          },
+          {
+            "id": 7,
+            "from": "FilesListVectorStore",
+            "to": "LogMessage3",
+            "type": "label",
+            "label": "FilesListVectorStore to LogMessage3"
+          },
+          {
+            "id": 8,
+            "from": "LogMessage3",
+            "to": "VectorSearch",
+            "type": "label",
+            "label": "LogMessage3 to VectorSearch"
+          },
+          {
+            "id": 9,
+            "from": "VectorSearch",
+            "to": "LogMessage4",
+            "type": "label",
+            "label": "VectorSearch to CopyOfLogMessage3"
+          },
+          {
+            "id": 10,
+            "from": "LogMessage4",
+            "to": "DeleteVectorStore",
+            "type": "label",
+            "label": "LogMessage4 to DeleteVectorStore"
+          },
+          {
+            "id": 11,
+            "from": "DeleteVectorStore",
+            "to": "Return",
+            "type": "label",
+            "label": "DeleteVectorStore to Return"
+          }
+        ],
+        "tasks": [
+          {
+            "id": "StartActivity",
+            "name": "StartActivity",
+            "description": "NoOp Activity",
+            "activity": {
+              "ref": "#noop"
+            }
+          },
+          {
+            "id": "CreateVectorStore",
+            "name": "CreateVectorStore",
+            "description": "This activity creates a new vector store in OpenAI",
+            "settings": {
+              "retryOnError": {
+                "count": 0,
+                "interval": 0
+              }
+            },
+            "activity": {
+              "ref": "#vectorStoreCreate",
+              "settings": {
+                "endPointURL": "=$property[\"OPENAI_API_ENDPOINT_URL\"]",
+                "apiKey": "=$property[\"OPENAI_API_KEY\"]"
+              },
+              "input": {
+                "name": "VectorStoreTesting",
+                "description": "VectorStore test case 1",
+                "expiresAfterDays": 1,
+                "maxChunkSizeTokens": 400,
+                "chunkOverlapTokens": 50,
+                "timeoutSeconds": 60,
+                "fileIds": {
+                  "mapping": [
+                    ""
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "id": "LogMessage",
+            "name": "LogMessage",
+            "description": "Simple Log Message Activity",
+            "activity": {
+              "ref": "#log",
+              "input": {
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "=string.concat(\"VectorStore Created: \",$activity[CreateVectorStore].id)",
+                "logLevel": "INFO"
+              }
+            }
+          },
+          {
+            "id": "UploadFile",
+            "name": "UploadFile",
+            "description": "This activity uploads files to OpenAI file store",
+            "settings": {
+              "retryOnError": {
+                "count": 0,
+                "interval": 0
+              }
+            },
+            "activity": {
+              "ref": "#fileUpload",
+              "settings": {
+                "endPointURL": "=$property[\"OPENAI_API_ENDPOINT_URL\"]",
+                "apiKey": "=$property[\"OPENAI_API_KEY\"]",
+                "purpose": "assistants",
+                "maxChunkSizeTokens": 800,
+                "chunkOverlapTokens": 400,
+                "timeoutSeconds": 300
+              },
+              "input": {
+                "filename": "extensions/openAI/src/activity/fileUpload/testdata/TIB-bwce_6.12_concepts.pdf",
+                "vectorStoreID": "=$activity[CreateVectorStore].id"
+              }
+            }
+          },
+          {
+            "id": "LogMessage2",
+            "name": "LogMessage2",
+            "description": "Simple Log Message Activity",
+            "activity": {
+              "ref": "#log",
+              "input": {
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "=string.concat(\"File uploaded: \", $activity[UploadFile].id, \" to Vectorstore: \",$activity[CreateVectorStore].id)",
+                "logLevel": "INFO"
+              }
+            }
+          },
+          {
+            "id": "Sleep",
+            "name": "Sleep",
+            "description": "Wait for vectors to be created from file upload",
+            "activity": {
+              "ref": "#sleep",
+              "input": {
+                "IntervalTypeSetting": "Second",
+                "IntervalSetting": 30
+              }
+            }
+          },
+          {
+            "id": "FilesListVectorStore",
+            "name": "FilesListVectorStore",
+            "description": "This activity lists files in an OpenAI vector store with support for filtering and pagination",
+            "settings": {
+              "retryOnError": {
+                "count": 0,
+                "interval": 0
+              }
+            },
+            "activity": {
+              "ref": "#listVectorStoreFiles",
+              "settings": {
+                "endPointURL": "=$property[\"OPENAI_API_ENDPOINT_URL\"]",
+                "apiKey": "=$property[\"OPENAI_API_KEY\"]"
+              },
+              "input": {
+                "vectorStoreID": "=$activity[CreateVectorStore].id",
+                "filter": "",
+                "order": "",
+                "after": "",
+                "before": ""
+              }
+            }
+          },
+          {
+            "id": "LogMessage3",
+            "name": "LogMessage3",
+            "description": "Simple Log Message Activity",
+            "type": "iterator",
+            "settings": {
+              "iterate": "=$activity[FilesListVectorStore].files",
+              "accumulate": false
+            },
+            "activity": {
+              "ref": "#log",
+              "input": {
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "=string.concat(\"File listed: \" ,coerce.toString($iteration[value]))",
+                "logLevel": "INFO"
+              }
+            }
+          },
+          {
+            "id": "VectorSearch",
+            "name": "VectorSearch",
+            "description": "This activity searches a vector store for relevant information based on a query",
+            "settings": {
+              "retryOnError": {
+                "count": 0,
+                "interval": 0
+              }
+            },
+            "activity": {
+              "ref": "#vectorSearch",
+              "settings": {
+                "endPointURL": "=$property[\"OPENAI_API_ENDPOINT_URL\"]",
+                "apiKey": "=$property[\"OPENAI_API_KEY\"]"
+              },
+              "input": {
+                "vectorStoreID": "=$activity[CreateVectorStore].id",
+                "searchString": "Tell me something about BWCE",
+                "maxNumberOfResults": 5,
+                "rewriteQuery": false,
+                "ranker": ""
+              },
+              "schemas": {
+                "output": {
+                  "searchResultRows": {
+                    "type": "json",
+                    "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"attributes\":{\"type\":\"object\",\"properties\":{}},\"content\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"text\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}}},\"file_id\":{\"type\":\"string\"},\"filename\":{\"type\":\"string\"},\"score\":{\"type\":\"number\"}},\"required\":[\"attributes\",\"content\",\"file_id\",\"filename\",\"score\"]}}",
+                    "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"attributes\":{\"type\":\"object\",\"properties\":{}},\"content\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"text\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}}},\"file_id\":{\"type\":\"string\"},\"filename\":{\"type\":\"string\"},\"score\":{\"type\":\"number\"}},\"required\":[\"attributes\",\"content\",\"file_id\",\"filename\",\"score\"]}}"
+                  }
+                }
+              },
+              "feSchemaMap": {}
+            }
+          },
+          {
+            "id": "LogMessage4",
+            "name": "LogMessage4",
+            "description": "Simple Log Message Activity",
+            "type": "iterator",
+            "settings": {
+              "iterate": "=$activity[VectorSearch].searchResultRows",
+              "accumulate": false
+            },
+            "activity": {
+              "ref": "#log",
+              "input": {
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "=string.concat(\"File: \",$iteration[value].filename ,\" Text: \", coerce.toString($iteration[value].content))",
+                "logLevel": "INFO"
+              }
+            }
+          },
+          {
+            "id": "DeleteVectorStore",
+            "name": "DeleteVectorStore",
+            "description": "This activity deletes a vector store from OpenAI",
+            "settings": {
+              "retryOnError": {
+                "count": 0,
+                "interval": 0
+              }
+            },
+            "activity": {
+              "ref": "#vectorStoreDelete",
+              "settings": {
+                "endPointURL": "=$property[\"OPENAI_API_ENDPOINT_URL\"]",
+                "apiKey": "=$property[\"OPENAI_API_KEY\"]"
+              },
+              "input": {
+                "vectorStoreId": "=$activity[CreateVectorStore].id"
+              }
+            }
+          },
+          {
+            "id": "Return",
+            "name": "Return",
+            "description": "Simple Return Activity",
+            "activity": {
+              "ref": "#actreturn"
+            }
+          }
+        ],
+        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjEyLCJ5IjoxMDB9LCJDcmVhdGVWZWN0b3JTdG9yZSI6eyJ4IjoxMzQsInkiOjkyfSwiTG9nTWVzc2FnZSI6eyJ4IjoyOTcsInkiOjIyMn0sIlVwbG9hZEZpbGUiOnsieCI6NDU0LCJ5Ijo5OX0sIkxvZ01lc3NhZ2UyIjp7IngiOjYwNSwieSI6MjI0fSwiU2xlZXAiOnsieCI6NzYxLCJ5Ijo4MX0sIkZpbGVzTGlzdFZlY3RvclN0b3JlIjp7IngiOjk0MywieSI6ODZ9LCJMb2dNZXNzYWdlMyI6eyJ4IjoxMDk2LCJ5IjoyMzh9LCJWZWN0b3JTZWFyY2giOnsieCI6MTI2MiwieSI6ODR9LCJMb2dNZXNzYWdlNCI6eyJ4IjoxNDI1LCJ5IjoyMzN9LCJEZWxldGVWZWN0b3JTdG9yZSI6eyJ4IjoxNTkxLCJ5Ijo5Mn0sIlJldHVybiI6eyJ4IjoxNzg1LCJ5Ijo4N319",
+        "metadata": {
+          "input": [],
+          "output": [],
+          "fe_metadata": {}
+        }
+      }
+    }
+  ],
+  "properties": [
+    {
+      "name": "OPENAI_API_KEY",
+      "type": "string",
+      "value": "REPLACE_ME"
+    },
+    {
+      "name": "OPENAI_API_ENDPOINT_URL",
+      "type": "string",
+      "value": "https://api.openai.com/v1"
+    }
+  ],
+  "connections": {},
+  "contrib": "W3sicmVmIjoiZ2l0aHViLmNvbS90aWJjby9mbG9nby1nZW5lcmFsL3NyYy9hcHAvR2VuZXJhbCIsImlkIjoiR2VuZXJhbCIsInZlcnNpb24iOiIxLjYuMTEiLCJ0YWciOiIxLjYuMTEtYjAyIiwibmFtZSI6IkdlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCIsImlzVXNlckV4dGVuc2lvbiI6ZmFsc2V9LHsicmVmIjoiZ2l0aHViLmNvbS9USUJDT1NvZnR3YXJlL2Zsb2dvLWVudGVycHJpc2UtaHViL2V4dGVuc2lvbnMvb3BlbkFJIiwiaWQiOiJvcGVuQUkiLCJ2ZXJzaW9uIjoiMS4wLjEiLCJ0YWciOiIxLjAuMCIsIm5hbWUiOiJPcGVuQUkgIiwiczNsb2NhdGlvbiI6IntVU0VSSUR9L29wZW5BSSIsImlzVXNlckV4dGVuc2lvbiI6dHJ1ZX1d",
+  "metadata": {
+    "endpoints": [],
+    "flogoVersion": "2.26.0"
+  }
+}

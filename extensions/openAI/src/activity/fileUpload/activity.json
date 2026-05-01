@@ -1,10 +1,10 @@
 {
-  "name": "openai-upload-file",
+  "name": "openai-file-upload",
   "version": "1.0.1",
   "type": "flogo:activity",
-  "title": "Upload File",
+  "title": "File Upload",
   "author": "TIBCO Software",
-  "ref": "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/uploadFile",
+  "ref": "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/fileUpload",
   "display": {
     "category": "openAI",
     "visible": true,
@@ -57,17 +57,6 @@
       ]
     },
     {
-      "name": "vectorStoreID",
-      "type": "string",
-      "required": false,
-      "value": "",
-      "display": {
-        "name": "Vector Store ID",
-        "description": "If populated will add the file to the vector store",
-        "appPropertySupport": true
-      }
-    },
-    {
       "name": "maxChunkSizeTokens",
       "type": "integer",
       "required": false,
@@ -102,17 +91,23 @@
     }
   ],
   "inputs": [
-   {
+    {
       "name": "filename",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "vectorStoreID",
       "type": "string",
       "required": true
     },
     {
       "name": "fileAttributes",
       "type": "object",
-      "required": false             
+      "required": false
     }
-  ],  
+  ],
+
   "outputs": [
     {
       "name": "id",

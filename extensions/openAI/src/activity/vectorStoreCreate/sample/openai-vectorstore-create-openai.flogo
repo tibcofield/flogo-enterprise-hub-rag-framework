@@ -3,12 +3,11 @@
     "github.com/project-flogo/flow",
     "github.com/project-flogo/contrib/activity/noop",
     "github.com/tibco/flogo-general/src/app/General/activity/sleep",
-    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/vectorSearch",
+    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/vectorStoreCreate",
     "github.com/tibco/flogo-general/src/app/General/activity/log",
     "github.com/project-flogo/contrib/activity/actreturn",
     "github.com/tibco/flogo-general/src/app/General/trigger/startuphook",
-    "github.com/project-flogo/contrib/function/coerce",
-    "github.com/project-flogo/contrib/function/string"
+    "github.com/project-flogo/contrib/function/coerce"
   ],
   "name": "openai-vectorStore-search-openai",
   "description": "",
@@ -29,19 +28,19 @@
           "action": {
             "ref": "github.com/project-flogo/flow",
             "settings": {
-              "flowURI": "res://flow:Vectorstore_search"
+              "flowURI": "res://flow:Vector_Store_create"
             }
           },
-          "name": "Vectorstore_search"
+          "name": "Vector_Store_create"
         }
       ]
     }
   ],
   "resources": [
     {
-      "id": "flow:Vectorstore_search",
+      "id": "flow:Vector_Store_create",
       "data": {
-        "name": "Vectorstore search",
+        "name": "Vector Store create",
         "description": "",
         "links": [
           {
@@ -54,16 +53,16 @@
           {
             "id": 2,
             "from": "SleepForDebug",
-            "to": "VectorSearch",
+            "to": "CreateVectorStore",
             "type": "label",
-            "label": "Sleep to VectorSearch"
+            "label": "SleepForDebug to CreateVectorStore"
           },
           {
             "id": 3,
-            "from": "VectorSearch",
+            "from": "CreateVectorStore",
             "to": "LogMessage",
             "type": "label",
-            "label": "VectorSearch to LogMessage"
+            "label": "CreateVectorStore to LogMessage"
           },
           {
             "id": 4,
@@ -89,15 +88,15 @@
             "activity": {
               "ref": "#sleep",
               "input": {
-                "IntervalTypeSetting": "Second",
-                "IntervalSetting": 1
+                "IntervalTypeSetting": "Millisecond",
+                "IntervalSetting": 10
               }
             }
           },
           {
-            "id": "VectorSearch",
-            "name": "VectorSearch",
-            "description": "This activity searches a vector store for relevant information based on a query",
+            "id": "CreateVectorStore",
+            "name": "CreateVectorStore",
+            "description": "This activity creates a new vector store in OpenAI",
             "settings": {
               "retryOnError": {
                 "count": 0,
@@ -105,45 +104,31 @@
               }
             },
             "activity": {
-              "ref": "#vectorSearch",
+              "ref": "#vectorStoreCreate",
               "settings": {
                 "endPointURL": "=$property[\"OPENAI_API_ENDPOINT_URL\"]",
                 "apiKey": "=$property[\"OPENAI_API_KEY\"]"
               },
               "input": {
-                "vectorStoreID": "=$property[\"VECTORSTORE_ID\"]",
-                "searchString": "tell me something about ssd architectures",
-                "maxNumberOfResults": 3,
-                "rewriteQuery": false,
-                "ranker": "auto"
-              },
-              "schemas": {
-                "output": {
-                  "searchResultRows": {
-                    "type": "json",
-                    "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"attributes\":{\"type\":\"object\",\"properties\":{}},\"content\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"text\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}}},\"file_id\":{\"type\":\"string\"},\"filename\":{\"type\":\"string\"},\"score\":{\"type\":\"number\"}},\"required\":[\"attributes\",\"content\",\"file_id\",\"filename\",\"score\"]}}",
-                    "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"attributes\":{\"type\":\"object\",\"properties\":{}},\"content\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"text\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}}},\"file_id\":{\"type\":\"string\"},\"filename\":{\"type\":\"string\"},\"score\":{\"type\":\"number\"}},\"required\":[\"attributes\",\"content\",\"file_id\",\"filename\",\"score\"]}}"
-                  }
-                }
-              },
-              "feSchemaMap": {}
+                "name": "vs1",
+                "description": "decription1",
+                "expiresAfterDays": 5,
+                "maxChunkSizeTokens": 300,
+                "chunkOverlapTokens": 20,
+                "timeoutSeconds": 100
+              }
             }
           },
           {
             "id": "LogMessage",
             "name": "LogMessage",
             "description": "Simple Log Message Activity",
-            "type": "iterator",
-            "settings": {
-              "iterate": "=$activity[VectorSearch].searchResultRows",
-              "accumulate": false
-            },
             "activity": {
               "ref": "#log",
               "input": {
                 "Log Level": "INFO",
                 "flowInfo": false,
-                "message": "=string.concat(\"File: \",$iteration[value].filename ,\" Text: \", coerce.toString($iteration[value].content))",
+                "message": "=coerce.toString($activity[CreateVectorStore])",
                 "logLevel": "INFO"
               }
             }
@@ -157,7 +142,7 @@
             }
           }
         ],
-        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjAsInkiOjcyfSwiU2xlZXBGb3JEZWJ1ZyI6eyJ4IjoxMTcsInkiOjYzfSwiVmVjdG9yU2VhcmNoIjp7IngiOjM0NCwieSI6NjR9LCJMb2dNZXNzYWdlIjp7IngiOjY2MSwieSI6NjF9LCJSZXR1cm4iOnsieCI6OTQ3LCJ5Ijo2N319",
+        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjAsInkiOjcyfSwiU2xlZXBGb3JEZWJ1ZyI6eyJ4IjoxMTcsInkiOjYzfSwiQ3JlYXRlVmVjdG9yU3RvcmUiOnsieCI6MzY0LCJ5Ijo2MX0sIkxvZ01lc3NhZ2UiOnsieCI6NjYxLCJ5Ijo2MX0sIlJldHVybiI6eyJ4Ijo5NDcsInkiOjY3fX0=",
         "metadata": {
           "input": [],
           "output": [],
@@ -169,11 +154,6 @@
     }
   ],
   "properties": [
-    {
-      "name": "VECTORSTORE_ID",
-      "type": "string",
-      "value": "REPLACE ME"
-    },
     {
       "name": "OPENAI_API_ENDPOINT_URL",
       "type": "string",
