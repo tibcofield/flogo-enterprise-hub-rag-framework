@@ -58,67 +58,75 @@ The activity returns detailed information about vector store files.
 |--------|------|-------------|
 | **files** | Array | Array of vector store file objects with comprehensive metadata |
 
-### File Object Structure
+The full JSON Schema for this output is defined in [`schemas/openai-filelist-response-schema.json`](schemas/openai-filelist-response-schema.json) and is also embedded as the `value` of the `files` output in [`activity.json`](activity.json).
 
-Each file in the `files` array contains the following properties:
+### `files` Array Schema
+
+The `files` output is a top-level JSON array (`type: "array"`) where each element is a vector store file object with the following fields:
+
+| Field | Type | Required | Constraints | Description |
+|-------|------|----------|-------------|-------------|
+| `id` | string | Yes | Pattern `^file-[a-zA-Z0-9]+$` | Unique OpenAI file identifier (e.g. `file-7Ksr2QJdoEmtKhHb6JDYjd`) |
+| `created_at` | integer | Yes | `minimum: 0` | Unix timestamp (seconds) when the file was created |
+| `last_error` | object | Yes | See [`last_error`](#last_error-object) | Information about the last error encountered; fields are empty strings when no error occurred |
+| `object` | string | Yes | Enum: `"vector_store.file"` | Object type identifier; always the literal `"vector_store.file"` |
+| `status` | string | Yes | Enum: `in_progress`, `completed`, `failed`, `cancelled` | Current processing status of the file |
+| `usage_bytes` | integer | Yes | `minimum: 0` | Number of bytes the file consumes in the vector store |
+| `vector_store_id` | string | Yes | Pattern `^vs_[a-zA-Z0-9]+$` | ID of the parent vector store |
+| `attributes` | object | Yes | Free-form key/value map (string, number, boolean, or null values) | Custom metadata associated with the file; may be empty (`{}`) |
+| `chunking_strategy` | object | Yes | See [`chunking_strategy`](#chunking_strategy-object) | Strategy used for chunking the file |
+
+#### `last_error` object
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `code` | string | Yes | Error code; empty string when no error |
+| `message` | string | Yes | Human-readable error message; empty string when no error |
+
+#### `chunking_strategy` object
+
+| Field | Type | Required | Constraints | Description |
+|-------|------|----------|-------------|-------------|
+| `type` | string | Yes | Enum: `static`, `auto` | Type of chunking strategy applied to the file |
+| `static` | object | No | Required when `type == "static"`. See below | Static chunking configuration |
+
+`static` sub-object:
+
+| Field | Type | Required | Constraints | Description |
+|-------|------|----------|-------------|-------------|
+| `chunk_overlap_tokens` | integer | Yes | `minimum: 0` | Number of tokens to overlap between chunks |
+| `max_chunk_size_tokens` | integer | Yes | `minimum: 0` | Maximum size of each chunk in tokens |
+
+### Example Output
 
 ```json
-{
-  "id": "file-abc123def456",
-  "created_at": 1640995200,
-  "last_error": {
-    "code": "invalid_file",
-    "message": "File format not supported"
-  },
-  "object": "vector_store.file",
-  "status": "completed",
-  "usage_bytes": 2048576,
-  "vector_store_id": "vs-abc123def456",
-  "attributes": {
-    "DocGroup": {
-      "OfString": "technical-documentation",
-      "OfFloat": 0,
-      "OfBool": false
-    },
-    "DocType": {
-      "OfString": "PDF",
-      "OfFloat": 0,
-      "OfBool": false
-    },
-    "Download URL": {
-      "OfString": "https://example.com/doc.pdf",
-      "OfFloat": 0,
-      "OfBool": false
-    }
-  },
-  "chunking_strategy": {
-    "type": "static",
-    "static": {
-      "chunk_overlap_tokens": 400,
-      "max_chunk_size_tokens": 800
+[
+  {
+    "id": "file-7Ksr2QJdoEmtKhHb6JDYjd",
+    "created_at": 1777623630,
+    "last_error": { "code": "", "message": "" },
+    "object": "vector_store.file",
+    "status": "completed",
+    "usage_bytes": 39619,
+    "vector_store_id": "vs_69f461edba448191a6542cb71c1a7a20",
+    "attributes": {},
+    "chunking_strategy": {
+      "type": "static",
+      "static": {
+        "chunk_overlap_tokens": 400,
+        "max_chunk_size_tokens": 800
+      }
     }
   }
-}
+]
 ```
-
-### File Properties Explained
-
-- **id**: Unique OpenAI file identifier
-- **created_at**: Unix timestamp of file creation
-- **last_error**: Error information if file processing failed (null for successful files)
-- **object**: Always "vector_store.file" for vector store files
-- **status**: Current processing status
-- **usage_bytes**: Storage consumed by the file in bytes
-- **vector_store_id**: Parent vector store identifier
-- **attributes**: Custom metadata with union types (OfString, OfFloat, OfBool)
-- **chunking_strategy**: Configuration used for document chunking
 
 ### File Status Values
 
 | Status | Description |
 |--------|-------------|
+| `in_progress` | File currently being processed and chunked |
 | `completed` | File successfully processed and available for search |
-| `processing` | File currently being processed and chunked |
 | `failed` | File processing encountered an error |
 | `cancelled` | File processing was cancelled |
 
