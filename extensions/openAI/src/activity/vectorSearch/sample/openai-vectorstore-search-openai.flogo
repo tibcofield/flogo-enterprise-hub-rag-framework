@@ -108,7 +108,7 @@
               "ref": "#vectorSearch",
               "settings": {
                 "endPointURL": "=$property[\"OPENAI_API_ENDPOINT_URL\"]",
-                "apiKey": "=$property[\"OPEN_AI_API_KEY\"]"
+                "apiKey": "=$property[\"OPENAI_API_KEY\"]"
               },
               "input": {
                 "vectorStoreID": "=$property[\"VECTORSTORE_ID\"]",
@@ -180,7 +180,7 @@
       "value": "https://api.openai.com/v1"
     },
     {
-      "name": "OPEN_AI_API_KEY",
+      "name": "OPENAI_API_KEY",
       "type": "string",
       "value": "REPLACE ME"
     }
