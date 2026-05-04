@@ -220,7 +220,7 @@ The skills reference a few placeholder values that you should set once in your p
 └── Flogo_Apps/                 # Place your .flogo applications here
 ```
 
-## Getting Started
+## Getting Started with Skills
 
 1. Open this project in VS Code with Claude Code installed.
 2. Edit `CLAUDE.md` and replace the placeholders (`<YOUR_FLOGO_CONTEXT>`, `<YOUR_PROFILE>`, `<DATAPLANE_NAME>`) with the values for your environment.
