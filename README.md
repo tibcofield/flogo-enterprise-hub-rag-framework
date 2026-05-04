@@ -92,6 +92,38 @@ Try out the Flogo application samples that help you build and deploy Flogo® app
         - [Deploy and Run Custom App Image for Flogo Oracle DB Application](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Tibco_Control_Plane/App_Deployment/Custom_App_Image) : This sample demonstrates how to create Flogo application build with all dependencies preinstalled outside TIBCO Platform by using custom Docker images
         - [Deploy and Run Custom App Image for TIBCO ActiveSpaces connector]( https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Tibco_Control_Plane/App_Deployment/Custom_App_Image/ActiveSpaces) <img width="30" height="30" alt="image" src="https://github.com/user-attachments/assets/7eb4d12a-e825-4356-993f-91659da1d57a" /> : This sample demonstrates how to deploy a TIBCO Flogo® ActiveSpaces application using a custom Docker image in TIBCO Control Plane.The Flogo ActiveSpaces application requires ActiveSpaces runtime libraries to connect to an ActiveSpaces cluster and perform data operations.The provided Dockerfile installs all required ActiveSpaces runtime dependencies needed to successfully run the Flogo ActiveSpaces application.
         - [Enable TLS at Ingress for Flogo Apps with Custom Certificates](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Tibco_Control_Plane/Enable_TLS_At_Ingress%20) <img width="30" height="30" alt="image" src="https://github.com/user-attachments/assets/7eb4d12a-e825-4356-993f-91659da1d57a" /> : This sample demonstrates how to configure ingress controllers (Traefik, NGINX, and Kong) to make HTTPS requests to Flogo application pods deployed with custom TLS certificates on TIBCO Control Plane. When SSL is terminated at the load balancer, the ingress controller must be configured to forward HTTPS traffic to the backend pod.
+---
+
+# Flogo Skill Library
+
+A library of **skills for AI coding agents** (such as **Claude Code**) to design, build, test, and deploy TIBCO Flogo integration applications. Drop these skills into the `.claude/skills/` directory of any project and the agent will use them to drive the Flogo, build, and platform CLIs end-to-end.
+
+---
+
+## What's a Skill?
+
+A **skill** is a Markdown file with frontmatter that documents a specific capability for an AI coding agent. The agent reads the skill on demand when the user's request matches its description. Skills make the agent reliable and repeatable on domain-specific tasks (like building a Flogo flow) — without you having to explain the same patterns over and over.
+
+Each skill in this library lives in `.claude/skills/<skill-name>/SKILL.md` and follows this shape:
+
+```markdown
+---
+name: <skill-name>
+description: <when the agent should use this skill>
+user-invocable: true
+---
+```
+
+## Skills overview
+
+| Skill | Purpose |
+|---|---|
+| `fda` | Reference for the Flogo Design Assistant CLI — every task to create/modify a `.flogo` file. |
+| `flogobuild` | Reference for building executables and deployment artifacts from `.flogo` files. |
+| `tibcop` | Reference for the TIBCO Platform CLI — manage builds, deployments, scaling. |
+| `flogo-deploy` | End-to-end recipe to deploy a `.flogo` app to a TIBCO Platform dataplane. |
+| `mapping-from-excel` | Recipe to build a Flogo flow from an Excel mapping spec (input fields → output fields with rules). |
+| `rest-to-database-app` | Recipe to scaffold a REST API Flogo app that queries a database. |
 
 ---
 
