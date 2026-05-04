@@ -112,6 +112,7 @@ name: <skill-name>
 description: <when the agent should use this skill>
 user-invocable: true
 ---
+```
 
 ## Skills overview
 
