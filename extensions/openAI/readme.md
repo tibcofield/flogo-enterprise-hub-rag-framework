@@ -16,10 +16,17 @@ Roadmap
 
 | Client Activity                     | Status                        | Open AI Docs
 | ------------------------------------| ------------------------------| ---------------------------------------------------|
+| Files API - upload file             | Completed                     | https://developers.openai.com/api/reference/resources/files/methods/create |
+| Files API - delete file             | Completed                     | https://developers.openai.com/api/reference/resources/files/methods/delete |
+| Files API - list files              | Completed                     | https://developers.openai.com/api/reference/resources/files/methods/list |
+| Vector Store API  - Create store    | Completed.                    | https://developers.openai.com/api/reference/resources/vector_stores/methods/create |
+| Vector Store API  - Delete store    | Completed.                    | https://developers.openai.com/api/reference/resources/vector_stores/methods/delete
+| Vector Store API  - List stores     | Completed.                    | https://developers.openai.com/api/reference/resources/vector_stores/methods/list |
+| Vector Store API - Search          | Completed.                    | https://developers.openai.com/api/reference/resources/vector_stores/methods/search |
+| | | | 
 | Responses API                       | In Dev for text and Images    | https://platform.openai.com/docs/guides/migrate-to-responses | 
 | Images API                          | In Dev                        | https://platform.openai.com/docs/api-reference/images |
 | Embedings API                       | Testing                       | https://platform.openai.com/docs/guides/embeddings |
-| Files API - upload file             | Completed                     | https://platform.openai.com/docs/api-reference/files |
 | Chat API                            | Out of scope                  ||
 | Completions API                     | Out of scope                  | Deprecated and unclear on OpenAI, other platforms direction |
 | Realtime API                        | Out of scope                  || 
@@ -29,8 +36,7 @@ Roadmap
 | Fine Tunning API                    | Out of scope                  ||
 | Graders API                         | Out of scope                  ||
 | Moderrations API                    | Out of scope                  ||
-| Vector Store API                    | In Scope.                     | Allows you to manage vector stores. |
-| Vector Store API  - List Files      | Completed.                    | https://developers.openai.com/api/reference/resources/vector_stores/subresources/files/methods/list. |
+
 ## ChatGPT Use Cases 
 
 These are some of the example use cases we are being reviewed as part of the client extension development.
