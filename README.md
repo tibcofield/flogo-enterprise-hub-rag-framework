@@ -36,6 +36,9 @@ Try out the Flogo application samples that help you build and deploy Flogo® app
          - [Customer 360](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Model_Context_Protocol(MCP)/Customer360) : This sample demonstrates how to use FLOGO MCP Connector and expose your customers, products, sales data as MCP server tools and query using natural language from AI Agent.
          - [Customer 360 with Auth](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Model_Context_Protocol(MCP)/Customer360WithAuth) : This sample demonstrates how to run the TIBCO Flogo® MCP Customer 360 Server over HTTPS (TLS) with JWT Token authentication, exposing customer, product, and sales data as secured MCP tools.
          - [Customer 360 with Prompts & Resources](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Model_Context_Protocol(MCP)/Customer360WithPromptsAndResources) : This sample extends the Customer 360 MCP server to demonstrate all three MCP primitive types — **Tools**, **Resources**, and **Prompts** — working together. It exposes static and dynamic Resources for zero-cost context pre-loading, and server-managed Prompt templates for consistent, structured AI analysis and cross-sell recommendations.
+         - [MCP Stateless Server — Product Catalog](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Model_Context_Protocol(MCP)/MCP_Stateless_Server) : This sample demonstrates how to configure a **stateless Flogo MCP server** (`statelessServer = true`) using a realistic e-commerce product catalog scenario. Every tool call is fully self-contained — the server holds no per-client session state — making it ideal for read-only lookups, horizontally scalable deployments, and serverless hosting.
+         - [MCP Stateful Server — Loan Application Wizard](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Model_Context_Protocol(MCP)/MCP_Stateful_Server) : This sample demonstrates how to configure a **stateful Flogo MCP server** (`statelessServer = false`) using a realistic multi-step loan application wizard. The server issues a unique `Mcp-Session-Id` and uses file-based state persistence to accumulate wizard context across four ordered tool calls — `start_loan_application` → `submit_financial_profile` → `review_application` → `submit_application` — with per-applicant session isolation.
+         - [MCP Tool Annotations — Banking Operations](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Model_Context_Protocol(MCP)/MCP_Tool_Annotations) : This sample demonstrates how to configure all four **MCP Tool Annotation hints** (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`) in a Flogo MCP server trigger using a banking operations scenario. Six banking tools cover every annotation combination — from safe read-only balance lookups to destructive, idempotent account closures — showing AI clients how to make informed decisions about confirmation, retry safety, and external service reach.
          - [Smart Incident Response Assistant](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Model_Context_Protocol(MCP)/Smart_Incident_Response_Assistant) : This sample demonstrates three advanced MCP features — **MCP Elicitation**, **MCP Logging**, and **MCP Sampling** — working together in a single realistic workflow. It exposes an `incident_response` tool that interactively collects incident details via a form, emits structured audit log messages, delegates root-cause analysis to the LLM via MCP Sampling, and returns a complete AI-generated triage report.
          - [Customer Health Monitor](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Model_Context_Protocol(MCP)/customer-health-monitor) : Demo showcasing Flogo's Model Context Protocol (MCP) integration with data from Salesforce, Google Sheets and Postgres.
 
@@ -91,6 +94,39 @@ Try out the Flogo application samples that help you build and deploy Flogo® app
     - **Application Deployment**
         - [Deploy and Run Custom App Image for Flogo Oracle DB Application](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Tibco_Control_Plane/App_Deployment/Custom_App_Image) : This sample demonstrates how to create Flogo application build with all dependencies preinstalled outside TIBCO Platform by using custom Docker images
         - [Deploy and Run Custom App Image for TIBCO ActiveSpaces connector]( https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Tibco_Control_Plane/App_Deployment/Custom_App_Image/ActiveSpaces) <img width="30" height="30" alt="image" src="https://github.com/user-attachments/assets/7eb4d12a-e825-4356-993f-91659da1d57a" /> : This sample demonstrates how to deploy a TIBCO Flogo® ActiveSpaces application using a custom Docker image in TIBCO Control Plane.The Flogo ActiveSpaces application requires ActiveSpaces runtime libraries to connect to an ActiveSpaces cluster and perform data operations.The provided Dockerfile installs all required ActiveSpaces runtime dependencies needed to successfully run the Flogo ActiveSpaces application.
+        - [Enable TLS at Ingress for Flogo Apps with Custom Certificates](https://github.com/TIBCOSoftware/flogo-enterprise-hub/tree/master/samples/Tibco_Control_Plane/Enable_TLS_At_Ingress%20) <img width="30" height="30" alt="image" src="https://github.com/user-attachments/assets/7eb4d12a-e825-4356-993f-91659da1d57a" /> : This sample demonstrates how to configure ingress controllers (Traefik, NGINX, and Kong) to make HTTPS requests to Flogo application pods deployed with custom TLS certificates on TIBCO Control Plane. When SSL is terminated at the load balancer, the ingress controller must be configured to forward HTTPS traffic to the backend pod.
+---
+
+# Flogo Skill Library
+
+A library of **skills for AI coding agents** (such as **Claude Code**) to design, build, test, and deploy TIBCO Flogo integration applications. Drop these skills into the `.claude/skills/` directory of any project and the agent will use them to drive the Flogo, build, and platform CLIs end-to-end.
+
+---
+
+## What's a Skill?
+
+A **skill** is a Markdown file with frontmatter that documents a specific capability for an AI coding agent. The agent reads the skill on demand when the user's request matches its description. Skills make the agent reliable and repeatable on domain-specific tasks (like building a Flogo flow) — without you having to explain the same patterns over and over.
+
+Each skill in this library lives in `.claude/skills/<skill-name>/SKILL.md` and follows this shape:
+
+```markdown
+---
+name: <skill-name>
+description: <when the agent should use this skill>
+user-invocable: true
+---
+```
+
+## Skills overview
+
+| Skill | Purpose |
+|---|---|
+| `fda` | Reference for the Flogo Design Assistant CLI — every task to create/modify a `.flogo` file. |
+| `flogobuild` | Reference for building executables and deployment artifacts from `.flogo` files. |
+| `tibcop` | Reference for the TIBCO Platform CLI — manage builds, deployments, scaling. |
+| `flogo-deploy` | End-to-end recipe to deploy a `.flogo` app to a TIBCO Platform dataplane. |
+| `mapping-from-excel` | Recipe to build a Flogo flow from an Excel mapping spec (input fields → output fields with rules). |
+| `rest-to-database-app` | Recipe to scaffold a REST API Flogo app that queries a database. |
 
 ---
 

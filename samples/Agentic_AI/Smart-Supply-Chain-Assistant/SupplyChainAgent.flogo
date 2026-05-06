@@ -24,17 +24,17 @@
       "description": "Supply chain agent trigger with MCP server list and custom CreatePurchaseOrder tool",
       "settings": {
         "llmProviderConnection": "conn://a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-        "agentName": "SupplyChainAgent",
-        "agentDescription": "Supply chain procurement assistant with real-time access to inventory and supplier data via MCP servers and the ability to create purchase orders",
+        "agentName": "=$property[\"Trigger_Settings.AgentName\"]",
+        "agentDescription": "=$property[\"Trigger_Settings.AgentDescription\"]",
         "agentType": "Local",
         "agentPort": 8080,
-        "model": "gpt-4o",
+        "model": "=$property[\"Trigger_Settings.LLM_Model\"]",
         "reasoning": "high",
-        "temperature": 0.2,
+        "temperature": "=$property[\"Trigger_Settings.LLM_temperature\"]",
         "enableGuardrails": true,
-        "rateLimit": 25,
-        "tokenLimit": 4096,
-        "redactSensitiveData": true,
+        "rateLimit": "=$property[\"Trigger_Settings.Rate_Limit\"]",
+        "tokenLimit": "=$property[\"Trigger_Settings.Token_Limit\"]",
+        "redactSensitiveData": "=$property[\"Trigger_Settings.Redact_Sensitive_Data\"]",
         "mcpServers": [
           "b2c3d4e5-f6a7-8901-bcde-f12345678901",
           "c3d4e5f6-a7b8-9012-cdef-012345678902"
@@ -129,6 +129,11 @@
           },
           "schemas": {
             "output": {
+              "queryParams": {
+                "type": "json",
+                "value": "{\"type\":\"object\",\"properties\":{\"sessionId\":{\"type\":\"string\"}},\"required\":[]}",
+                "fe_metadata": "[{\"parameterName\":\"sessionId\",\"type\":\"string\",\"repeating\":\"\",\"required\":\"\"}]"
+              },
               "headers": {
                 "type": "json",
                 "value": "{\"type\":\"object\",\"properties\":{\"Accept\":{\"type\":\"string\",\"visible\":false},\"Accept-Charset\":{\"type\":\"string\",\"visible\":false},\"Accept-Encoding\":{\"type\":\"string\",\"visible\":false},\"Content-Type\":{\"type\":\"string\",\"visible\":false},\"Content-Length\":{\"type\":\"string\",\"visible\":false},\"Connection\":{\"type\":\"string\",\"visible\":false},\"Cookie\":{\"type\":\"string\",\"visible\":false},\"Pragma\":{\"type\":\"string\",\"visible\":false},\"Sec-Websocket-Key\":{\"type\":\"string\",\"visible\":false},\"Sec-Websocket-Version\":{\"type\":\"string\",\"visible\":false},\"Upgrade\":{\"type\":\"string\",\"visible\":false}},\"required\":[]}",
@@ -216,7 +221,11 @@
             },
             {
               "name": "queryParams",
-              "type": "params"
+              "type": "object",
+              "schema": {
+                "type": "json",
+                "value": "{\"sessionId\":{\"type\":\"string\"}}"
+              }
             },
             {
               "name": "headers",
@@ -237,7 +246,7 @@
           ],
           "output": [],
           "fe_metadata": {
-            "input": "{\"type\":\"object\",\"title\":\"WebsocketServer\",\"properties\":{\"pathParams\":{\"type\":\"params\"},\"queryParams\":{\"type\":\"params\"},\"headers\":{\"type\":\"object\",\"properties\":{\"Accept\":{\"type\":\"string\",\"visible\":false},\"Accept-Charset\":{\"type\":\"string\",\"visible\":false},\"Accept-Encoding\":{\"type\":\"string\",\"visible\":false},\"Content-Type\":{\"type\":\"string\",\"visible\":false},\"Content-Length\":{\"type\":\"string\",\"visible\":false},\"Connection\":{\"type\":\"string\",\"visible\":false},\"Cookie\":{\"type\":\"string\",\"visible\":false},\"Pragma\":{\"type\":\"string\",\"visible\":false},\"Sec-Websocket-Key\":{\"type\":\"string\",\"visible\":false},\"Sec-Websocket-Version\":{\"type\":\"string\",\"visible\":false},\"Upgrade\":{\"type\":\"string\",\"visible\":false}},\"required\":[]},\"content\":{\"type\":\"any\",\"required\":false},\"wsconnection\":{\"type\":\"any\",\"required\":false}}}"
+            "input": "{\"type\":\"object\",\"title\":\"WebsocketServer\",\"properties\":{\"pathParams\":{\"type\":\"params\"},\"queryParams\":{\"type\":\"object\",\"properties\":{\"sessionId\":{\"type\":\"string\"}},\"required\":[]},\"headers\":{\"type\":\"object\",\"properties\":{\"Accept\":{\"type\":\"string\",\"visible\":false},\"Accept-Charset\":{\"type\":\"string\",\"visible\":false},\"Accept-Encoding\":{\"type\":\"string\",\"visible\":false},\"Content-Type\":{\"type\":\"string\",\"visible\":false},\"Content-Length\":{\"type\":\"string\",\"visible\":false},\"Connection\":{\"type\":\"string\",\"visible\":false},\"Cookie\":{\"type\":\"string\",\"visible\":false},\"Pragma\":{\"type\":\"string\",\"visible\":false},\"Sec-Websocket-Key\":{\"type\":\"string\",\"visible\":false},\"Sec-Websocket-Version\":{\"type\":\"string\",\"visible\":false},\"Upgrade\":{\"type\":\"string\",\"visible\":false}},\"required\":[]},\"content\":{\"type\":\"any\",\"required\":false},\"wsconnection\":{\"type\":\"any\",\"required\":false}}}"
           }
         }
       }
@@ -323,12 +332,47 @@
     {
       "name": "AgenticAI.openai.API_Key",
       "type": "string",
-      "value": "SECRET:/B1Ski0HQ8rg/5DbLZfci1CvLfezifopnWDItyc9iCvcggPVr0AOsZz/I27XUZSYfmLfAT9k0AKApJahG5Xzbk9eqc/55ZeM1oiotCw52I0cTegKZKV/Awuv8FhHPv/cfxAvMTA/z38ToeK+P5WU1huQNYYQ+MELtGQj8TZgLJENRv82/WJJU9zbday6JMj5VOjotQtDrCpfuawbEWnN+EnZf07txq1GalowBrEKDpWRx/Qp"
+      "value": "SECRET:pP3IQOJhSXzvPF8yBJiiOSW+CqaCIoEvyKnrjZ3C6O0hYbzQ9tyiAMlXWf4HvD0Q9sg6r9idCy6mJak1v64N2vS1c9cXER/HqSQ1L2A+U/xxWMwgd9EzLfSzWpfeal6sBqogjeqzh2P+JUMyMabGN5sFc92mJZQWhLQ7U4CqTQWzJh+fyylV6+8N9FuuIZrkFTKcV2+Sun7YlyfS2hlDavFWkbVm4UXV0nbLhWWWkX7NLSI9"
     },
     {
       "name": "AgenticAI.openai.LLM_Base_URL",
       "type": "string",
       "value": ""
+    },
+    {
+      "name": "Trigger_Settings.AgentName",
+      "type": "string",
+      "value": "SupplyChainAgent"
+    },
+    {
+      "name": "Trigger_Settings.AgentDescription",
+      "type": "string",
+      "value": "Supply chain procurement assistant with real-time access to inventory and supplier data via MCP servers and the ability to create purchase orders"
+    },
+    {
+      "name": "Trigger_Settings.LLM_Model",
+      "type": "string",
+      "value": "gpt-4o"
+    },
+    {
+      "name": "Trigger_Settings.Token_Limit",
+      "type": "float64",
+      "value": 4096
+    },
+    {
+      "name": "Trigger_Settings.Rate_Limit",
+      "type": "float64",
+      "value": 25
+    },
+    {
+      "name": "Trigger_Settings.Redact_Sensitive_Data",
+      "type": "boolean",
+      "value": true
+    },
+    {
+      "name": "Trigger_Settings.LLM_temperature",
+      "type": "float64",
+      "value": 1
     }
   ],
   "connections": {
@@ -397,6 +441,6 @@
         "type": "public"
       }
     ],
-    "flogoVersion": "2.26.3"
+    "flogoVersion": "2.26.2"
   }
 }
