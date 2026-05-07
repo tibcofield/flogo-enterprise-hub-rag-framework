@@ -6,14 +6,57 @@
 package vectorSearch
 
 import (
+	"bufio"
 	"fmt"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/support/test"
 	"github.com/stretchr/testify/assert"
 )
+
+// Load environment variables from .env file
+func init() {
+	loadEnvFile()
+}
+
+func loadEnvFile() {
+	file, err := os.Open(".env")
+	if err != nil {
+		fmt.Printf("No .env file found: %v\n", err)
+		return
+	}
+	defer file.Close()
+
+	// Read the .env file line by line and set environment variables
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue // Skip empty lines and comments
+		}
+
+		parts := strings.SplitN(line, "=", 2)
+		if len(parts) == 2 {
+			key := strings.TrimSpace(parts[0])
+			value := strings.TrimSpace(parts[1])
+			// Only set if not already set (command line takes precedence)
+			if os.Getenv(key) == "" {
+				os.Setenv(key, value)
+				//fmt.Printf("Loaded env var: %s=%s\n", key, value)
+			}
+		}
+	}
+}
+
+func populateSettingsFromEnv() *Settings {
+	return &Settings{
+		ApiKey:      os.Getenv("OPEN_AI_API_KEY"),
+		EndPointURL: os.Getenv("OPENAI_API_ENDPOINT_URL"),
+	}
+}
 
 func TestRegister(t *testing.T) {
 
@@ -27,20 +70,18 @@ func TestRegister(t *testing.T) {
 func TestSearchDocumentsDefault(t *testing.T) {
 
 	if os.Getenv("RUN_INTEGRATION") != "1" {
-		t.Skip("integration tests  disabled")
+		t.Skip("integration tests disabled")
 	}
 
-	s := Settings{
-		ApiKey:      os.Getenv("OPEN_AI_API_KEY"),
-		EndPointURL: os.Getenv("OPENAI_API_ENDPOINT_URL"),
-	}
+	// Initialize settings from environment variables
+	s := populateSettingsFromEnv()
 
 	act := &Activity{
-		Settings: &s,
+		Settings: s,
 	}
 
 	tc := test.NewActivityContext(act.Metadata())
-	tc.SetInput("searchString", "tibco ems versions")
+	tc.SetInput("searchString", "tell me something about tibco businessworks")
 	tc.SetInput("vectorStoreID", os.Getenv("VECTOR_STORE_ID"))
 	tc.SetInput("maxNumberOfResults", int64(10))
 	tc.SetInput("rewriteQuery", false)
@@ -48,6 +89,7 @@ func TestSearchDocumentsDefault(t *testing.T) {
 	done, err := act.Eval(tc)
 	if !done {
 		fmt.Println(err)
+		assert.Fail(t, "activity failed")
 	}
 
 	success := tc.GetOutput("searchResultRows")
@@ -56,102 +98,47 @@ func TestSearchDocumentsDefault(t *testing.T) {
 
 	if success != 0 {
 		assert.True(t, done)
-
 	}
 }
 
-// func TestUpdateDocumentrow(t *testing.T) {
-// 	s := Settings{
-// 		APIKey:        "MySecretKey",
-// 		VectorDBURL:   "192.168.1.50:50052",
-// 		DocumentStore: "ds_store_tdks",
-// 		Action:        "Update",
-// 	}
+func TestSearchDocumentsInvalidVectorStoreId(t *testing.T) {
 
-// 	act := &Activity{
-// 		Settings: &s,
-// 	}
+	if os.Getenv("RUN_INTEGRATION") != "1" {
+		t.Skip("integration tests disabled")
+	}
 
-// 	tc := test.NewActivityContext(act.Metadata())
+	// Initialize settings from environment variables
+	s := populateSettingsFromEnv()
 
-// 	tc.SetInput("docID", "9144897421204059669")
-// 	tc.SetInput("status", "IT WORKS..3.")
-// 	tc.SetInput("docTitle", "Updated Activity Test Doc 2")
-// 	tc.SetInput("chunks", 0)
-// 	tc.SetInput("vectorStore", "vs_store_tdks_doc")
-// 	tc.SetInput("metaData", "Pages 44")
-// 	done, err := act.Eval(tc)
-// 	if !done {
-// 		fmt.Println(err)
-// 	}
+	act := &Activity{
+		Settings: s,
+	}
 
-// 	success := tc.GetOutput("success")
+	tc := test.NewActivityContext(act.Metadata())
+	tc.SetInput("searchString", "tell me something about tibco businessworks")
+	tc.SetInput("vectorStoreID", "nonexisting")
+	tc.SetInput("maxNumberOfResults", int64(10))
+	tc.SetInput("rewriteQuery", false)
 
-// 	fmt.Printf("Document Row Created: %d", tc.GetOutput("docID"))
+	done, err := act.Eval(tc)
 
-// 	if success != 0 {
-// 		assert.True(t, done)
-// 	}
-// }
-
-// func TestUpdateROWSTATUS(t *testing.T) {
-// 	s := Settings{
-// 		APIKey:        "MySecretKey",
-// 		VectorDBURL:   "192.168.1.50:50052",
-// 		DocumentStore: "ds_store_tdks",
-// 		Action:        "Update",
-// 	}
-
-// 	act := &Activity{
-// 		Settings: &s,
-// 	}
-
-// 	tc := test.NewActivityContext(act.Metadata())
-
-// 	tc.SetInput("docID", "9144897421204059669")
-// 	tc.SetInput("status", "IT WORKS..3.")
-
-// 	done, err := act.Eval(tc)
-// 	if !done {
-// 		fmt.Println(err)
-// 	}
-
-// 	success := tc.GetOutput("success")
-
-// 	fmt.Printf("Document Row Created: %d", tc.GetOutput("docID"))
-
-// 	if success != 0 {
-// 		assert.True(t, done)
-// 	}
-// }
-
-// func TestGetROW(t *testing.T) {
-// 	s := Settings{
-// 		APIKey:        "MySecretKey",
-// 		VectorDBURL:   "192.168.1.50:50052",
-// 		DocumentStore: "ds_store_tdks",
-// 		Action:        "Get",
-// 	}
-
-// 	act := &Activity{
-// 		Settings: &s,
-// 	}
-
-// 	tc := test.NewActivityContext(act.Metadata())
-
-// 	tc.SetInput("docID", "-3818324397740905472")
-
-// 	done, err := act.Eval(tc)
-// 	if !done {
-// 		fmt.Println(err)
-// 	}
-
-// 	success := tc.GetOutput("success")
-
-// 	fmt.Printf("Document Row Recieved: %d", tc.GetOutput("docID"))
-// 	fmt.Printf("Document Row Recieved: %f", tc.GetOutput("rows"))
-
-// 	if success != 0 {
-// 		assert.True(t, done)
-// 	}
-// }
+	// Expect the activity to fail with an invalid vector store ID
+	if done {
+		// If the activity completes, it should return an error or empty results
+		success := tc.GetOutput("searchResultRows")
+		fmt.Printf("Unexpected success with invalid vector store ID. Results: %s", success)
+		// The activity might complete but return empty results or an error
+		if err != nil {
+			fmt.Printf("Expected error occurred: %v", err)
+			assert.True(t, true) // Test passes as expected error occurred
+		} else {
+			// Check if results are empty/zero indicating failure
+			assert.Equal(t, 0, success, "Expected no results for invalid vector store ID")
+		}
+	} else {
+		// Activity failed as expected
+		fmt.Printf("Activity failed as expected with invalid vector store ID: %v", err)
+		assert.False(t, done)
+		assert.NotNil(t, err)
+	}
+}
