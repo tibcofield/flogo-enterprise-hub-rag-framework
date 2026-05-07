@@ -23,7 +23,7 @@
       "type": "string",
       "required": true,
       "display": {
-        "name": "API Endopoint URL",
+        "name": "API Endpoint URL",
         "description": "Endpoint URL for the OpenAI API, for example https://api.openai.com/v1",
         "appPropertySupport": true
       }
@@ -44,7 +44,7 @@
       "required": true,
       "value": "assistants",
       "display": {
-        "name": "Output Format",
+        "name": "Purpose",
         "description": "The intended purpose of the uploaded file"
       },
       "allowed": [

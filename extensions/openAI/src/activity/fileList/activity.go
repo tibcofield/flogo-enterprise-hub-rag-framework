@@ -142,8 +142,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	// Process results page-by-page to handle pagination and add to final output
 	fileCount := 0
 	for {
-		for _, file := range pages.Data {
-			out.Files = append(out.Files, &file)
+		for i := range pages.Data {
+			out.Files = append(out.Files, &pages.Data[i])
 			fileCount++
 		}
 
@@ -168,6 +168,5 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		logger.Errorf("Failed to set output object: %v", err)
 		return false, err
 	}
-	fmt.Printf("%+v\n", out)
 	return true, nil
 }

@@ -9,7 +9,7 @@
     "github.com/tibco/flogo-general/src/app/General/trigger/startuphook",
     "github.com/project-flogo/contrib/function/string"
   ],
-  "name": "openaiVectorStore-openAI",
+  "name": "openaiVectorStore-List",
   "description": "",
   "version": "1.0.0",
   "type": "flogo:app",
