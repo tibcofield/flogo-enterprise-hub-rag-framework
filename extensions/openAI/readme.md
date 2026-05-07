@@ -1,15 +1,15 @@
-Flogo ChatGPT Client Exension
-=============================
+Flogo ChatGPT Client Extension
+==============================
 
-Please do not use this for your own projects at this stage as it is still in very early stage of development.  If you are a TIBCO customer and would like to use the extension or have feeback then please reach out to the repository owner or your account team. 
+Please do not use this for your own projects at this stage as it is still in very early stage of development.  If you are a TIBCO customer and would like to use the extension or have feedback then please reach out to the repository owner or your account team. 
 
 Overview
 --------
 
-The Flogo ChatGPT extesion acts as a client for the APIs exposed from the ChatGPT developer platform.  It is in the very early days of development and there is a focus on supporting text generation, image generation, embedings creation and storage using the Responses API. 
+The Flogo ChatGPT extension acts as a client for the APIs exposed from the ChatGPT developer platform.  It is in the very early days of development and there is a focus on supporting text generation, image generation, embeddings creation and storage using the Responses API. 
 
 
-OpenAI Go API Library Version - v3.29.0
+OpenAI Go API Library Version - v3.31.0
 
 Roadmap
 -------
@@ -26,16 +26,16 @@ Roadmap
 | | | | 
 | Responses API                       | In Dev for text and Images    | https://platform.openai.com/docs/guides/migrate-to-responses | 
 | Images API                          | In Dev                        | https://platform.openai.com/docs/api-reference/images |
-| Embedings API                       | Testing                       | https://platform.openai.com/docs/guides/embeddings |
+| Embeddings API                      | Testing                       | https://platform.openai.com/docs/guides/embeddings |
 | Chat API                            | Out of scope                  ||
 | Completions API                     | Out of scope                  | Deprecated and unclear on OpenAI, other platforms direction |
 | Realtime API                        | Out of scope                  || 
 | Assistants API                      | Out of scope                  ||
 | Batch API                           | Out of scope                  ||
 | Containers API                      | Out of scope                  ||
-| Fine Tunning API                    | Out of scope                  ||
+| Fine Tuning API                     | Out of scope                  ||
 | Graders API                         | Out of scope                  ||
-| Moderrations API                    | Out of scope                  ||
+| Moderations API                     | Out of scope                  ||
 
 ## ChatGPT Use Cases 
 

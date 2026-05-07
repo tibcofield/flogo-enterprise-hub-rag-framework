@@ -23,7 +23,7 @@
       "type": "string",
       "required": true,
       "display": {
-        "name": "API Endopoint URL",
+        "name": "API Endpoint URL",
         "description": "Endpoint URL for the OpenAI API, for example https://api.openai.com/v1",
         "appPropertySupport": true
       }

@@ -21,7 +21,6 @@ The Upload File activity requires the following connection and configuration set
 | **API Endpoint URL** | String | Yes | - | The base URL for the OpenAI API. Typically `https://api.openai.com/v1`. Supports app properties. |
 | **OpenAI API Key** | String | Yes | - | Your OpenAI API authentication key required for file operations. Supports app properties for secure storage. |
 | **Purpose** | String | Yes | "assistants" | The intended purpose of the uploaded file. Determines how OpenAI processes and uses the file. |
-| **Vector Store ID** | String | No | "" | Optional vector store identifier. If provided, the file will be automatically added to the specified vector store with chunking. |
 | **Maximum Chunk Size Tokens** | Integer | No | 800 | Maximum number of tokens per chunk when adding to vector store. Range: 100-4096. |
 | **Chunk Overlap Tokens** | Integer | No | 400 | Number of tokens that overlap between adjacent chunks for better context preservation. |
 | **Timeout in Seconds** | Integer | Yes | 300 | Upload timeout duration in seconds. Increase for large files or slow connections. |
@@ -44,7 +43,6 @@ The **Purpose** setting accepts the following values:
 API Endpoint URL: https://api.openai.com/v1
 OpenAI API Key: sk-your-openai-api-key-here
 Purpose: assistants
-Vector Store ID: vs-abc123def456
 Maximum Chunk Size Tokens: 800
 Chunk Overlap Tokens: 400
 Timeout in Seconds: 600
@@ -57,11 +55,13 @@ The Upload File activity accepts the following input parameters:
 | Input | Type | Required | Description |
 |-------|------|----------|-------------|
 | **filename** | String | Yes | Full path to the local file to upload. Must be accessible from the Flogo runtime environment. |
+| **vectorStoreID** | String | Yes | Identifier of the OpenAI vector store the uploaded file is added to (with chunking). |
 | **fileAttributes** | Object | No | Custom metadata key-value pairs to associate with the file when adding to a vector store. |
 
 ### Input Guidelines
 
 - **filename**: Must be an absolute or relative path to an existing file
+- **vectorStoreID**: Must reference an existing OpenAI vector store; the activity will fail if it is empty
 - **fileAttributes**: Structure should contain key-value pairs as objects with "key" and "value" properties
 
 ### File Attributes Example
@@ -122,7 +122,7 @@ File type support may vary depending on the specified **Purpose**.
 
 ## Vector Store Integration
 
-When a **Vector Store ID** is provided, the activity automatically:
+The activity always adds the uploaded file to the vector store identified by the required **vectorStoreID** input. Specifically, it:
 
 1. Uploads the file to OpenAI file storage
 2. Processes the file content using the configured chunking strategy

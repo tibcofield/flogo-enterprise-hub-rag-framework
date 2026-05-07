@@ -43,11 +43,11 @@ func loadEnvFile() {
 		if len(parts) == 2 {
 			key := strings.TrimSpace(parts[0])
 			value := strings.TrimSpace(parts[1])
-			fmt.Println(line)
 			// Only set if not already set (command line takes precedence)
 			if os.Getenv(key) == "" {
 				os.Setenv(key, value)
-				fmt.Printf("Loaded env var: %s=%s\n", key, value)
+				// Print only the key name to avoid leaking secrets to logs
+				fmt.Printf("Loaded env var: %s\n", key)
 			}
 		}
 	}

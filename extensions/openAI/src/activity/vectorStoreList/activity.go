@@ -127,13 +127,14 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	var firstVS, lastVS *openai.VectorStore
 
 	for {
-		for i, vectorStore := range pages.Data {
-			out.VectorStores = append(out.VectorStores, &vectorStore)
+		for i := range pages.Data {
+			vs := &pages.Data[i]
+			out.VectorStores = append(out.VectorStores, vs)
 			if vectorStoreCount == 0 {
-				firstVS = &vectorStore
+				firstVS = vs
 			}
 			if i == len(pages.Data)-1 {
-				lastVS = &vectorStore
+				lastVS = vs
 			}
 			vectorStoreCount++
 		}

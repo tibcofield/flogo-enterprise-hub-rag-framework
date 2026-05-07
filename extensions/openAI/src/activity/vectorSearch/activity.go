@@ -8,6 +8,7 @@ package vectorSearch
 
 import (
 	"context"
+	"errors"
 
 	"github.com/openai/openai-go/v3"
 	"github.com/openai/openai-go/v3/option"
@@ -31,7 +32,8 @@ func init() {
 
 // Activity is a ChatGPT API activity
 type Activity struct {
-	Settings *Settings
+	Settings  *Settings
+	oaiClient openai.Client
 }
 
 // New creates a new instance of the Activity.
@@ -42,8 +44,26 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		return nil, err
 	}
 
+	// Validate required settings during initialization
+	if s.ApiKey == "" {
+		return nil, errors.New("validation failed: OpenAI API key is required but not provided in activity settings")
+	}
+
+	if s.EndPointURL == "" {
+		return nil, errors.New("validation failed: OpenAI endpoint URL is required but not provided in activity settings")
+	}
+
+	// Create OpenAI client once during initialization
+	oaiClient := openai.NewClient(
+		option.WithAPIKey(s.ApiKey),
+		option.WithBaseURL(s.EndPointURL),
+	)
+
+	logger.Infof("OpenAI client initialized for endpoint: %s", s.EndPointURL)
+
 	return &Activity{
-		Settings: s,
+		Settings:  s,
+		oaiClient: oaiClient,
 	}, nil
 }
 
@@ -58,21 +78,11 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	//fileName := ctx.GetInput(iFilename).(string)
 	searchString := input.SearchString
 
-	if a.Settings.ApiKey == "" {
-		logger.Error("Missing openAPI key")
-
-	}
-
-	oaiClient := openai.NewClient(
-		option.WithAPIKey(a.Settings.ApiKey),
-		option.WithBaseURL(a.Settings.EndPointURL),
-	)
-
 	clientCtx := context.Background()
 
 	logger.Info("Starting vector store search with query: ", searchString)
 
-	pages, err := oaiClient.VectorStores.Search(
+	pages, err := a.oaiClient.VectorStores.Search(
 		clientCtx,
 		input.VectorStoreID,
 		openai.VectorStoreSearchParams{
@@ -111,8 +121,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	// Process results page-by-page to handle pagination and add to final output:
 	for {
-		for _, item := range pages.Data {
-			out.SearchResultRows = append(out.SearchResultRows, &item)
+		for i := range pages.Data {
+			out.SearchResultRows = append(out.SearchResultRows, &pages.Data[i])
 		}
 		logger.Info("--- Getting next page of results ---\n")
 

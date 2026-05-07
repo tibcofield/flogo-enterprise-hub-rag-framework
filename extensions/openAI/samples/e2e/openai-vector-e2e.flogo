@@ -6,8 +6,9 @@
     "github.com/tibco/flogo-general/src/app/General/activity/log",
     "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/fileUpload",
     "github.com/tibco/flogo-general/src/app/General/activity/sleep",
-    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/listVectorStoreFiles",
+    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/fileList",
     "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/vectorSearch",
+    "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/fileDelete",
     "github.com/TIBCOSoftware/flogo-enterprise-hub/extensions/openAI/activity/vectorStoreDelete",
     "github.com/project-flogo/contrib/activity/actreturn",
     "github.com/tibco/flogo-general/src/app/General/trigger/startuphook",
@@ -96,16 +97,16 @@
           {
             "id": 6,
             "from": "Sleep",
-            "to": "FilesListVectorStore",
+            "to": "FileList",
             "type": "label",
-            "label": "Sleep to FilesListVectorStore"
+            "label": "Sleep to FileList"
           },
           {
             "id": 7,
-            "from": "FilesListVectorStore",
+            "from": "FileList",
             "to": "LogMessage3",
             "type": "label",
-            "label": "FilesListVectorStore to LogMessage3"
+            "label": "FileList to LogMessage3"
           },
           {
             "id": 8,
@@ -124,12 +125,26 @@
           {
             "id": 10,
             "from": "LogMessage4",
-            "to": "DeleteVectorStore",
+            "to": "FileDelete",
             "type": "label",
-            "label": "LogMessage4 to DeleteVectorStore"
+            "label": "LogMessage4 to FileDelete"
           },
           {
             "id": 11,
+            "from": "FileDelete",
+            "to": "LogMessage5",
+            "type": "label",
+            "label": "FileDelete to LogMessage5"
+          },
+          {
+            "id": 12,
+            "from": "LogMessage5",
+            "to": "DeleteVectorStore",
+            "type": "label",
+            "label": "LogMessage5 to DeleteVectorStore"
+          },
+          {
+            "id": 13,
             "from": "DeleteVectorStore",
             "to": "Return",
             "type": "label",
@@ -243,8 +258,8 @@
             }
           },
           {
-            "id": "FilesListVectorStore",
-            "name": "FilesListVectorStore",
+            "id": "FileList",
+            "name": "FileList",
             "description": "This activity lists files in an OpenAI vector store with support for filtering and pagination",
             "settings": {
               "retryOnError": {
@@ -253,18 +268,29 @@
               }
             },
             "activity": {
-              "ref": "#listVectorStoreFiles",
+              "ref": "#fileList",
               "settings": {
                 "endPointURL": "=$property[\"OPENAI_API_ENDPOINT_URL\"]",
                 "apiKey": "=$property[\"OPENAI_API_KEY\"]"
               },
               "input": {
                 "vectorStoreID": "=$activity[CreateVectorStore].id",
+                "limit": 5,
                 "filter": "",
                 "order": "",
                 "after": "",
                 "before": ""
-              }
+              },
+              "schemas": {
+                "output": {
+                  "files": {
+                    "type": "json",
+                    "value": "{\"$schema\": \"http://json-schema.org/draft-07/schema#\", \"title\": \"OpenAI Vector Store Files\", \"description\": \"Array of vector store file objects returned by the OpenAI list files API\", \"type\": \"array\", \"items\": {\"type\": \"object\", \"required\": [\"id\", \"created_at\", \"last_error\", \"object\", \"status\", \"usage_bytes\", \"vector_store_id\", \"attributes\", \"chunking_strategy\"], \"additionalProperties\": false, \"properties\": {\"id\": {\"type\": \"string\", \"description\": \"Unique identifier for the file\", \"pattern\": \"^file-[a-zA-Z0-9]+$\"}, \"created_at\": {\"type\": \"integer\", \"description\": \"Unix timestamp when the file was created\", \"minimum\": 0}, \"last_error\": {\"type\": \"object\", \"description\": \"Information about the last error encountered (empty strings when no error)\", \"required\": [\"code\", \"message\"], \"additionalProperties\": false, \"properties\": {\"code\": {\"type\": \"string\", \"description\": \"Error code, empty string when no error\"}, \"message\": {\"type\": \"string\", \"description\": \"Error message, empty string when no error\"}}}, \"object\": {\"type\": \"string\", \"description\": \"Object type identifier\", \"enum\": [\"vector_store.file\"]}, \"status\": {\"type\": \"string\", \"description\": \"Processing status of the file\", \"enum\": [\"in_progress\", \"completed\", \"failed\", \"cancelled\"]}, \"usage_bytes\": {\"type\": \"integer\", \"description\": \"Number of bytes used by the file\", \"minimum\": 0}, \"vector_store_id\": {\"type\": \"string\", \"description\": \"ID of the vector store containing this file\", \"pattern\": \"^vs_[a-zA-Z0-9]+$\"}, \"attributes\": {\"type\": \"object\", \"description\": \"Custom attributes associated with the file (free-form key/value pairs)\", \"additionalProperties\": {\"type\": [\"string\", \"number\", \"boolean\", \"null\"]}}, \"chunking_strategy\": {\"type\": \"object\", \"description\": \"Strategy used for chunking the file\", \"required\": [\"type\"], \"additionalProperties\": false, \"properties\": {\"type\": {\"type\": \"string\", \"description\": \"Type of chunking strategy\", \"enum\": [\"static\", \"auto\"]}, \"static\": {\"type\": \"object\", \"description\": \"Static chunking configuration (present when type is static)\", \"required\": [\"chunk_overlap_tokens\", \"max_chunk_size_tokens\"], \"additionalProperties\": false, \"properties\": {\"chunk_overlap_tokens\": {\"type\": \"integer\", \"description\": \"Number of tokens to overlap between chunks\", \"minimum\": 0}, \"max_chunk_size_tokens\": {\"type\": \"integer\", \"description\": \"Maximum size of each chunk in tokens\", \"minimum\": 0}}}}}}}}",
+                    "fe_metadata": "{\"$schema\": \"http://json-schema.org/draft-07/schema#\", \"title\": \"OpenAI Vector Store Files\", \"description\": \"Array of vector store file objects returned by the OpenAI list files API\", \"type\": \"array\", \"items\": {\"type\": \"object\", \"required\": [\"id\", \"created_at\", \"last_error\", \"object\", \"status\", \"usage_bytes\", \"vector_store_id\", \"attributes\", \"chunking_strategy\"], \"additionalProperties\": false, \"properties\": {\"id\": {\"type\": \"string\", \"description\": \"Unique identifier for the file\", \"pattern\": \"^file-[a-zA-Z0-9]+$\"}, \"created_at\": {\"type\": \"integer\", \"description\": \"Unix timestamp when the file was created\", \"minimum\": 0}, \"last_error\": {\"type\": \"object\", \"description\": \"Information about the last error encountered (empty strings when no error)\", \"required\": [\"code\", \"message\"], \"additionalProperties\": false, \"properties\": {\"code\": {\"type\": \"string\", \"description\": \"Error code, empty string when no error\"}, \"message\": {\"type\": \"string\", \"description\": \"Error message, empty string when no error\"}}}, \"object\": {\"type\": \"string\", \"description\": \"Object type identifier\", \"enum\": [\"vector_store.file\"]}, \"status\": {\"type\": \"string\", \"description\": \"Processing status of the file\", \"enum\": [\"in_progress\", \"completed\", \"failed\", \"cancelled\"]}, \"usage_bytes\": {\"type\": \"integer\", \"description\": \"Number of bytes used by the file\", \"minimum\": 0}, \"vector_store_id\": {\"type\": \"string\", \"description\": \"ID of the vector store containing this file\", \"pattern\": \"^vs_[a-zA-Z0-9]+$\"}, \"attributes\": {\"type\": \"object\", \"description\": \"Custom attributes associated with the file (free-form key/value pairs)\", \"additionalProperties\": {\"type\": [\"string\", \"number\", \"boolean\", \"null\"]}}, \"chunking_strategy\": {\"type\": \"object\", \"description\": \"Strategy used for chunking the file\", \"required\": [\"type\"], \"additionalProperties\": false, \"properties\": {\"type\": {\"type\": \"string\", \"description\": \"Type of chunking strategy\", \"enum\": [\"static\", \"auto\"]}, \"static\": {\"type\": \"object\", \"description\": \"Static chunking configuration (present when type is static)\", \"required\": [\"chunk_overlap_tokens\", \"max_chunk_size_tokens\"], \"additionalProperties\": false, \"properties\": {\"chunk_overlap_tokens\": {\"type\": \"integer\", \"description\": \"Number of tokens to overlap between chunks\", \"minimum\": 0}, \"max_chunk_size_tokens\": {\"type\": \"integer\", \"description\": \"Maximum size of each chunk in tokens\", \"minimum\": 0}}}}}}}}"
+                  }
+                }
+              },
+              "feSchemaMap": {}
             }
           },
           {
@@ -273,7 +299,7 @@
             "description": "Simple Log Message Activity",
             "type": "iterator",
             "settings": {
-              "iterate": "=$activity[FilesListVectorStore].files",
+              "iterate": "=$activity[FileList].files",
               "accumulate": false
             },
             "activity": {
@@ -341,6 +367,41 @@
             }
           },
           {
+            "id": "FileDelete",
+            "name": "FileDelete",
+            "description": "This activity deletes a file from OpenAI's file store",
+            "settings": {
+              "retryOnError": {
+                "count": 0,
+                "interval": 0
+              }
+            },
+            "activity": {
+              "ref": "#fileDelete",
+              "settings": {
+                "endPointURL": "=$property[\"OPENAI_API_ENDPOINT_URL\"]",
+                "apiKey": "=$property[\"OPENAI_API_KEY\"]"
+              },
+              "input": {
+                "fileId": "=$activity[UploadFile].id"
+              }
+            }
+          },
+          {
+            "id": "LogMessage5",
+            "name": "LogMessage5",
+            "description": "Simple Log Message Activity",
+            "activity": {
+              "ref": "#log",
+              "input": {
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "=string.concat(\"File: \",$activity[FileDelete].id ,\" deleted\")",
+                "logLevel": "INFO"
+              }
+            }
+          },
+          {
             "id": "DeleteVectorStore",
             "name": "DeleteVectorStore",
             "description": "This activity deletes a vector store from OpenAI",
@@ -370,7 +431,7 @@
             }
           }
         ],
-        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjEyLCJ5IjoxMDB9LCJDcmVhdGVWZWN0b3JTdG9yZSI6eyJ4IjoxMzQsInkiOjkyfSwiTG9nTWVzc2FnZSI6eyJ4IjoyOTcsInkiOjIyMn0sIlVwbG9hZEZpbGUiOnsieCI6NDU0LCJ5Ijo5OX0sIkxvZ01lc3NhZ2UyIjp7IngiOjYwNSwieSI6MjI0fSwiU2xlZXAiOnsieCI6NzYxLCJ5Ijo4MX0sIkZpbGVzTGlzdFZlY3RvclN0b3JlIjp7IngiOjk0MywieSI6ODZ9LCJMb2dNZXNzYWdlMyI6eyJ4IjoxMDk2LCJ5IjoyMzh9LCJWZWN0b3JTZWFyY2giOnsieCI6MTI2MiwieSI6ODR9LCJMb2dNZXNzYWdlNCI6eyJ4IjoxNDI1LCJ5IjoyMzN9LCJEZWxldGVWZWN0b3JTdG9yZSI6eyJ4IjoxNTkxLCJ5Ijo5Mn0sIlJldHVybiI6eyJ4IjoxNzg1LCJ5Ijo4N319",
+        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjEyLCJ5IjoxMDB9LCJDcmVhdGVWZWN0b3JTdG9yZSI6eyJ4IjoxMzQsInkiOjkyfSwiTG9nTWVzc2FnZSI6eyJ4IjoyOTcsInkiOjIyMn0sIlVwbG9hZEZpbGUiOnsieCI6NDU1LCJ5Ijo5OX0sIkxvZ01lc3NhZ2UyIjp7IngiOjYwNSwieSI6MjI0fSwiU2xlZXAiOnsieCI6NzkzLCJ5IjoyMjV9LCJGaWxlTGlzdCI6eyJ4Ijo5NTIsInkiOjg0fSwiTG9nTWVzc2FnZTMiOnsieCI6MTA5NiwieSI6MjM4fSwiVmVjdG9yU2VhcmNoIjp7IngiOjEyNjIsInkiOjg0fSwiTG9nTWVzc2FnZTQiOnsieCI6MTQyNSwieSI6MjMzfSwiRmlsZURlbGV0ZSI6eyJ4Ijo0NjcsInkiOjQ1OH0sIkxvZ01lc3NhZ2U1Ijp7IngiOjY4NSwieSI6NjExfSwiRGVsZXRlVmVjdG9yU3RvcmUiOnsieCI6OTU4LCJ5Ijo0NTJ9LCJSZXR1cm4iOnsieCI6MTM1OCwieSI6NDUwfX0=",
         "metadata": {
           "input": [],
           "output": [],
@@ -392,7 +453,7 @@
     }
   ],
   "connections": {},
-  "contrib": "W3sicmVmIjoiZ2l0aHViLmNvbS90aWJjby9mbG9nby1nZW5lcmFsL3NyYy9hcHAvR2VuZXJhbCIsImlkIjoiR2VuZXJhbCIsInZlcnNpb24iOiIxLjYuMTEiLCJ0YWciOiIxLjYuMTEtYjAyIiwibmFtZSI6IkdlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCIsImlzVXNlckV4dGVuc2lvbiI6ZmFsc2V9LHsicmVmIjoiZ2l0aHViLmNvbS9USUJDT1NvZnR3YXJlL2Zsb2dvLWVudGVycHJpc2UtaHViL2V4dGVuc2lvbnMvb3BlbkFJIiwiaWQiOiJvcGVuQUkiLCJ2ZXJzaW9uIjoiMS4wLjEiLCJ0YWciOiIxLjAuMCIsIm5hbWUiOiJPcGVuQUkgIiwiczNsb2NhdGlvbiI6IntVU0VSSUR9L29wZW5BSSIsImlzVXNlckV4dGVuc2lvbiI6dHJ1ZX1d",
+  "contrib": "W3sicmVmIjoiZ2l0aHViLmNvbS90aWJjby9mbG9nby1nZW5lcmFsL3NyYy9hcHAvR2VuZXJhbCIsImlkIjoiR2VuZXJhbCIsInZlcnNpb24iOiIxLjYuMTEiLCJ0YWciOiIxLjYuMTEtYjAyIiwibmFtZSI6IkdlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCIsImlzVXNlckV4dGVuc2lvbiI6ZmFsc2V9LHsicmVmIjoiZ2l0aHViLmNvbS9USUJDT1NvZnR3YXJlL2Zsb2dvLWVudGVycHJpc2UtaHViL2V4dGVuc2lvbnMvb3BlbkFJIiwiaWQiOiJvcGVuQUkiLCJ2ZXJzaW9uIjoiMS4wLjEiLCJ0YWciOiIxLjAuMSIsIm5hbWUiOiJPcGVuQUkiLCJzM2xvY2F0aW9uIjoie1VTRVJJRH0vb3BlbkFJIiwiaXNVc2VyRXh0ZW5zaW9uIjp0cnVlfV0=",
   "metadata": {
     "endpoints": [],
     "flogoVersion": "2.26.0"
