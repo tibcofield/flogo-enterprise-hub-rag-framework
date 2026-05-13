@@ -1,35 +1,46 @@
-Flogo ChatGPT Client Extension
+Flogo OpenAi API Client Extension
 ==============================
-
-Please do not use this for your own projects at this stage as it is still in very early stage of development.  If you are a TIBCO customer and would like to use the extension or have feedback then please reach out to the repository owner or your account team. 
 
 Overview
 --------
 
-The Flogo ChatGPT extension acts as a client for the APIs exposed from the ChatGPT developer platform.  It is in the very early days of development and there is a focus on supporting text generation, image generation, embeddings creation and storage using the Responses API. 
+This framework provides a library of Flogo activities for interacting with the OpenAI API interface. The framework provides the base interaction for Flogo flows with the purpose of demonstration and better understanding of Flogo activities, with a current focus on supporting text generation, image generation, and embeddings creation and storage via the Responses API.
 
 
 OpenAI Go API Library Version - v3.31.0
 
-Roadmap
+Implemtation status
 -------
 
-| Client Activity                     | Status                        | Open AI Docs
+### Completed
+
+| Client Activity                     | Status                        | Open AI Docs |
 | ------------------------------------| ------------------------------| ---------------------------------------------------|
 | Files API - upload file             | Completed                     | https://developers.openai.com/api/reference/resources/files/methods/create |
 | Files API - delete file             | Completed                     | https://developers.openai.com/api/reference/resources/files/methods/delete |
 | Files API - list files              | Completed                     | https://developers.openai.com/api/reference/resources/files/methods/list |
-| Vector Store API  - Create store    | Completed.                    | https://developers.openai.com/api/reference/resources/vector_stores/methods/create |
-| Vector Store API  - Delete store    | Completed.                    | https://developers.openai.com/api/reference/resources/vector_stores/methods/delete
-| Vector Store API  - List stores     | Completed.                    | https://developers.openai.com/api/reference/resources/vector_stores/methods/list |
-| Vector Store API - Search          | Completed.                    | https://developers.openai.com/api/reference/resources/vector_stores/methods/search |
-| | | | 
-| Responses API                       | In Dev for text and Images    | https://platform.openai.com/docs/guides/migrate-to-responses | 
-| Images API                          | In Dev                        | https://platform.openai.com/docs/api-reference/images |
-| Embeddings API                      | Testing                       | https://platform.openai.com/docs/guides/embeddings |
+| Vector Store API  - Create store    | Completed                     | https://developers.openai.com/api/reference/resources/vector_stores/methods/create |
+| Vector Store API  - Delete store    | Completed                     | https://developers.openai.com/api/reference/resources/vector_stores/methods/delete |
+| Vector Store API  - List stores     | Completed                     | https://developers.openai.com/api/reference/resources/vector_stores/methods/list |
+| Vector Store API - Search           | Completed                     | https://developers.openai.com/api/reference/resources/vector_stores/methods/search |
+
+### In Progress
+
+| Client Activity                     | Status                        | Open AI Docs |
+| ------------------------------------| ------------------------------| ---------------------------------------------------|
+| ResponsesCreate                        | In Dev (text and Images)    | https://developers.openai.com/api/reference/resources/responses/methods/create
+| ImagesCreate                          | In Dev                        | https://developers.openai.com/api/reference/resources/images/methods/generate |
+| EmbeddingsCreate                      | In Dev                       | https://developers.openai.com/api/reference/resources/embeddings/methods/create |
+
+### Out of Scope
+
+These activites have are out of scope since they are not relavant for scoped use cases.
+
+| Client Activity                     | Status                        | Open AI Docs |
+| ------------------------------------| ------------------------------| ---------------------------------------------------|
 | Chat API                            | Out of scope                  ||
-| Completions API                     | Out of scope                  | Deprecated and unclear on OpenAI, other platforms direction |
-| Realtime API                        | Out of scope                  || 
+| Completions API                     | Out of scope                  ||
+| Realtime API                        | Out of scope                  ||
 | Assistants API                      | Out of scope                  ||
 | Batch API                           | Out of scope                  ||
 | Containers API                      | Out of scope                  ||
@@ -37,7 +48,7 @@ Roadmap
 | Graders API                         | Out of scope                  ||
 | Moderations API                     | Out of scope                  ||
 
-## ChatGPT Use Cases 
+## Use Cases 
 
 These are some of the example use cases we are being reviewed as part of the client extension development.
 
@@ -52,7 +63,7 @@ These are some of the example use cases we are being reviewed as part of the cli
 | Responses - Structured Response     | Backlog                       |
 | Responses - Web Search              | Backlog                       |
 | Responses - File Search (RAG)       | Backlog                       |
-| App with Flogo MCP                  | Bcaklog                       |     
+| App with Flogo MCP                  | Backlog                       |     
 | Responses - Function Calling        | Out of scope                  |
 | Create New Image (mulitple Images)  | Backlog                       |
 | Responses - Remote MCP              | Out of scope                  |
@@ -110,29 +121,29 @@ For more information please reach out to the repository owner.
 
 | Platfrom       | /v1/completions | /v1/embeddings | /v1/models  | /v1/responses | /v1/images/* | /v1/audio/* | /v1/fine_tuning/* | /v1/assistants |
 |----------------|-----------------|----------------|------------|---------------|--------------|-------------|-------------------|----------------|
-| Open AI.       | Yes - NB        | Yes            | Yes - NB   | Yes - In Dev  |  Yes - NB    | Yes - NB    | Yes - NB          | Yes - NB       |       
-| Ollama         | Yes - NB        | Yes            | Yes - NB.  | Partial - FT  |  NS          |  NS         | NS                | NS             |
-| Amazon Bedrock | Yes - NB        | NS             | NS         | Yes In Dev    | NS Y         |  NS         | NS                | NS             |
-| Azure OpenAI   | Yes - NB        | ?              | ?          | ?             | ?            | ?           |  ?                |  ?             |      
-| Cloudflare. AI | ?               | ?              | ?          | ?             | ?            | ?           |  ?                |  ?             |    
-| Paralon AI     | ?               | ?              | ?          | ?             | ?            | ?           |  ?                |  ?             |  
-| OpenRouter     | ?               | ?              | ?          | ?             | ?            | ?           |  ?                |  ?             |  
+| Open AI.       | ✅ - NB        | ✅ - NB       | ✅ - NB   | ✅ - In Dev  |  ✅ - NB    | ✅ - NB    | ✅ - NB          | ✅ - NB       |       
+| Ollama         | ✅ - NB        | ✅ - NB       | ✅ - NB.  | Partial - FT  |  NS          |  NS         | NS                | NS             |
+| Amazon Bedrock | ✅ - NB        | NS             | NS         | ✅ In Dev    | NS Y         |  NS         | NS                | NS             |
+| Azure OpenAI   | ✅ - NB        | -              | -          | -             | -            | -           |  -                |  -             |      
+| Cloudflare. AI | -               | -              | -          | -             | -            | -           |  -                |  -             |    
+| Paralon AI     | -               | -              | -          | -             | -            | -           |  -                |  -             |  
+| OpenRouter     | -               | -              | -          | -             | -            | -           |  -                |  -             |  
 
 ## Supported Vector Database Platforms
 
 | Platfrom             | POST /v1/files    | POST /v1/vector_stores | POST /v1/vector_stores/{vs_id}/files | vector store search | POST /v1/responses with tools: [{type: "file_search"}] |
 | ---------------------| ------------------|------------------------| -------------------------------------| --------------------| -------------------------------------------------------| 
-| Open AI.             | Yes - NT          |  Yes - NB              | Yes - NB.                            | Yes                 | Yes - NT                                               |  
-| Azure AI Search      | ?                 | ?                      | ?                                    | ?                   | ?                                                      |
-| Pinecone             | ?                 | ?                      | ?                                    | ?                   | ?                                                      |
-| Weaviate             | ?                 | ?                      | ?                                    | ?                   | ?                                                      |
-| Qdrant               | ?                 | ?                      | ?                                    | ?                   | ?                                                      |
-| Milvus / Zilliz      | ?                 | ?                      | ?                                    | ?                   | ?                                                      |
-| Chroma               | ?                 | ?                      | ?                                    | ?                   | ?                                                      |
-| Redis (Vector).      | ?                 | ?                      | ?                                    | ?                   | ?                                                      |
-| MongoDB Atlas Vector | ?                 | ?                      | ?                                    | ?                   | ?                                                      |
+| Open AI.             | ✅           |  ✅             | ✅ -                         | ✅                 | ✅ - NB                                               |  
+| Azure AI Search      | -                 | -                      | -                                    | -                   | -                                                      |
+| Pinecone             | -                 | -                      | -                                    | -                   | -                                                      |
+| Weaviate             | -                 | -                      | -                                    | -                   | -                                                      |
+| Qdrant               | -                 | -                      | -                                    | -                   | -                                                      |
+| Milvus / Zilliz      | -                 | -                      | -                                    | -                   | -                                                      |
+| Chroma               | -                 | -                      | -                                    | -                   | -                                                      |
+| Redis (Vector).      | -                 | -                      | -                                    | -                   | -                                                      |
+| MongoDB Atlas Vector | -                 | -                      | -                                    | -                   | -                                                      |
 
-Note: TIBCO AS VDB will require an abstraction layer to support open AI API.  When the abstraction layer is built it will be added to this list for testing. 
+
 
 ## Key to compatibility tables
 
@@ -142,7 +153,7 @@ NB = Not Built.  This capability is not currenlty available in the extension but
 NA = Underlying platform does not support this capability. 
 FT = Said supported on paper is currently failing testing. 
 Partial = Partial capability from platform backend supported. 
-? = Unkown till paper execise carried out on platform.
+- = Unkown till paper execise carried out on platform.
 
 ## Ranking Options
 These are the ones specifc to Open AI.  There will be a need to add custom values.
