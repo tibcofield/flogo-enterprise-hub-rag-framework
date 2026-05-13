@@ -240,7 +240,7 @@
               "input": {
                 "Log Level": "INFO",
                 "flowInfo": false,
-                "message": "=string.concat(\"File uploaded: \", $activity[UploadFile].id, \" to Vectorstore: \",$activity[CreateVectorStore].id)",
+                "message": "=string.concat(\"File uploaded: \", $activity[UploadFile].id, \" to Vectorstore: \",$activity[CreateVectorStore].id, \" *** Sleeping to allow file to be chuncked and vectorized ***\")",
                 "logLevel": "INFO"
               }
             }
@@ -431,7 +431,7 @@
             }
           }
         ],
-        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjAsInkiOjE5OX0sIkNyZWF0ZVZlY3RvclN0b3JlIjp7IngiOjEzMiwieSI6MTkxfSwiTG9nTWVzc2FnZSI6eyJ4IjozMDQsInkiOjQyfSwiVXBsb2FkRmlsZSI6eyJ4Ijo0NjQsInkiOjIwM30sIkxvZ01lc3NhZ2UyIjp7IngiOjYxNiwieSI6MzZ9LCJTbGVlcCI6eyJ4Ijo3OTUsInkiOjM3fSwiRmlsZUxpc3QiOnsieCI6OTU3LCJ5IjoyMjd9LCJMb2dNZXNzYWdlMyI6eyJ4IjoxMTEyLCJ5Ijo0NH0sIlZlY3RvclNlYXJjaCI6eyJ4IjoxMjY4LCJ5IjoyMTd9LCJMb2dNZXNzYWdlNCI6eyJ4IjoxNTA0LCJ5IjoyMjJ9LCJGaWxlRGVsZXRlIjp7IngiOjEzMSwieSI6NDI3fSwiTG9nTWVzc2FnZTUiOnsieCI6Mjg3LCJ5Ijo1NTd9LCJEZWxldGVWZWN0b3JTdG9yZSI6eyJ4Ijo0ODcsInkiOjQyOH0sIlJldHVybiI6eyJ4IjoxNTExLCJ5Ijo0Mjl9fQ==",
+        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjAsInkiOjE5OX0sIkNyZWF0ZVZlY3RvclN0b3JlIjp7IngiOjEzMiwieSI6MTkxfSwiTG9nTWVzc2FnZSI6eyJ4IjozMDQsInkiOjQyfSwiVXBsb2FkRmlsZSI6eyJ4Ijo0NjQsInkiOjIwM30sIkxvZ01lc3NhZ2UyIjp7IngiOjYxNywieSI6Mzd9LCJTbGVlcCI6eyJ4Ijo3OTUsInkiOjM3fSwiRmlsZUxpc3QiOnsieCI6OTU3LCJ5IjoyMjd9LCJMb2dNZXNzYWdlMyI6eyJ4IjoxMTEyLCJ5Ijo0NH0sIlZlY3RvclNlYXJjaCI6eyJ4IjoxMjY4LCJ5IjoyMTd9LCJMb2dNZXNzYWdlNCI6eyJ4IjoxNTA0LCJ5IjoyMjJ9LCJGaWxlRGVsZXRlIjp7IngiOjEzMSwieSI6NDI3fSwiTG9nTWVzc2FnZTUiOnsieCI6Mjg3LCJ5Ijo1NTd9LCJEZWxldGVWZWN0b3JTdG9yZSI6eyJ4Ijo0ODcsInkiOjQyOH0sIlJldHVybiI6eyJ4IjoxNTExLCJ5Ijo0Mjl9fQ==",
         "metadata": {
           "input": [],
           "output": [],
