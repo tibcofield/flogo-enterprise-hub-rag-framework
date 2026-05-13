@@ -92,7 +92,57 @@ code .
 
 ---
 
-## 4. Open the Sample Flogo Project
+## 4. Register the OpenAI Extension with the Flogo VS Code Extension
+
+The `openai-vector-e2e.flogo` flow uses activities from the local `extensions/openAI` Go module. The Flogo VS Code extension must be told where to find these local extension sources via the **`Flogo › Extensions: Local`** setting.
+
+### 4.1 Open the setting
+
+1. Open **Settings** (`Ctrl+,` / `Cmd+,`).
+2. Search for **`Flogo Extensions Local`** (or navigate to **Extensions → Flogo → Extensions: Local**).
+3. Click **Edit in settings.json** / **Add Item** to manage the list of local extension paths.
+
+### 4.2 Add the path to `extensions/openAI`
+
+Add the **absolute** path to the `extensions/openAI` directory of this cloned repository.
+
+**Linux / macOS** (forward slashes `/`):
+
+```
+/home/<you>/projects/flogo-enterprise-hub-rag-framework/extensions/openAI
+```
+
+**Windows** (backslashes `\`, or escaped `\\` inside `settings.json`):
+
+```
+C:\Users\<you>\projects\flogo-enterprise-hub-rag-framework\extensions\openAI
+```
+
+In `settings.json` on Windows, escape the backslashes:
+
+```json
+"flogo.extensions.local": [
+  "C:\\Users\\<you>\\projects\\flogo-enterprise-hub-rag-framework\\extensions\\openAI"
+]
+```
+
+On Linux / macOS:
+
+```json
+"flogo.extensions.local": [
+  "/home/<you>/projects/flogo-enterprise-hub-rag-framework/extensions/openAI"
+]
+```
+
+### 4.3 If another directory is already configured
+
+If the **`Flogo › Extensions: Local`** setting already points to a different directory (for example a shared/common extensions folder), **do not replace it**. Instead, copy the `extensions/openAI` folder from this repository into that already-configured location so the Flogo extension can discover it alongside your existing extensions.
+
+> Reload the VS Code window (`Ctrl+Shift+P` → **Developer: Reload Window**) after changing the setting so the Flogo extension picks up the new path.
+
+---
+
+## 5. Open the Sample Flogo Project
 
 1. In VS Code, open the file:
    `extensions/openAI/samples/e2e/openai-vector-e2e.flogo`
@@ -101,17 +151,17 @@ code .
 
 ---
 
-## 5. Build & Run the Flogo Application
+## 6. Build & Run the Flogo Application
 
 The Flogo VS Code extension builds and runs the app in a single action via **Configure and Run**.
 
-### 5.1 Open the Configure dialog
+### 6.1 Open the Configure dialog
 
 1. In the **Explorer** sidebar, locate the **Flogo App** section that appears once the `.flogo` file is opened.
 2. Click **`Configure and Run`**.
 3. The **Configure** popup opens, allowing you to set environment variables for the app run.
 
-### 5.2 Set required environment variables
+### 6.2 Set required environment variables
 
 Add the following environment variables in the popup. Multiple variables must be **separated by a comma**:
 
@@ -128,7 +178,7 @@ FLOGO_APP_PROPS_ENV=auto,OPENAI_API_KEY=sk-your-key-here
 
 > Add any additional app-specific properties (e.g. custom endpoint URLs, vector store IDs) as further comma-separated `NAME=VALUE` entries.
 
-### 5.3 Save and Run
+### 6.3 Save and Run
 
 Click **`Save and Run`** in the Configure popup. The extension will:
 
@@ -139,7 +189,7 @@ You should see Flogo startup logs in the VS Code terminal indicating the trigger
 
 ---
 
-## 6. Verify the Flow
+## 7. Verify the Flow
 
 This flow is **automatically triggered** — no manual request is required. As soon as the app starts it will run end-to-end.
 
@@ -152,7 +202,7 @@ This flow is **automatically triggered** — no manual request is required. As s
 
 ---
 
-## 7. Troubleshooting
+## 8. Troubleshooting
 
 | Issue | Resolution |
 |-------|------------|
@@ -165,7 +215,7 @@ This flow is **automatically triggered** — no manual request is required. As s
 
 ---
 
-## 8. Clean Up
+## 9. Clean Up
 
 To avoid lingering OpenAI resources / billing, use the helper scripts under [`bin/`](../../../../bin/):
 
