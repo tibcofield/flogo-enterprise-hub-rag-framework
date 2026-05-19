@@ -34,17 +34,17 @@
           "action": {
             "ref": "github.com/project-flogo/flow",
             "settings": {
-              "flowURI": "res://flow:VectorStore_Testing"
+              "flowURI": "res://flow:VectorStore_E2E"
             }
           },
-          "name": "VectorStore_Testing"
+          "name": "VectorStore_E2E"
         }
       ]
     }
   ],
   "resources": [
     {
-      "id": "flow:VectorStore_Testing",
+      "id": "flow:VectorStore_E2E",
       "data": {
         "note": {
           "author": {
@@ -56,7 +56,7 @@
           "lastUpdatedAt": 1777471523969,
           "title": "Flow Note"
         },
-        "name": "VectorStore Testing",
+        "name": "VectorStore E2E",
         "description": "",
         "links": [
           {
@@ -240,7 +240,7 @@
               "input": {
                 "Log Level": "INFO",
                 "flowInfo": false,
-                "message": "=string.concat(\"File uploaded: \", $activity[UploadFile].id, \" to Vectorstore: \",$activity[CreateVectorStore].id)",
+                "message": "=string.concat(\"File uploaded: \", $activity[UploadFile].id, \" to Vectorstore: \",$activity[CreateVectorStore].id, \" *** Sleeping to allow file to be chuncked and vectorized ***\")",
                 "logLevel": "INFO"
               }
             }
@@ -431,7 +431,7 @@
             }
           }
         ],
-        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjEyLCJ5IjoxMDB9LCJDcmVhdGVWZWN0b3JTdG9yZSI6eyJ4IjoxMzQsInkiOjkyfSwiTG9nTWVzc2FnZSI6eyJ4IjoyOTcsInkiOjIyMn0sIlVwbG9hZEZpbGUiOnsieCI6NDU1LCJ5Ijo5OX0sIkxvZ01lc3NhZ2UyIjp7IngiOjYwNSwieSI6MjI0fSwiU2xlZXAiOnsieCI6NzkzLCJ5IjoyMjV9LCJGaWxlTGlzdCI6eyJ4Ijo5NTIsInkiOjg0fSwiTG9nTWVzc2FnZTMiOnsieCI6MTA5NiwieSI6MjM4fSwiVmVjdG9yU2VhcmNoIjp7IngiOjEyNjIsInkiOjg0fSwiTG9nTWVzc2FnZTQiOnsieCI6MTQyNSwieSI6MjMzfSwiRmlsZURlbGV0ZSI6eyJ4Ijo0NjcsInkiOjQ1OH0sIkxvZ01lc3NhZ2U1Ijp7IngiOjY4NSwieSI6NjExfSwiRGVsZXRlVmVjdG9yU3RvcmUiOnsieCI6OTU4LCJ5Ijo0NTJ9LCJSZXR1cm4iOnsieCI6MTM1OCwieSI6NDUwfX0=",
+        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjAsInkiOjE5OX0sIkNyZWF0ZVZlY3RvclN0b3JlIjp7IngiOjEzMiwieSI6MTkxfSwiTG9nTWVzc2FnZSI6eyJ4IjozMDQsInkiOjQyfSwiVXBsb2FkRmlsZSI6eyJ4Ijo0NjQsInkiOjIwM30sIkxvZ01lc3NhZ2UyIjp7IngiOjYxNywieSI6Mzd9LCJTbGVlcCI6eyJ4Ijo3OTUsInkiOjM3fSwiRmlsZUxpc3QiOnsieCI6OTU3LCJ5IjoyMjd9LCJMb2dNZXNzYWdlMyI6eyJ4IjoxMTEyLCJ5Ijo0NH0sIlZlY3RvclNlYXJjaCI6eyJ4IjoxMjY4LCJ5IjoyMTd9LCJMb2dNZXNzYWdlNCI6eyJ4IjoxNTA0LCJ5IjoyMjJ9LCJGaWxlRGVsZXRlIjp7IngiOjEzMSwieSI6NDI3fSwiTG9nTWVzc2FnZTUiOnsieCI6Mjg3LCJ5Ijo1NTd9LCJEZWxldGVWZWN0b3JTdG9yZSI6eyJ4Ijo0ODcsInkiOjQyOH0sIlJldHVybiI6eyJ4IjoxNTExLCJ5Ijo0Mjl9fQ==",
         "metadata": {
           "input": [],
           "output": [],
